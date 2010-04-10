@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob User Dao hbm
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob Web Fragment
+Bundle-SymbolicName: com.jbob.user.dao.hbm
+Fragment-Host: com.jbob.hbm;bundle-version="[1.0.0,1.0.0]"
+
