@@ -9,6 +9,8 @@ Import-Package: javax.servlet.http,
  javax.servlet,
  org.apache.commons.logging,
  org.apache.commons.lang,
+ org.apache.commons.lang.time,
+ org.apache.commons.lang.builder,
  org.hibernate;version="[3.2.0,3.5.0]",
  org.hibernate.criterion;version="[3.2.0,3.5.0]",
  org.springframework.core;version="[3.0.0,3.5.0]",
@@ -18,5 +20,8 @@ Import-Package: javax.servlet.http,
  org.springframework.orm.hibernate3.support;version="[3.0.0,3.5.0]"
 Export-Package: com.jbob.core;version="1.0.0",
  com.jbob.core.dao;version="1.0.0",
- com.jbob.core.web;version="1.0.0"
+ com.jbob.core.web;version="1.0.0",
+ com.jbob.core.model;version="1.0.0",
+ com.jbob.core.service;version="1.0.0",
+ com.jbob.core.sql;version="1.0.0"
 
