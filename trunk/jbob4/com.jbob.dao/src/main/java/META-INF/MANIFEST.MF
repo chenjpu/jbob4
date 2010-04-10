@@ -1,14 +1,15 @@
 Manifest-Version: 1.0
 Bundle-Version: 1.0.0
-Bundle-Name: jBob System
+Bundle-Name: jBob System Service
 Bundle-ManifestVersion: 2
-Bundle-Description: jBob System
-Bundle-SymbolicName: com.jbob.system
+Bundle-Description: jBob System Service
+Bundle-SymbolicName: com.jbob.system.service
 Import-Package: com.jbob.core,
  com.jbob.core.model,
  com.jbob.core.dao,
  com.jbob.core.sql,
- com.jbob.core.service
-Export-Package: com.jbob.system.model;version="1.0.0",
- com.jbob.system.dao;version="1.0.0",
- com.jbob.system.service;version="1.0.0"
+ com.jbob.core.service,
+ com.jbob.system.model,
+ com.jbob.system.dao,
+ com.jbob.system.service
+Import-Library: org.springframework.spring;version="[2.5,3.1]"
