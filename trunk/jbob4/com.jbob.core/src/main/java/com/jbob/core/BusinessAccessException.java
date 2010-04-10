@@ -1,22 +1,22 @@
 /*
  * $Id: BusinessAccessException.java,v 1.2 2010/01/18 02:58:06 chenbing Exp $
  * 
- * �ļ����ƣ�BusinessAccessException.java
+ * 文件名称：BusinessAccessException.java
  * 
- * �������ڣ�2006-9-7
+ * 创建日期：2006-9-7
  * 
- * ��Ȩ���У��㶫��Ѹ�Ƽ����޹�˾
+ * 版权所有：J.Bob
  */
 
 package com.jbob.core;
 
 /**
- * ����ҵ������쳣�ṹ��ϵ�ĸ���������һ����������û����Ը�����Ҫʵ�־����ҵ������쳣
+ * 所有业务操作异常结构体系的更对象。它是一个抽象对象，用户可以更具需要实现具体的业务操作异常
  * 
- * �������������null���󣬵ȵȡ�����ط�������ǵķ������ҵ���߼����󣬻��׳�BusinessAccessException�쳣
- * ����spring��ܵ�DataAccessException���ǲ�������װ��ֱ�������׳�
+ * 比如操作对象是null对象，等等。这个地方如果我们的服务层有业务逻辑错误，回抛出BusinessAccessException异常
+ * 对于spring框架的DataAccessException我们不在做包装，直接向上抛出
  * 
- * ����쳣��ϵҲ������ʱ�쳣���û�����ѡ���ñ��벶����Щ�쳣
+ * 这个异常体系也是运行时异常，用户可以选择不用编码捕获这些异常
  *
  * @author chenjpu
  *

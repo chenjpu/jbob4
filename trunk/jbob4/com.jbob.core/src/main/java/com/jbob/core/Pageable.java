@@ -3,7 +3,6 @@ package com.jbob.core;
 import java.io.Serializable;
 import java.util.Collection;
 
-//import com.opensymphony.xwork2.util.ObjectTypeDeterminer
 /**
  * 
  * @author chenb

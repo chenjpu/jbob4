@@ -3,19 +3,23 @@ package com.jbob.core;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+
+import com.jbob.core.sql.QueryFilter;
+
 /**
  * 
  * @author chenjpu
- * ËùÓĞdaoµÄ¸¸½Ó¿Ú,ÓÃÓÚÊµÏÖÍ¨³£µÄÊı¾İ¿â·ÃÎÊ
+ * æ‰€æœ‰daoçš„çˆ¶æ¥å£,ç”¨äºå®ç°é€šå¸¸çš„æ•°æ®åº“è®¿é—®
  * 
- * ×¢Òâ::Õâ¸ö½Ó¿Ú¸Ä½ø,Ö÷ÒªÓÃÁËjdk1.5µÄÌØĞÔ
- * ÔËÓÃ·½·¨²ÎÊı»¯ÀàĞÍ.
+ * æ³¨æ„::è¿™ä¸ªæ¥å£æ”¹è¿›,ä¸»è¦ç”¨äº†jdk1.5çš„ç‰¹æ€§
+ * è¿ç”¨æ–¹æ³•å‚æ•°åŒ–ç±»å‹.
  * @version 1.2
  */
-public interface GenericDao<T extends Entity,PK extends Serializable> {
+public interface GenericDao<T extends Entity, PK extends Serializable> {
 	/**
-	 * ´ÓÊı¾İ¿â²éÑ¯Âú×ãÌõ¼şµÄ¶ÔÏó,ÕâÀïÎÒÃÇ²»´¦ÀíÕÒ²»µ½½á¹ûµÄÇé¿ö,Ó¦Îª´æÔÚÒµÎñÒªÇó
-	 * Êı¾İ¿âÖĞÊÇ·ñÒÑÓĞÕâÌõ¼ÇÂ¼
+	 * ä»æ•°æ®åº“æŸ¥è¯¢æ»¡è¶³æ¡ä»¶çš„å¯¹è±¡,è¿™é‡Œæˆ‘ä»¬ä¸å¤„ç†æ‰¾ä¸åˆ°ç»“æœçš„æƒ…å†µ,åº”ä¸ºå­˜åœ¨ä¸šåŠ¡è¦æ±‚
+	 * æ•°æ®åº“ä¸­æ˜¯å¦å·²æœ‰è¿™æ¡è®°å½•
 	 * @param id
 	 * @return
 	 * @throws DataAccessException
@@ -23,21 +27,21 @@ public interface GenericDao<T extends Entity,PK extends Serializable> {
 	T select(PK id);
 
 	/**
-	 * ·µ»ØÄ³Àà¶ÔÏóÔÚÊı¾İ¿âÖĞµÄ¼ÇÂ¼Êı,·ÖÒ³ÓÃµÄ±È½Ï¶à
+	 * è¿”å›æŸç±»å¯¹è±¡åœ¨æ•°æ®åº“ä¸­çš„è®°å½•æ•°,åˆ†é¡µç”¨çš„æ¯”è¾ƒå¤š
 	 * @return
 	 * @throws DataAccessException
 	 */
 	int count();
 
 	/**
-	 * ·µ»ØÊı¾İ¿âÖĞ´ËÀà¼ÇÂ¼µÄËùÓĞÊı¾İ,°´idÅÅĞò
+	 * è¿”å›æ•°æ®åº“ä¸­æ­¤ç±»è®°å½•çš„æ‰€æœ‰æ•°æ®,æŒ‰idæ’åº
 	 * @return
 	 * @throws DataAccessException
 	 */
 	List<T> select();
 
 	/**
-	 * ·µ»ØÊı¾İ¿âÖĞ´ËÀà¼ÇÂ¼µÄÊı¾İ,Âú×ã²éÑ¯±ß½ç.Ö÷ÒªÓÃÔÚiBatisÉÏ,ÏÖÔÚ»¹Ã»ÓĞÑĞ¾¿hibernateÉÏÕâ¸ö·½·¨ÔõÃ´ÊµÏÖ
+	 * è¿”å›æ•°æ®åº“ä¸­æ­¤ç±»è®°å½•çš„æ•°æ®,æ»¡è¶³æŸ¥è¯¢è¾¹ç•Œ.ä¸»è¦ç”¨åœ¨iBatisä¸Š,ç°åœ¨è¿˜æ²¡æœ‰ç ”ç©¶hibernateä¸Šè¿™ä¸ªæ–¹æ³•æ€ä¹ˆå®ç°
 	 * @param skip
 	 * @param pageSize
 	 * @return
@@ -46,27 +50,30 @@ public interface GenericDao<T extends Entity,PK extends Serializable> {
 	List<T> select(int skip, int max);
 
 	/**
-	 * ±£´æÊı¾İ¼ÇÂ¼,¸ü¾ßidÊÇ·ñÎª¿ÕÀ´ÅĞ¶ÏÊÇ·ñ²åÈëĞÂ¼ÇÂ¼»¹ÊÇ¸üĞÂ²Ù×÷
+	 * ä¿å­˜æ•°æ®è®°å½•,æ›´å…·idæ˜¯å¦ä¸ºç©ºæ¥åˆ¤æ–­æ˜¯å¦æ’å…¥æ–°è®°å½•è¿˜æ˜¯æ›´æ–°æ“ä½œ
 	 * @param newObject
 	 * @throws DataAccessException
 	 */
 	T insert(T entity);
 
 	/**
-	 * ¸üĞÂÊı¾İ¼ÇÂ¼
+	 * æ›´æ–°æ•°æ®è®°å½•
 	 * @param Object
 	 * @throws DataAccessException
 	 */
 	void update(T entity);
-	
+
 	void merge(T entity);
-	
+
 	/**
-	 * É¾³ı¼ÇÂ¼
+	 * åˆ é™¤è®°å½•
 	 * @param id
 	 * @throws DataAccessException
 	 */
 	void delete(PK id);
+
 	void delete(T entity);
 
+	//~~~
+	List<T> getAll(QueryFilter filter);
 }

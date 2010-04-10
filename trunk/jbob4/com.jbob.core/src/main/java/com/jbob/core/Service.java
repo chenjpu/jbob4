@@ -1,11 +1,8 @@
 /*
- * $Id: Service.java,v 1.2 2010/01/16 11:14:02 huangzhihui Exp $
  * 
- * ÎÄ¼şÃû³Æ£ºManager.java
+ * åˆ›å»ºæ—¥æœŸï¼š2006-9-7
  * 
- * ´´½¨ÈÕÆÚ£º2006-9-7
- * 
- * °æÈ¨ËùÓĞ£º¹ã¶«ÒÚÑ¸¿Æ¼¼ÓĞÏŞ¹«Ë¾
+ * ç‰ˆæƒæ‰€æœ‰ï¼šJ.Bob
  */
 
 package com.jbob.core;
@@ -16,12 +13,12 @@ import java.util.List;
 
 
 /**
- * Õâ¸ö½Ó¿ÚÖ÷ÒªÊµÏÖµÄ¹¦ÄÜºÍDao½Ó¿ÚÒ»Ñù£¬Í¨ÓÃµÄ¹¦ÄÜ¾ÍÃ»ÓĞ±È½ÏÃ¿¸ö¹ÜÀí½Ó¿ÚÔÚ×Ô¼ºÊµÏÖÁË
- * ÕâÒ²ÊÇÒ»¸ö±È½ÏÖØÒªµÄ»ù´¡½á¹¹£¬Î¨Ò»²»ºÃ½â¾öµÄÊÇgetObject()·½·¨·µ»ØµÄÊÇObject¡£
- * ĞèÒªÑ°ÕÒÒ»¸ö±È½ÏºÃµÄ°ì·¨À´ÊµÏÖ£¬Õâ¸öµØ·½ÏÖÔÚÖ»ÄÜ·µ»ØObject£¬ÓĞ×îÖÕÓÃ»§Ç¿ĞĞ×ª»»
+ * è¿™ä¸ªæ¥å£ä¸»è¦å®ç°çš„åŠŸèƒ½å’ŒDaoæ¥å£ä¸€æ ·ï¼Œé€šç”¨çš„åŠŸèƒ½å°±æ²¡æœ‰æ¯”è¾ƒæ¯ä¸ªç®¡ç†æ¥å£åœ¨è‡ªå·±å®ç°äº†
+ * è¿™ä¹Ÿæ˜¯ä¸€ä¸ªæ¯”è¾ƒé‡è¦çš„åŸºç¡€ç»“æ„ï¼Œå”¯ä¸€ä¸å¥½è§£å†³çš„æ˜¯getObject()æ–¹æ³•è¿”å›çš„æ˜¯Objectã€‚
+ * éœ€è¦å¯»æ‰¾ä¸€ä¸ªæ¯”è¾ƒå¥½çš„åŠæ³•æ¥å®ç°ï¼Œè¿™ä¸ªåœ°æ–¹ç°åœ¨åªèƒ½è¿”å›Objectï¼Œæœ‰æœ€ç»ˆç”¨æˆ·å¼ºè¡Œè½¬æ¢
  * 
  * 
- * Ğí¶àactionÖĞÆäÊµ¶¼²»ĞèÒª×ª»»Õâ¸ö¶ÔÏóµ½ÌØÊâ¶ÔÏó¡£ĞèÒªµÄÊ±ºòÓÉÓÃ»§×Ô¼º¾ö¶¨¡£
+ * è®¸å¤šactionä¸­å…¶å®éƒ½ä¸éœ€è¦è½¬æ¢è¿™ä¸ªå¯¹è±¡åˆ°ç‰¹æ®Šå¯¹è±¡ã€‚éœ€è¦çš„æ—¶å€™ç”±ç”¨æˆ·è‡ªå·±å†³å®šã€‚
  * 
  * @author chenjpu
  * 
@@ -29,16 +26,16 @@ import java.util.List;
 public interface Service<T extends Entity,PK extends Serializable> {
 
 	/**
-	 * ¸ü¾ßidºÅ»ñµÃ¶ÔÏó£¬¿ÉÒÔ·µ»Ø¡£Èç¹û·µ»Ønull£¬²»×÷ÏàÓ¦µÄÒì³£´¦Àí
+	 * æ›´å…·idå·è·å¾—å¯¹è±¡ï¼Œå¯ä»¥è¿”å›ã€‚å¦‚æœè¿”å›nullï¼Œä¸ä½œç›¸åº”çš„å¼‚å¸¸å¤„ç†
 	 * 
 	 * @param id
 	 * @return
 	 */
 
-	T get(Serializable id) throws BusinessAccessException;
+	T get(PK id) throws BusinessAccessException;
 
 	/**
-	 * ¸ü¾ßidºÅ»ñµÃ¶ÔÏó£¬Ò»°ã²»Ó¦¸Ã·µ»Ønull¡£Èç¹û·µ»Ønull£¬Ó¦¸Ã×öÏàÓ¦µÄÒì³£´¦Àí
+	 * æ›´å…·idå·è·å¾—å¯¹è±¡ï¼Œä¸€èˆ¬ä¸åº”è¯¥è¿”å›nullã€‚å¦‚æœè¿”å›nullï¼Œåº”è¯¥åšç›¸åº”çš„å¼‚å¸¸å¤„ç†
 	 * 
 	 * @param id
 	 * @return
@@ -47,17 +44,15 @@ public interface Service<T extends Entity,PK extends Serializable> {
 
 	T find(PK id) throws BusinessAccessException;
 	
-	List<T> findByIds(String ids) throws BusinessAccessException;
-
 	/**
-	 * »ñµÃ¶ÔÏóµÄ×ÜÊı
+	 * è·å¾—å¯¹è±¡çš„æ€»æ•°
 	 * 
 	 * @return
 	 */
 	int getAllSize() throws BusinessAccessException;
 
 	/**
-	 * »ñµÃÖ¸¶¨·¶Î§ÄÚµÄ¶ÔÏó¼¯ºÏ
+	 * è·å¾—æŒ‡å®šèŒƒå›´å†…çš„å¯¹è±¡é›†åˆ
 	 * 
 	 * @param page
 	 * @param pageSize
@@ -69,7 +64,7 @@ public interface Service<T extends Entity,PK extends Serializable> {
 	List<T> getAll() throws BusinessAccessException;
 
 	/**
-	 * ´æ´¢¶ÔÏó ×¢Òâ:Õâ¸öµØ·½Ó¦¸Ã»áÓĞ¼ì²éÊÇ·ñ´æÔÚ´Ë¼ÇÂ¼µÄÒµÎñÂß¼­
+	 * å­˜å‚¨å¯¹è±¡ æ³¨æ„:è¿™ä¸ªåœ°æ–¹åº”è¯¥ä¼šæœ‰æ£€æŸ¥æ˜¯å¦å­˜åœ¨æ­¤è®°å½•çš„ä¸šåŠ¡é€»è¾‘
 	 * 
 	 * @param newObject
 	 * @throws BusinessAccessException
@@ -77,9 +72,14 @@ public interface Service<T extends Entity,PK extends Serializable> {
 	Serializable save(T o) throws BusinessAccessException;
 
 	void update(T o) throws BusinessAccessException;
+	
+	T merge(T entity);
+	
+	
+	void evict(T entity);
 
 	/**
-	 * É¾³ı¼ÇÂ¼
+	 * åˆ é™¤è®°å½•
 	 * 
 	 * @param id
 	 * @throws BusinessAccessException

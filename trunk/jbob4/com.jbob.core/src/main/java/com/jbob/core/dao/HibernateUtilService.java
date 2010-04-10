@@ -1,7 +1,6 @@
 /*
- * $Id: HibernateUtilService.java,v 1.8 2010/03/29 01:39:44 chenbing Exp $ 
- * ÎÄ¼şÃû³Æ£ºddddd.java ´´½¨ÈÕÆÚ£º2006-9-7
- * °æÈ¨ËùÓĞ£º¹ã¶«ÒÚÑ¸¿Æ¼¼ÓĞÏŞ¹«Ë¾
+ * æ–‡ä»¶åç§°ï¼šddddd.java åˆ›å»ºæ—¥æœŸï¼š2006-9-7
+ * ç‰ˆæƒæ‰€æœ‰ï¼šJ.Bob
  */
 
 package com.jbob.core.dao;
@@ -26,7 +25,7 @@ import com.jbob.core.ObjectRetrievalFailureException;
 import com.jbob.core.Pageable;
 
 /**
- * Í¨ÓÃ¹ÜÀí½Ó¿ÚµÄÊµÏÖ£¬Õâ¸öÀàÊÇÒ»¸ö³éÏóÀà¡£ÓÃ»§×Ô¼º¶¨ÒåµÄ·şÎñĞèÒª¼Ì³ĞÕâ¸ö¶ÔÏó
+ * é€šç”¨ç®¡ç†æ¥å£çš„å®ç°ï¼Œè¿™ä¸ªç±»æ˜¯ä¸€ä¸ªæŠ½è±¡ç±»ã€‚ç”¨æˆ·è‡ªå·±å®šä¹‰çš„æœåŠ¡éœ€è¦ç»§æ‰¿è¿™ä¸ªå¯¹è±¡
  * 
  * @author chenjpu
  */
@@ -208,7 +207,7 @@ public abstract class HibernateUtilService {
 	}
 
 	/**
-		 * ¼ÆËãºÏ·¨µÄÒ³Ãæ
+		 * è®¡ç®—åˆæ³•çš„é¡µé¢
 		 * @param page
 		 * @param pageSize
 		 * @param length

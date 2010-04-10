@@ -15,6 +15,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.jbob.core.Entity;
 import com.jbob.core.GenericDao;
+import com.jbob.core.sql.QueryFilter;
 
 /**
  * 
@@ -145,6 +146,12 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 	@Override
 	public void update(T entity) {
 		
+	}
+
+	@Override
+	public List<T> getAll(QueryFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
