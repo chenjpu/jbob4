@@ -12,7 +12,6 @@ Import-Package: org.hibernate;version="[3.2.0,3.5.0]",
  javax.sql, org.springframework.osgi.compendium.cm
 Export-Package: com.jbob.dao;version="1.0.0"
 Import-Library: org.springframework.spring;version="[2.5,3.1]"
-Import-Bundle: com.springsource.org.apache.commons.dbcp;version="[1.2.2.osgi,1.2.2.osgi]",
- com.springsource.org.hsqldb;version="[1.8.0.9,1.8.0.9]"
+Import-Bundle: com.springsource.org.apache.commons.dbcp;version="[1.2.2.osgi,1.2.2.osgi]"
 
 
