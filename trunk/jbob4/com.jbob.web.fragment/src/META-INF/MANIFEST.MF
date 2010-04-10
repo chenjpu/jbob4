@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Version: 1.0.0
-Bundle-Name: jBob Web Fragment
-Bundle-ManifestVersion: 2
-Bundle-Description: jBob Web Fragment
-Bundle-SymbolicName: com.jbob.web.fragment
-Fragment-Host: com.jbob.web
-
