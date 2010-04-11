@@ -43,6 +43,7 @@
 		</property>
 		<property name="mobile" type="string">
 			<column name="mobile" />
+			
 		</property>
 		<property name="email" type="string">
 			<column name="email" />
