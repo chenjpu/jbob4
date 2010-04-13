@@ -75,5 +75,6 @@ public interface GenericDao<T extends Entity, PK extends Serializable> {
 	void delete(T entity);
 
 	//~~~
+	void evict(T entity);
 	List<T> getAll(QueryFilter filter);
 }

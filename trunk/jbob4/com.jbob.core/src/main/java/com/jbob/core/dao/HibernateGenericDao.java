@@ -31,13 +31,12 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 		this.clazz = clazz;
 	}
 
-	public <B> B select(Class<?> clazz, Serializable id) throws DataAccessException {
-		return (B) super.getHibernateTemplate().get(clazz, id);
+	public  T select(PK id) throws DataAccessException {
+		return super.getHibernateTemplate().get(clazz, id);
 	}
 
-	public <B> List<B> select(final Class<?> clazz) throws DataAccessException {
+	public List<T> select() throws DataAccessException {
 		return executeFind(new HibernateCallback() {
-
 			public Object doInHibernate(Session session) throws HibernateException {
 				Criteria criteria = session.createCriteria(clazz).addOrder(Order.asc("id"));
 				return criteria.list();
@@ -45,9 +44,8 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 		});
 	}
 
-	public <B> List<B> select(final Class<?> clazz, final int skip, final int max) throws DataAccessException {
+	public List<T> select(final int skip, final int max) throws DataAccessException {
 		return executeFind(new HibernateCallback() {
-
 			public Object doInHibernate(Session session) throws HibernateException {
 				Criteria criteria = session.createCriteria(clazz).addOrder(Order.asc("id"));
 				criteria.setFirstResult(skip);
@@ -57,9 +55,8 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 		});
 	}
 
-	public int count(final Class<?> clazz) throws DataAccessException {
+	public int count() throws DataAccessException {
 		return executeInt(new HibernateCallback() {
-
 			public Object doInHibernate(Session session) throws HibernateException {
 				Criteria criteria = session.createCriteria(clazz).setProjection(Projections.rowCount());
 				return criteria.uniqueResult();
@@ -67,23 +64,28 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 		});
 	}
 
-	public void delete(final Class<?> clazz, final Serializable id) throws DataAccessException {
-		execute(new HibernateCallback() {
-
-			public Object doInHibernate(Session session) throws HibernateException {
-				Query query = session.createQuery("delete from " + clazz.getSimpleName() + " where id=:id");
-				query.setParameter("id", id);
-				return query.executeUpdate();
-			}
-		});
+	public void delete(final PK id) throws DataAccessException {
+		delete(super.getHibernateTemplate().get(clazz, id));
+	}
+	
+	public void delete(T entity) {
+		super.getHibernateTemplate().delete(entity);
 	}
 
-	public <B> Serializable insert(B o) throws DataAccessException {
-		return super.getHibernateTemplate().save(o);
+	public T insert(T o) throws DataAccessException {
+		super.getHibernateTemplate().save(o);
+		return o;
 	}
 
-	public <B> void update(B o) throws DataAccessException {
+	public void update(T o) throws DataAccessException {
 		super.getHibernateTemplate().update(o);
+	}
+	public void merge(T entity) {
+		super.getHibernateTemplate().merge(entity);
+	}
+	
+	public void evict(T entity) {
+		super.getHibernateTemplate().evict(entity);
 	}
 
 	protected final <B> B execute(HibernateCallback hibernateCallback) throws DataAccessException {
@@ -101,57 +103,7 @@ public class HibernateGenericDao<T extends Entity, PK extends Serializable> exte
 	protected final long executeLong(HibernateCallback hibernateCallback) throws DataAccessException {
 		return this.<Number> execute(hibernateCallback).longValue();
 	}
-
-	@Override
-	public int count() {
-		return 0;
-	}
-
-	@Override
-	public void delete(PK id) {
-		
-	}
-
-	@Override
-	public void delete(T entity) {
-		
-	}
-
-	@Override
-	public T insert(T entity) {
-		super.getHibernateTemplate().save(entity);
-		return entity;
-	}
-
-	@Override
-	public void merge(T entity) {
-		
-	}
-
-	@Override
-	public T select(PK id) {
-		return null;
-	}
-
-	@Override
-	public List<T> select() {
-		return null;
-	}
-
-	@Override
-	public List<T> select(int skip, int max) {
-		return null;
-	}
-
-	@Override
-	public void update(T entity) {
-		
-	}
-
-	@Override
 	public List<T> getAll(QueryFilter filter) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }
