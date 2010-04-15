@@ -14,5 +14,18 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>com.jbob</groupId>
+    	<artifactId>com.jbob.system</artifactId>
+    	<version>1.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.jbob</groupId>
+    	<artifactId>jbob-core</artifactId>
+    	<version>1.0.0-SNAPSHOT</version>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

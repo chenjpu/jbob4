@@ -11,5 +11,7 @@ Import-Package: com.jbob.core,
  com.jbob.core.service,
  com.jbob.system.model,
  com.jbob.system.dao,
- com.jbob.system.service
+ com.jbob.system.service,
+ org.springframework.security.core;version="[3.0.0,3.5.0)",
+ org.springframework.security.core.userdetails;version="[3.0.0,3.5.0)"
 Import-Library: org.springframework.spring;version="[2.5,3.1]"

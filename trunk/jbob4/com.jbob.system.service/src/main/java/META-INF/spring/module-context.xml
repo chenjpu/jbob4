@@ -18,6 +18,9 @@
     <!-- 
     <osgi:reference id="transactionManager" interface="org.springframework.orm.hibernate3.HibernateTransactionManager"/>
  	-->
+ 	<osgi:reference id="appRoleDao" interface="com.jbob.system.dao.AppRoleDao" />
+    <osgi:reference id="appUserDao" interface="com.jbob.system.dao.AppUserDao" />
+ 	
 	<!-- ========================= BUSINESS OBJECT DEFINITIONS ========================= -->
 
 	<!--
@@ -32,6 +35,12 @@
 	-->
 	<tx:annotation-driven/>
 
+    <bean id="appRoleService" class="com.jbob.system.service.impl.AppRoleServiceImpl">
+		<constructor-arg><ref local="appRoleDao"/></constructor-arg>
+	</bean>
+	<bean id="appUserService" class="com.jbob.system.service.impl.AppUserServiceImpl">
+		<constructor-arg><ref local="appUserDao"/></constructor-arg>
+	</bean>
 	<!-- PetClinic's central data access object: Hibernate implementation -->
 
 </beans>
