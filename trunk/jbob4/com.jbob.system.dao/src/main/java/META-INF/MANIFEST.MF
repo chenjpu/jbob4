@@ -4,7 +4,8 @@ Bundle-Name: jBob System Dao
 Bundle-ManifestVersion: 2
 Bundle-Description: jBob System Dao
 Bundle-SymbolicName: com.jbob.system.dao
-Import-Package: com.jbob.core,
+Import-Package: javax.sql,
+ com.jbob.core,
  com.jbob.core.model,
  com.jbob.core.dao,
  com.jbob.core.sql,
@@ -15,5 +16,6 @@ Import-Package: com.jbob.core,
  org.springframework.dao;version="[3.0.0,3.5.0]",
  org.springframework.orm.hibernate3;version="[3.0.0,3.5.0]",
  org.springframework.orm.hibernate3.support;version="[3.0.0,3.5.0]",
- javax.sql, org.springframework.osgi.compendium.cm
+ org.springframework.security.core;version="[3.0.0,3.5.0)",
+ org.springframework.security.core.userdetails;version="[3.0.0,3.5.0)"
 Import-Library: org.springframework.spring;version="[2.5,3.1]"

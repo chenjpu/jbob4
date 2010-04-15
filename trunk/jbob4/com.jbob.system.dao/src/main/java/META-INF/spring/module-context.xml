@@ -26,6 +26,13 @@
 		Spring's @Required and @Autowired, as well as JSR 250's @Resource.
 	-->
 	<context:annotation-config/>
+	
+	<bean id="appRoleDao" class="com.jbob.system.dao.impl.AppRoleDaoImpl">
+		<property name="sessionFactory"><ref local="sessionFactory"/></property>
+	</bean>
+	<bean id="appUserDao" class="com.jbob.system.dao.impl.AppUserDaoImpl">
+		<property name="sessionFactory"><ref local="sessionFactory"/></property>
+	</bean>
 
 	<!-- PetClinic's central data access object: Hibernate implementation -->
 
