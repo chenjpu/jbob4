@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+   xmlns="http://www.springframework.org/schema/osgi"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:beans="http://www.springframework.org/schema/beans"
+   xsi:schemaLocation="http://www.springframework.org/schema/osgi  
+       http://www.springframework.org/schema/osgi/spring-osgi.xsd
+       http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 
+    <reference id="authenticationManager" interface="org.springframework.security.authentication.AuthenticationManager"/>
+    
+    -->
+    <reference id="appRoleService" interface="com.jbob.system.service.AppRoleService" />
+    <reference id="appUserService" interface="com.jbob.system.service.AppUserService" />
+    <reference id="osgiMenuManager" interface="com.jbob.core.menu.XmlMenuManager"/>
+    
+    
+    <service id="osgiAnnotationHandlerMapping"
+             ref="annotationHandlerMapping"
+             interface="org.springframework.web.servlet.HandlerMapping" />
+    
+</beans:beans>
