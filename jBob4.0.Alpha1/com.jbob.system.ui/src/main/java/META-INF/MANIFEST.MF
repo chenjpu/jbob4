@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob System UI
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob System UI
+Bundle-SymbolicName: com.jbob.system.ui
+Import-Package: org.w3c.dom;version="1.6.0",
+ com.jbob.system,
+ com.jbob.system.model,
+ com.jbob.system.service,
+ com.jbob.security.util,
+ org.springframework.security.core,
+ org.springframework.security.core.authority,
+ org.springframework.security.core.userdetails,
+ org.springframework.web.servlet.mvc.annotation,
+  org.springframework.web.servlet
+Require-Bundle: com.jbob.core;bundle-version="1.0.0",
+ com.google.gson;bundle-version="[1.0,2.0]",
+ org.springframework.aop;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.asm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.aspects;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.beans;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context.support;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jdbc;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.transaction;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.web;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]"

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob System Hbm
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob System Hbm
+Bundle-SymbolicName: com.jbob.system.hbm
+Fragment-Host: com.jbob.hbm
