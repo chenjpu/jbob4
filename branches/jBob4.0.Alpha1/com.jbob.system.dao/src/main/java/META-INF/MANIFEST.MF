@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob System Dao
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob System Dao
+Bundle-SymbolicName: com.jbob.system.dao
+Import-Package: javax.sql,
+ com.jbob.system.model,
+ com.jbob.system.dao,
+ org.springframework.security.core,
+ org.springframework.security.core.authority,
+ org.springframework.security.core.userdetails
+Require-Bundle: com.jbob.core;bundle-version="1.0.0",
+ com.springsource.antlr,
+ com.springsource.org.hibernate;bundle-version="[3.3.2.GA,3.3.2.GA]",
+ org.springframework.aop;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.asm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.beans;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context.support;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.expression;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jdbc;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.orm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.transaction;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]"
+ 

@@ -1,0 +1,205 @@
+2010-05-20 16:22:41,359 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Starting Apache Tomcat/5.5.23 ...
+2010-05-20 16:22:41,390 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Using default XML configuration bundle://9.0:1/conf/default-server.xml
+2010-05-20 16:22:41,406 INFO [org.springframework.scheduling.timer.TimerTaskExecutor] - Initializing Timer
+2010-05-20 16:22:41,468 INFO [org.springframework.osgi.web.extender.internal.activator.WarLoaderListener] - Starting [org.springframework.osgi.web.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:22:41,593 INFO [org.springframework.osgi.web.extender.internal.activator.WarListenerConfiguration] - No custom extender configuration detected; using defaults...
+2010-05-20 16:22:41,609 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - No Catalina Service set; looking for one in the OSGi service registry...
+2010-05-20 16:22:41,625 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:22:41,640 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:22:41,812 INFO [org.springframework.osgi.extender.internal.boot.ChainActivator] - Blueprint API detected; enabling Blueprint Container functionality
+2010-05-20 16:22:41,828 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:22:42,093 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:22:42,093 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:22:42,250 INFO [org.springframework.osgi.extender.internal.blueprint.event.EventAdminDispatcher] - EventAdmin package not found; no Blueprint lifecycle events will be published
+2010-05-20 16:22:42,250 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:22:42,359 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:22:42,359 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:22:42,437 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Initializing Coyote HTTP/1.1 on http-8088
+2010-05-20 16:22:42,437 INFO [org.apache.catalina.startup.Catalina] - Initialization processed in 797 ms
+2010-05-20 16:22:42,437 INFO [org.apache.catalina.core.StandardService] - Starting service Catalina
+2010-05-20 16:22:42,437 INFO [org.apache.catalina.core.StandardEngine] - Starting Servlet Engine: Apache Tomcat/5.5.23
+2010-05-20 16:22:42,453 INFO [org.apache.catalina.core.StandardHost] - XML validation disabled
+2010-05-20 16:22:42,546 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Starting Coyote HTTP/1.1 on http-8088
+2010-05-20 16:22:42,578 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Succesfully started Apache Tomcat/5.5.23 @ Catalina:8088
+2010-05-20 16:22:42,593 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Published Apache Tomcat/5.5.23 as an OSGi service
+2010-05-20 16:22:42,593 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - Found service Catalina
+2010-05-20 16:23:27,843 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - Stopping [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:23:27,906 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Cancelling Timer
+2010-05-20 16:23:27,906 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Stopping [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:23:27,906 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Cancelling Timer
+2010-05-20 16:23:27,921 INFO [org.springframework.scheduling.timer.TimerTaskExecutor] - Cancelling Timer
+2010-05-20 16:23:27,937 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Unpublished  Apache Tomcat/5.5.23 OSGi service
+2010-05-20 16:23:27,937 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Stopping Apache Tomcat/5.5.23 ...
+2010-05-20 16:23:27,953 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Pausing Coyote HTTP/1.1 on http-8088
+2010-05-20 16:23:28,968 INFO [org.apache.catalina.core.StandardService] - Stopping service Catalina
+2010-05-20 16:23:28,968 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Stopping Coyote HTTP/1.1 on http-8088
+2010-05-20 16:23:28,968 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Succesfully stopped Apache Tomcat/5.5.23
+2010-05-20 16:23:41,328 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Starting Apache Tomcat/5.5.23 ...
+2010-05-20 16:23:41,328 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Using default XML configuration bundle://9.0:1/conf/default-server.xml
+2010-05-20 16:23:41,359 INFO [org.springframework.scheduling.timer.TimerTaskExecutor] - Initializing Timer
+2010-05-20 16:23:41,406 INFO [org.springframework.osgi.web.extender.internal.activator.WarLoaderListener] - Starting [org.springframework.osgi.web.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:23:41,468 INFO [org.springframework.osgi.web.extender.internal.activator.WarListenerConfiguration] - No custom extender configuration detected; using defaults...
+2010-05-20 16:23:41,468 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:23:41,468 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:23:41,468 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - No Catalina Service set; looking for one in the OSGi service registry...
+2010-05-20 16:23:41,515 INFO [org.springframework.osgi.extender.internal.boot.ChainActivator] - Blueprint API detected; enabling Blueprint Container functionality
+2010-05-20 16:23:41,515 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:23:41,734 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:23:41,734 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:23:41,796 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Initializing Coyote HTTP/1.1 on http-8088
+2010-05-20 16:23:41,796 INFO [org.apache.catalina.startup.Catalina] - Initialization processed in 328 ms
+2010-05-20 16:23:41,796 INFO [org.apache.catalina.core.StandardService] - Starting service Catalina
+2010-05-20 16:23:41,796 INFO [org.apache.catalina.core.StandardEngine] - Starting Servlet Engine: Apache Tomcat/5.5.23
+2010-05-20 16:23:41,812 INFO [org.apache.catalina.core.StandardHost] - XML validation disabled
+2010-05-20 16:23:41,812 INFO [org.springframework.osgi.extender.internal.blueprint.event.EventAdminDispatcher] - EventAdmin package not found; no Blueprint lifecycle events will be published
+2010-05-20 16:23:41,828 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:23:41,875 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Starting Coyote HTTP/1.1 on http-8088
+2010-05-20 16:23:41,875 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Succesfully started Apache Tomcat/5.5.23 @ Catalina:8088
+2010-05-20 16:23:41,890 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - Found service Catalina
+2010-05-20 16:23:41,906 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Published Apache Tomcat/5.5.23 as an OSGi service
+2010-05-20 16:23:41,921 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:23:41,921 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:25:11,593 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - Stopping [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:25:11,609 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Cancelling Timer
+2010-05-20 16:25:11,609 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Stopping [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:25:11,609 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Cancelling Timer
+2010-05-20 16:25:11,625 INFO [org.springframework.scheduling.timer.TimerTaskExecutor] - Cancelling Timer
+2010-05-20 16:25:11,625 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Unpublished  Apache Tomcat/5.5.23 OSGi service
+2010-05-20 16:25:11,625 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Stopping Apache Tomcat/5.5.23 ...
+2010-05-20 16:25:11,640 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Pausing Coyote HTTP/1.1 on http-8088
+2010-05-20 16:25:12,640 INFO [org.apache.catalina.core.StandardService] - Stopping service Catalina
+2010-05-20 16:25:12,640 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Stopping Coyote HTTP/1.1 on http-8088
+2010-05-20 16:25:12,640 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Succesfully stopped Apache Tomcat/5.5.23
+2010-05-20 16:25:17,562 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Starting Apache Tomcat/5.5.23 ...
+2010-05-20 16:25:17,562 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Using default XML configuration bundle://9.0:1/conf/default-server.xml
+2010-05-20 16:25:17,609 INFO [org.springframework.scheduling.timer.TimerTaskExecutor] - Initializing Timer
+2010-05-20 16:25:17,671 INFO [org.springframework.osgi.web.extender.internal.activator.WarLoaderListener] - Starting [org.springframework.osgi.web.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:25:17,750 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:25:17,750 INFO [org.apache.catalina.startup.ClusterRuleSetFactory] - Unable to find a cluster rule set in the classpath. Will load the default rule set.
+2010-05-20 16:25:17,781 INFO [org.springframework.osgi.web.extender.internal.activator.WarListenerConfiguration] - No custom extender configuration detected; using defaults...
+2010-05-20 16:25:17,781 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - No Catalina Service set; looking for one in the OSGi service registry...
+2010-05-20 16:25:17,781 INFO [org.springframework.osgi.extender.internal.boot.ChainActivator] - Blueprint API detected; enabling Blueprint Container functionality
+2010-05-20 16:25:17,796 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:25:18,062 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:25:18,062 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:25:18,125 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Initializing Coyote HTTP/1.1 on http-8088
+2010-05-20 16:25:18,125 INFO [org.apache.catalina.startup.Catalina] - Initialization processed in 375 ms
+2010-05-20 16:25:18,125 INFO [org.apache.catalina.core.StandardService] - Starting service Catalina
+2010-05-20 16:25:18,125 INFO [org.apache.catalina.core.StandardEngine] - Starting Servlet Engine: Apache Tomcat/5.5.23
+2010-05-20 16:25:18,140 INFO [org.springframework.osgi.extender.internal.blueprint.event.EventAdminDispatcher] - EventAdmin package not found; no Blueprint lifecycle events will be published
+2010-05-20 16:25:18,156 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - Starting [org.springframework.osgi.extender] bundle v.[2.0.0.M1]
+2010-05-20 16:25:18,156 INFO [org.apache.catalina.core.StandardHost] - XML validation disabled
+2010-05-20 16:25:18,218 INFO [org.apache.coyote.http11.Http11BaseProtocol] - Starting Coyote HTTP/1.1 on http-8088
+2010-05-20 16:25:18,234 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Succesfully started Apache Tomcat/5.5.23 @ Catalina:8088
+2010-05-20 16:25:18,250 INFO [org.springframework.osgi.web.tomcat.internal.Activator] - Published Apache Tomcat/5.5.23 as an OSGi service
+2010-05-20 16:25:18,250 INFO [org.springframework.osgi.extender.internal.blueprint.activator.BlueprintLoaderListener] - No custom extender configuration detected; using defaults...
+2010-05-20 16:25:18,250 INFO [org.springframework.osgi.extender.internal.support.ExtenderConfiguration$1] - Initializing Timer
+2010-05-20 16:25:18,250 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - Found service Catalina
+2010-05-20 16:33:23,562 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob Data Sourcee (com.jbob.datasource)]
+2010-05-20 16:33:23,625 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.datasource, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:33:23 CST 2010]; root of context hierarchy
+2010-05-20 16:33:23,625 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:33:23,781 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://76.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:33:24,578 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://76.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:33:24,921 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor] - No outstanding OSGi service dependencies, completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.datasource, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:33:25,984 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{javax.sql.DataSource}]
+2010-05-20 16:33:26,000 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.datasource, Bundle-SymbolicName=com.jbob.datasource, Bundle-Version=1.0.0}
+2010-05-20 16:33:26,000 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.datasource, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:33:59,890 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob hbm (com.jbob.hbm)]
+2010-05-20 16:33:59,906 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.hbm, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:33:59 CST 2010]; root of context hierarchy
+2010-05-20 16:33:59,906 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:33:59,921 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://79.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:34:00,218 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://79.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:34:00,328 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor] - No outstanding OSGi service dependencies, completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.hbm, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:34:00,890 INFO [org.springframework.orm.hibernate3.LocalSessionFactoryBean] - Building new Hibernate SessionFactory
+2010-05-20 16:34:01,468 INFO [org.springframework.orm.hibernate3.HibernateTransactionManager] - Using DataSource [org.apache.commons.dbcp.BasicDataSource@43ad4a] of Hibernate SessionFactory for HibernateTransactionManager
+2010-05-20 16:34:01,468 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{org.hibernate.SessionFactory}]
+2010-05-20 16:34:01,468 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{org.springframework.transaction.PlatformTransactionManager}]
+2010-05-20 16:34:01,468 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.hbm, Bundle-SymbolicName=com.jbob.hbm, Bundle-Version=1.0.0}
+2010-05-20 16:34:01,468 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.hbm, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:34:13,218 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob System Dao (com.jbob.system.dao)]
+2010-05-20 16:34:13,218 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.system.dao, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:34:13 CST 2010]; root of context hierarchy
+2010-05-20 16:34:13,218 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:34:13,234 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://80.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:34:13,328 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://80.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:34:13,500 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor] - No outstanding OSGi service dependencies, completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.system.dao, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:34:13,562 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{com.jbob.system.dao.AppRoleDao}]
+2010-05-20 16:34:13,562 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{com.jbob.core.BaseDao, com.jbob.core.GenericDao, com.jbob.system.dao.AppUserDao, org.springframework.beans.factory.InitializingBean, org.springframework.security.core.userdetails.UserDetailsService}]
+2010-05-20 16:34:13,562 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.system.dao, Bundle-SymbolicName=com.jbob.system.dao, Bundle-Version=1.0.0}
+2010-05-20 16:34:13,562 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.system.dao, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:34:23,859 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob Security (com.jbob.security)]
+2010-05-20 16:34:23,875 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.security, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:34:23 CST 2010]; root of context hierarchy
+2010-05-20 16:34:23,875 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:34:23,890 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://81.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:34:24,187 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://81.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:34:24,250 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyServiceManager] - Adding OSGi service dependency for importer [&appRoleService] matching OSGi filter [(objectClass=com.jbob.system.service.AppRoleService)]
+2010-05-20 16:34:24,265 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyServiceManager] - Adding OSGi service dependency for importer [&appUserService] matching OSGi filter [(objectClass=com.jbob.system.service.AppUserService)]
+2010-05-20 16:34:24,265 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyServiceManager] - OsgiBundleXmlApplicationContext(bundle=com.jbob.security, config=osgibundle:/META-INF/spring/*.xml) is waiting for unsatisfied dependencies [[&appRoleService, &appUserService]]
+2010-05-20 16:34:36,375 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob System Service (com.jbob.system.service)]
+2010-05-20 16:34:36,375 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.system.service, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:34:36 CST 2010]; root of context hierarchy
+2010-05-20 16:34:36,375 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:34:36,390 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://82.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:34:36,484 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://82.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:34:36,625 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor] - No outstanding OSGi service dependencies, completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.system.service, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:34:36,843 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{com.jbob.system.service.AppRoleService}]
+2010-05-20 16:34:36,859 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{com.jbob.system.service.AppUserService}]
+2010-05-20 16:34:36,875 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyServiceManager] - No unsatisfied OSGi service dependencies; completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.security, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:34:37,093 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.system.service, Bundle-SymbolicName=com.jbob.system.service, Bundle-Version=1.0.0}
+2010-05-20 16:34:37,125 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.system.service, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:34:37,296 INFO [com.jbob.security.intercept.FilterSecurityInterceptor] - Validated configuration attributes
+2010-05-20 16:34:37,359 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/CurrentAppUser] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,359 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/CurrentAppUser.*] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,390 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/CurrentAppUser/] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,406 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/Login] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,406 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/Login.*] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,421 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/Login/] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,421 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,437 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication.*] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,437 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Authentication/] onto handler [com.jbob.security.ui.Login@c13406]
+2010-05-20 16:34:37,468 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{org.springframework.security.authentication.AuthenticationManager}]
+2010-05-20 16:34:37,484 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{javax.servlet.Filter}]
+2010-05-20 16:34:37,500 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{org.springframework.web.servlet.HandlerMapping}]
+2010-05-20 16:34:37,500 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.security, Bundle-SymbolicName=com.jbob.security, Bundle-Version=1.0.0}
+2010-05-20 16:34:37,500 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.security, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:34:48,593 INFO [org.springframework.osgi.extender.support.DefaultOsgiApplicationContextCreator] - Discovered configurations {osgibundle:/META-INF/spring/*.xml} in bundle [jBob System UI (com.jbob.system.ui)]
+2010-05-20 16:34:48,593 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Refreshing OsgiBundleXmlApplicationContext(bundle=com.jbob.system.ui, config=osgibundle:/META-INF/spring/*.xml): startup date [Thu May 20 16:34:48 CST 2010]; root of context hierarchy
+2010-05-20 16:34:48,593 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Application Context service already unpublished
+2010-05-20 16:34:48,609 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://83.0:0/META-INF/spring/module-context.xml]
+2010-05-20 16:34:48,765 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://83.0:0/META-INF/spring/osgi-context.xml]
+2010-05-20 16:34:48,875 INFO [org.springframework.osgi.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor] - No outstanding OSGi service dependencies, completing initialization for OsgiBundleXmlApplicationContext(bundle=com.jbob.system.ui, config=osgibundle:/META-INF/spring/*.xml)
+2010-05-20 16:34:48,937 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu/Left] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,937 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu/Left.*] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,937 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu/Left/] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,937 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,953 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu.*] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,953 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Menu/] onto handler [com.jbob.system.ui.MenuController@134ab9b]
+2010-05-20 16:34:48,984 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role/List] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:48,984 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role/List.*] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:48,984 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role/List/] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:48,984 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:49,015 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role.*] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:49,015 INFO [org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping] - Mapped URL path [/Role/] onto handler [com.jbob.system.ui.RoleController@a1fdd8]
+2010-05-20 16:34:49,031 INFO [org.springframework.osgi.service.exporter.support.OsgiServiceFactoryBean] - Publishing service under classes [{org.springframework.web.servlet.HandlerMapping}]
+2010-05-20 16:34:49,031 INFO [org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.system.ui, Bundle-SymbolicName=com.jbob.system.ui, Bundle-Version=1.0.0}
+2010-05-20 16:34:49,046 INFO [org.springframework.osgi.extender.internal.activator.ContextLoaderListener] - Application context successfully refreshed (OsgiBundleXmlApplicationContext(bundle=com.jbob.system.ui, config=osgibundle:/META-INF/spring/*.xml))
+2010-05-20 16:35:25,656 INFO [org.springframework.osgi.web.extender.internal.activator.WarLoaderListener] - jBob Web Module (com.jbob.web) is a WAR, scheduling war deployment on context path [/jbob] (web.xml found at [bundle://85.0:0/WEB-INF/web.xml])
+2010-05-20 16:35:38,515 WARN [org.apache.catalina.startup.DigesterFactory] - Could not get url for /javax/servlet/resources/jsp_2_0.xsd
+2010-05-20 16:35:38,515 WARN [org.apache.catalina.startup.DigesterFactory] - Could not get url for /javax/servlet/resources/web-jsptaglibrary_2_0.xsd
+2010-05-20 16:35:38,656 WARN [org.apache.catalina.startup.DigesterFactory] - Could not get url for /javax/servlet/resources/jsp_2_0.xsd
+2010-05-20 16:35:38,656 WARN [org.apache.catalina.startup.DigesterFactory] - Could not get url for /javax/servlet/resources/web-jsptaglibrary_2_0.xsd
+2010-05-20 16:35:38,703 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/jbob]] - Initializing Spring root WebApplicationContext
+2010-05-20 16:35:38,703 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization started
+2010-05-20 16:35:38,703 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Refreshing OsgiBundleXmlWebApplicationContext(bundle=com.jbob.web, config=/WEB-INF/applicationContext.xml): startup date [Thu May 20 16:35:38 CST 2010]; root of context hierarchy
+2010-05-20 16:35:38,703 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Application Context service already unpublished
+2010-05-20 16:35:38,812 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://85.0:0/WEB-INF/applicationContext.xml]
+2010-05-20 16:35:39,046 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://85.0:0/WEB-INF/osgi-context.xml]
+2010-05-20 16:35:39,218 INFO [org.springframework.security.web.access.intercept.FilterSecurityInterceptor] - Validated configuration attributes
+2010-05-20 16:35:39,375 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.web, Bundle-SymbolicName=com.jbob.web, Bundle-Version=1.0.0}
+2010-05-20 16:35:39,375 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization completed in 672 ms
+2010-05-20 16:35:39,500 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/jbob]] - Initializing Spring FrameworkServlet 'jbob'
+2010-05-20 16:35:39,500 INFO [org.springframework.web.servlet.DispatcherServlet] - FrameworkServlet 'jbob': initialization started
+2010-05-20 16:35:39,500 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Refreshing WebApplicationContext for namespace 'jbob-servlet': startup date [Thu May 20 16:35:39 CST 2010]; parent: OsgiBundleXmlWebApplicationContext(bundle=com.jbob.web, config=/WEB-INF/applicationContext.xml)
+2010-05-20 16:35:39,515 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Application Context service already unpublished
+2010-05-20 16:35:39,640 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from URL [bundle://85.0:0/WEB-INF/jbob-servlet.xml]
+2010-05-20 16:35:40,078 INFO [org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext] - Publishing application context as OSGi service with properties {org.springframework.context.service.name=com.jbob.web, Bundle-SymbolicName=com.jbob.web, Bundle-Version=1.0.0, org.springframework.web.context.namespace=jbob-servlet}
+2010-05-20 16:35:40,078 INFO [org.springframework.web.servlet.DispatcherServlet] - FrameworkServlet 'jbob': initialization completed in 578 ms
+2010-05-20 16:35:40,187 INFO [org.springframework.osgi.web.deployer.tomcat.TomcatWarDeployer] - Successfully deployed bundle [jBob Web Module (com.jbob.web)] at [/jbob] on server org.apache.catalina.core.StandardService/1.0

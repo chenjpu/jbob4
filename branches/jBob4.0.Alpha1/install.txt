@@ -1,0 +1,12 @@
+在Felix控制台分别执行下面命令
+
+install reference:file:..\com.jbob.core\target\classes
+install reference:file:..\com.jbob.datasource\target\classes
+install reference:file:..\com.jbob.menu\target\classes
+install reference:file:..\com.jbob.system\target\classes
+install reference:file:..\com.jbob.hbm\target\classes
+install reference:file:..\com.jbob.system.dao\target\classes
+install reference:file:..\com.jbob.system.service\target\classes
+install reference:file:..\com.jbob.security\target\classes
+install reference:file:..\com.jbob.system.ui\target\classes
+install reference:file:..\com.jbob.web\war
