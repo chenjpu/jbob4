@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:osgi="http://www.springframework.org/schema/osgi"
+	   xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+	
+	<bean id="filterSecurityInterceptorProxy" class="com.jbob.core.web.DelegatingFilterProxy">
+	    <constructor-arg index="0">
+	    	<ref bean="filterSecurityInterceptor"/>
+	    </constructor-arg>
+	</bean>
+	
+	<security:http auto-config="true" access-denied-page="/403.jsp" lowercase-comparisons="true" once-per-request="true">
+        <security:intercept-url pattern="/images/**" filters="none"/>
+        <security:intercept-url pattern="/css/**" filters="none"/>
+        <security:intercept-url pattern="/js/**" filters="none"/>
+        <security:intercept-url pattern="/403*" filters="none"/>
+        <security:intercept-url pattern="/404*" filters="none"/>
+        <security:intercept-url pattern="/500*" filters="none"/> 
+        <security:intercept-url pattern="/ext3/**" filters="none"/>
+        <security:intercept-url pattern="/fckeditor/**" filters="none"/>  
+        <security:form-login default-target-url="/index.jsp" login-page="/login.jsp" authentication-failure-url="/login.jsp?error=true" login-processing-url="/j_security_check" />
+        <security:logout logout-url="/j_logout.do" logout-success-url="/login.jsp"/> 
+   		<!--  -->
+   		<security:remember-me key="RememberAppUser"/>
+   		<security:custom-filter after="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptorProxy" />
+   		<!-- 
+   		<security:session-management invalid-session-url="/login.jsp" session-fixation-protection="none">
+        	<security:concurrency-control max-sessions="1" />
+        </security:session-management>
+        -->
+    </security:http>
+</beans>

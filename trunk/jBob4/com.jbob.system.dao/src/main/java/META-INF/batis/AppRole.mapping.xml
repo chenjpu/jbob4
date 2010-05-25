@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper
+  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+  
+<mapper namespace="com.jbob.system.model.AppRole">
+  
+  <!-- RESULTMAP -->
+  
+  <resultMap id="AppRoleResultMap" type="com.jbob.system.model.AppRole">
+    <id property="id" column="roleId" jdbcType="NUMERIC" javaType="long" />
+    <result property="name" column="roleName" javaType="string"/>
+  	<result property="description" column="roleDesc" javaType="string"/>
+  	<result property="status" column="status" javaType="short"/>
+  	<result property="rights" column="rights" javaType="string" />
+    <result property="isDefaultIn" column="isDefaultIn" javaType="short" />
+  </resultMap>
+  
+  <!-- SELECT -->
+  
+  <select id="selectByUserId" parameterType="long" resultMap="AppRoleResultMap">
+    select * from app_role r where exists(select * from user_role ur where ur.roleid = r.roleid and ur.userId = #{id, jdbcType=NUMERIC})
+  </select>
+  
+  <select id="select" resultMap="AppRoleResultMap">
+    select * from app_role r
+  </select>
+  
+  <select id="count" resultType="int">
+    select count(*) from app_role
+  </select>
+  
+</mapper>

@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.jbob.web
+Bundle-Version: 1.0.0
+Bundle-Name: jBob Web Module
+Bundle-Vendor: J.Bob Inc.
+Require-Bundle: com.springsource.org.apache.taglibs.standard;bundle-version="[1.1.2,1.2)",
+ org.springframework.aop;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.asm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.aspects;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.beans;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context.support;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.expression;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jdbc;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jms;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.orm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.transaction;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.web;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.web.servlet;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.security.acls;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.security.config;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.security.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.security.web;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+  org.springframework.security.taglibs;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]"
+Import-Package: javax.servlet,
+ javax.servlet.http,
+ javax.servlet.jsp.jstl.core,
+ javax.servlet.jsp.jstl.fmt,
+ com.jbob.core.web,
+ org.springframework.osgi.web.context.support
+Export-Package: com.jbob.web
+Web-ContextPath: jbob
