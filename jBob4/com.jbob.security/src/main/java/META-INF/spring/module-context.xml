@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+	Application context definition for PetClinic on Hibernate.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+			http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<!--
+
+		<osgi:reference id="appRoleService"
+		interface="com.jbob.system.service.AppRoleService" /> <osgi:reference
+		id="appUserService" interface="com.jbob.system.service.AppUserService"
+		/>
+	-->
+
+	<bean id="securityMetadataSource" class="com.jbob.security.BaseUrlSecurityMetadataSource">
+		<property name="anonymousUrls">
+			<set>
+				<value>/Authentication/*</value>
+			</set>
+		</property>
+		<property name="publicUrls">
+			<set>
+				<value>/index.jsp</value>
+				<value>/Menu/*</value>
+			</set>
+		</property>
+
+	</bean>
+
+	<bean id="accessDecisionManager" class="com.jbob.security.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions" value="true" />
+		<property name="decisionVoters">
+            <list>
+                <bean class="org.springframework.security.access.vote.RoleVoter"/>
+                <bean class="com.jbob.security.vote.RightVote"/>
+            </list>
+        </property>
+	</bean>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider
+			user-service-ref="userDetailsService">
+			<security:password-encoder hash="sha-256"
+				base64="true" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="filterSecurityInterceptor" class="com.jbob.security.intercept.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="securityMetadataSource" ref="securityMetadataSource" />
+	</bean>
+	
+	
+	<bean id="annotationHandlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	</bean>
+    
+    <context:component-scan base-package="com.jbob.security.ui" name-generator="com.jbob.core.FullClassNameBeanNameGenerator"/>
+
+	<!--
+		Activates various annotations to be detected in bean classes:
+		Spring's @Required and @Autowired, as well as JSR 250's @Resource.
+	-->
+	<context:annotation-config/>
+</beans>

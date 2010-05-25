@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob Data Sourcee
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob Data Sourcee
+Bundle-SymbolicName: com.jbob.datasource
+Require-Bundle: com.springsource.org.apache.commons.dbcp;bundle-version="[1.2.2.osgi,1.2.2.osgi]",
+ com.springsource.com.mysql.jdbc;bundle-version="[5.1.6,5.1.6]",
+ org.springframework.aop;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.asm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.beans;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context.support;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.expression;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jdbc;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.orm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+Import-Package: javax.sql,
+ org.apache.commons.dbcp;version="[1.2.2.osgi,1.2.2.osgi]",
+ org.springframework.osgi.compendium.cm
+Export-Package: com.jbob.datasource;version="1.0.0"

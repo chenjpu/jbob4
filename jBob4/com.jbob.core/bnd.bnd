@@ -1,0 +1,2 @@
+Export-Package: *; version=1.0.0 
+-runfw: org.apache.felix.framework

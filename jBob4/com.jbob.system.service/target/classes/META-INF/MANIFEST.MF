@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob System Service
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob System Service
+Bundle-SymbolicName: com.jbob.system.service
+Import-Package: com.jbob.core,
+ com.jbob.core.sql,
+ com.jbob.system.model,
+ com.jbob.system.dao,
+ com.jbob.system.service,
+ com.jbob.core.service;version="1.0.0",
+ org.springframework.security.core,
+ org.springframework.security.core.authority,
+ org.springframework.security.core.userdetails,
+ org.springframework.security.web.access.intercept
+Require-Bundle: org.springframework.aop;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.asm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.beans;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.context.support;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.core;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.expression;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.jdbc;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.orm;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]",
+ org.springframework.transaction;bundle-version="[3.0.0.RELEASE, 3.0.0.RELEASE]"
+

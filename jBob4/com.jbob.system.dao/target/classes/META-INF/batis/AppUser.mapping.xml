@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper
+  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.jbob.system.model.AppUser">
+
+	<!-- RESULTMAP -->
+
+	<resultMap id="AppUserResultMap" type="com.jbob.system.model.AppUser">
+		<id property="id" column="userId" jdbcType="NUMERIC" javaType="long" />
+		<result property="username" javaType="java.lang.String" column="username" />
+		<result property="password" javaType="java.lang.String" column="password" />
+		<result property="email" javaType="java.lang.String" column="email" />
+		<result property="position" javaType="java.lang.String" column="position" />
+		<result property="phone" javaType="java.lang.String" column="phone" />
+		<result property="mobile" javaType="java.lang.String" column="mobile" />
+		<result property="fax" javaType="java.lang.String" column="fax" />
+		<result property="address" javaType="java.lang.String" column="address" />
+		<result property="zip" javaType="java.lang.String" column="zip" />
+		<result property="photo" javaType="java.lang.String" column="photo" />
+		<result property="accessionTime" javaType="java.util.Date" column="accessionTime" />
+		<result property="status" javaType="java.lang.Short" column="status" />
+		<result property="delFlag" javaType="java.lang.Short" column="delFlag" />
+		<result property="education" javaType="java.lang.String" column="education" />
+		<result property="title" javaType="java.lang.Short" column="title" />
+		<result property="fullname" javaType="java.lang.String" column="fullname" />
+		<!--  -->
+		<collection property="roles" javaType="ArrayList" column="userId"
+		            ofType="com.jbob.system.model.AppRole" select="com.jbob.system.model.AppRole.selectByUserId" /> 
+	</resultMap>
+
+	<!-- SELECT -->
+
+	<select id="findByUserName" parameterType="string" resultMap="AppUserResultMap">
+		select * from app_user au where au.username = #{id,jdbcType=VARCHAR}
+	</select>
+</mapper>

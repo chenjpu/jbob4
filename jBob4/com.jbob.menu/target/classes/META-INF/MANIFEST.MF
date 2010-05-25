@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: jBob Menu
+Bundle-ManifestVersion: 2
+Bundle-Description: jBob Menu
+Bundle-SymbolicName: com.jbob.menu
+Bundle-Activator: com.jbob.menu.boot.ChainActivator
+Import-Package: org.osgi.framework;version="1.3",
+ org.osgi.util.tracker,org.apache.commons.logging,
+ org.w3c.dom;version="1.6.0",
+ javax.xml.parsers;version="1.6.0",
+ javax.xml.transform;version="1.6.0",
+ javax.xml.transform.dom;version="1.6.0",
+ javax.xml.transform.stream;version="1.6.0"
+Require-Bundle: com.jbob.core;bundle-version="[1.0,2.0]"
