@@ -4,7 +4,7 @@
   "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="com.jbob.system.model.AppUser">
-
+    <cache-ref namespace="com.jbob.system.model.AppUser"/>
 	<!-- RESULTMAP -->
 
 	<resultMap id="AppUserResultMap" type="com.jbob.system.model.AppUser">
@@ -29,7 +29,7 @@
 		<collection property="roles" javaType="ArrayList" column="userId"
 		            ofType="com.jbob.system.model.AppRole" select="com.jbob.system.model.AppRole.selectByUserId" /> 
 	</resultMap>
-
+    
 	<!-- SELECT -->
 
 	<select id="findByUserName" parameterType="string" resultMap="AppUserResultMap">
