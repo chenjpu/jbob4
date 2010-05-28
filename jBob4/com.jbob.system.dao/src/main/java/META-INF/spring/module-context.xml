@@ -22,6 +22,7 @@
 	
 	<bean id="sqlSessionFactory" class="com.jbob.core.batis.SqlSessionFactoryFactoryBean">
 		<property name="configLocation" value="/META-INF/batis/batis.conf.xml"></property>
+		<property name="cacheLocation" value="/META-INF/ehcache.xml"></property>
 		<property name="dataSource"><ref bean="dataSource"/></property>
 		<property name="mapperLocations">
 		   <array>
