@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form name="VacationRequest" xmlns="http://jbob.com/4.0/form" type="process" col="2">
+	<discription>
+	</discription>
+	<field name="userId" type="hidden">
+		<discription>用户登录id</discription>
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="createDate" type="date" label="创建时间" colspan="1" type="text">
+		<discription>流程创建时间</discription>
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="userName" type="string" label="用户名" colspan="1">
+		<discription>用户名</discription>
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="startDate" type="date" label="请假开始时间" colspan="1">
+		<discription>请假开始时间</discription>
+		<role name="申请人" authority="all" />
+		<role name="*" authority="read" />
+	
+		<event type="onclick" function="doOnclick()">
+		    <!-- 可以实现函数定义，也可以引用全局 -->
+		</event>
+	</field>
+
+	<field name="endDate" type="date" label="请假结束时间" colspan="1">
+		<discription>请假结束时间</discription>
+		<role name="申请人" authority="all" />
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="type" type="string" label="请假类型" colspan="1">
+		<subField>
+			<field name="年假" value="1" type="option">
+				<role name="*" authority="read" />
+			</field>
+			<field name="病假" value="2" type="option">
+				<role name="*" authority="read" />
+			</field>
+			<field name="事假" value="3" type="option">
+				<role name="*" authority="read" />
+			</field>
+			<field name="其它" value="4" type="option">
+				<role name="*" authority="read" />
+			</field>
+		</subField>
+		<discription>请假类型</discription>
+		<role name="申请人" authority="read,write" />
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="reason" type="string" label="请假事由" type="option">
+		<discription>请假事由</discription>
+		<role name="申请人" authority="all" />
+		<role name="*" authority="read" />
+	</field>
+</form>
