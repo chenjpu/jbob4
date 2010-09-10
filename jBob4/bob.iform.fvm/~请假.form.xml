@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form name="VacationRequest" xmlns="http://jbpm.org/4.3/form" type="process">
+	<discription>
+	</discription>
+	<field name="userId" webType="hidden" javaType="string">
+		<discription>
+			用户登录id
+		</discription>
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="userName" webType="text" javaType="string">
+		<discription>
+			 
+		</discription>
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="startDate" webType="text" javaType="date">
+		<discription>
+			请假开始时间
+		</discription>
+		<role name="申请人" authority="read,write" />
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="endDate" webType="text" javaType="date">
+		<discription>
+			请假结束时间
+		</discription>
+		<role name="申请人" authority="read,write" />
+		<role name="*" authority="read" />
+	</field>
+
+	<field name="type" webType="radio" javaType="string">
+		<options>
+			<option name="年假" value="1">
+				<role name="*" authority="read" />
+			</option>
+			<option name="病假" value="2">
+				<role name="*" authority="read" />
+			</option>
+			<option name="事假" value="3">
+				<role name="*" authority="read" />
+			</option>
+			<option name="其它" value="4">
+				<role name="*" authority="read" />
+			</option>
+		</options>
+		<discription>
+			请假类型
+		</discription>
+		<role name="申请人" authority="read,write" />
+		<role name="*" authority="read" />
+	</field>
+	
+	<field name="reason" webType="textarea" javaType="string">
+		<discription>
+			请假事由
+		</discription>
+		<role name="申请人" authority="read,write" />
+		<role name="*" authority="read" />
+	</field>
+</form>

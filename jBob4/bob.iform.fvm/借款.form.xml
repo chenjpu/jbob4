@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form name="VacationRequest" xmlns="http://jbpm.org/4.3/form">
+
+	<hidden  name="userId" type="string">
+		<discription>
+			用户登录id
+		</discription>
+		<role name="*" authority="read" />
+	</hidden>
+<field>
+	<text  name="userName" type="string" label="用户名">
+		<discription>
+			用户登录id
+		</discription>
+		<role name="*" authority="read" />
+	</text>
+</field>
+</form>
