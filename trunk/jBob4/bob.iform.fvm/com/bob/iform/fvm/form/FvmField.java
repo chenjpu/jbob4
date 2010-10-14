@@ -24,9 +24,5 @@ public interface FvmField extends FvmScope {
 
   FvmScope getParent();
 
- /* List<PvmTransition> getIncomingTransitions();
-
-  List<PvmTransition> getOutgoingTransitions();
   
-  PvmTransition findOutgoingTransition(String transitionId);*/
 }
