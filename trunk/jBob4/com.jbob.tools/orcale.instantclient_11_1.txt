@@ -1,0 +1,33 @@
+    1. 把下载的Basic版压缩包解压，放到 D:\Program Files\instantclient_10_2 目录下，总共8个文件。
+    2. 桌面上，右键点“我的电脑”，选择“属性”，选择“高级”页中的“环境变量”，在系统变量中，增加：
+       1) 变量名：ORACLE_HOME
+          变量值：D:\Program Files\instantclient_11_1
+       2) 变量名：TNS_ADMIN
+          变量值：D:\Program Files\instantclient_11_1
+       3) 变量名：NLS_LANG
+          变量值：SIMPLIFIED CHINESE_CHINA.ZHS16GBK
+       4) 修改Path变量，在后面添加 D:\Program Files\instantclient_11_1
+      
+       如果不愿意手工增加，可以下载 SetOraEnv.rar 附件, 解压后执行其中的 setOraEnv.bat.
+    3. 在D:\Progra~1\instantclient_10_2 新建一个文本文件，文件名为tnsnames.ora,文件中增加自己的数据库别名配置，
+    示例如下：
+       MyDB =
+      (DESCRIPTION =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.1.16)(PORT = 1521))
+        (CONNECT_DATA =
+          (SERVER = DEDICATED)
+          (SERVICE_NAME = ora10g)
+        )
+      )
+    主要改=前面的别名，Host为IP地址, SERVICE_NAME为数据库服务器的实例名。
+    4. 把sqlplus的压缩包中的文件，解压到 D:\Program Files\instantclient_10_2 目录下,共3个文件。
+       在Dos命令行，在D:\Program Files\instantclient_10_2 目录下，运行 sqlplus username/password@dbname,即可连到数据库上。
+      
+    卸载方法：
+    1.  桌面上，右键点“我的电脑”，选择“属性”，选择“高级”页中的“环境变量”，在系统变量中，
+        删除 ORACLE_HOME, TNS_ADMIN, NLS_LANG 三个变量,修改path变量，去掉D:\Program Files\instantclient_11_1目录。
+    2. 删除D:\Progra~1\instantclient_10_2 目录.
+
+
+    三、第三方工具使用：
+    上面的任何一种客户端配置好后，都可以安装Toad 或者PL/SQL Developer 工具，不需要再额外进行任何设置，即可使用。
