@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jQuery EasyUI</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<script type="text/javascript" src="../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script>
+		function disable(){
+			$('#dd').datebox('disable');
+		}
+		function enable(){
+			$('#dd').datebox('enable');
+		}
+		
+		/*  
+		 将Date/String类型,解析为String类型.  
+		 传入String类型,则先解析为Date类型  
+		 不正确的Date,返回 ''  
+		 如果时间部分为0,则忽略,只返回日期部分.  
+		 */
+		function formatDate(v) {
+			if (v instanceof Date) {
+				var y = v.getFullYear();
+				var m = v.getMonth() + 1;
+				var d = v.getDate();
+				var h = v.getHours();
+				var i = v.getMinutes();
+				var s = v.getSeconds();
+				var ms = v.getMilliseconds();
+				if (ms > 0)
+					return y + '-' + m + '-' + d + ' ' + h + ':' + i + ':' + s
+							+ '.' + ms;
+				if (h > 0 || i > 0 || s > 0)
+					return y + '-' + m + '-' + d + ' ' + h + ':' + i + ':' + s;
+				return y + '-' + m + '-' + d;
+			}
+			return '';
+		}
+	
+		$( function() {
+			$('#dd').datebox( {
+				currentText : '今天',
+				closeText : '关闭',
+				disabled : false,
+				required : true,
+				missingMessage : '必填',
+				formatter : formatDate
+	
+			});
+		});
+
+	</script>
+</head>
+<body>
+	<h1>DateBox</h1>
+	<div style="margin-bottom:10px;">
+		<a href="#" onclick="disable()">disable</a>
+		<a href="#" onclick="enable()">enable</a>
+		<a href="#" onclick="getValue()">getValue</a>
+	</div>
+	<input id="dd" class="easyui-datebox" required="true"></input>
+</body>
+</html>

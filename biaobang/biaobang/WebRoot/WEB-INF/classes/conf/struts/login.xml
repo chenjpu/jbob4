@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="login" extends="rts" namespace="/login">
+		<action name="login" class="loginAction" method="login">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">text/html; charset=GBK</param>
+				<param name="inputName">loginStream</param> 
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="logout" class="loginAction" method="logout">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">text/html; charset=GBK</param>
+				<param name="inputName">loginStream</param> 
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">/jsp/fail.jsp</result>
+		</action>
+	</package> 
+</struts>
