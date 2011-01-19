@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="json" extends="rts" namespace="/json">
+		
+		<action name="getPjInfo" class="jsonAction" method="getPjInfo">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream; charset=GBK</param>		
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>	
+		
+		<action name="getRiskLevelInfo2" class="jsonAction" method="getRiskLevelInfo2">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream; charset=GBK</param>		
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<action name="getRiskLevelInfo3" class="jsonAction" method="getRiskLevelInfo3">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream; charset=GBK</param>		
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+	</package>
+</struts>

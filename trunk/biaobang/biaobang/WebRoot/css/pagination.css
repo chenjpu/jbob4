@@ -1,0 +1,50 @@
+/*·ÖÒ³ */
+/*Ê×Ò³¡¢ÏÂÒ³¡¢ÉÏÒ³¡¢Ä©Ò³°´Å¥*/
+.right_button_three {
+	height:20px;
+	background:url(../images/button_three.png);
+	font:12px;
+	font-family: Geneva, Arial, Helvetica, sans-serif;	
+	width:50px;
+	text-align:center;
+	padding-top:2px;
+	border:#000 solid 0px;
+	cursor:hand;
+	letter-spacing:0px;
+	filter:progid:DXImageTransform.Microsoft.Glow(enabled=false,color=#ffffff,strength=0);
+}
+.right_button_threeds {
+	height:20px;
+	background:url(../images/button_threeds.png);
+	font:12px;
+	font-family: Geneva, Arial, Helvetica, sans-serif;	
+	width:50px;
+	text-align:center;
+	padding-top:2px;
+	border:#000 solid 0px;
+	letter-spacing:0px;
+	filter:progid:DXImageTransform.Microsoft.Glow(enabled=false,color=#ffffff,strength=0);
+}
+/*go*/
+.right_button_one {
+	height:21px;
+	background:url(../images/button_one.jpg);
+	font:12px;
+	font-family: Geneva, Arial, Helvetica, sans-serif;	
+	width:29px;
+	text-align:center;
+	border:#000 solid 0px;
+	cursor:hand;
+	letter-spacing:0px;
+	filter:progid:DXImageTransform.Microsoft.Glow(enabled=false,color=#ffffff,strength=0);
+}
+
+.input_text_go {
+	font-size:12px;
+	border:#9EAAB4 solid 1px;
+	background:#fff;
+	height:21px;
+	width:30px;
+	padding-top:4px;
+	padding-left:4px;
+}

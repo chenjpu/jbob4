@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.locale" value="zh_CN" />
+	<constant name="struts.i18n.encoding" value="GBK" />
+	<constant name="struts.multipart.maxSize" value="20971520"/>
+	
+	<!-- struts配置集合 -->
+	<include file="conf/struts/login.xml" />
+	<include file="conf/struts/paramConfig/commonTable.xml" />
+	<include file="conf/struts/attachment/attachment.xml" />
+	<include file="conf/struts/json/json.xml" />
+	<!-- end -->
+	
+	<package name="rts" extends="struts-default" namespace="/">	
+		<interceptors>
+			<!-- 拦截前台设置页面不缓存 -->
+			<interceptor name="serverBrowserCache" class="com.cy.erp.web.common.ServerBrowserCacheInterceptor" />
+			
+			<!-- 默认执行的拦截器栈 -->
+			<interceptor-stack name="customStack">
+				<!-- 引用STRUTS2默认拦截器 -->
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="serverBrowserCache" />
+			</interceptor-stack>		
+		</interceptors>
+			
+		<default-interceptor-ref name="customStack" />
+		<!-- 全局 -->
+		<global-results>
+			<result name="success">/jsp/success.jsp</result>
+			<result name="error">/jsp/fail.jsp</result>
+			<result name="exception">/jsp/exception.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="exception" />
+		</global-exception-mappings>	
+		
+	</package>
+</struts>

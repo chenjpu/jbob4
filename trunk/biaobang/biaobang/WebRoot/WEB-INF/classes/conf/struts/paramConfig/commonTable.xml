@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="commonTable" extends="rts" namespace="/commonTable">	
+		
+		<action name="downloadDemo" class="commonTableAction" method="downloadDemo">
+			<interceptor-ref name="customStack" >
+				<param name="serverBrowserCache.cacheSeconds">0</param>
+			</interceptor-ref>
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-Excel;charset=GBK</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="demo.xls"</param>				
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<action name="queryObject" class="commonTableAction" method="queryObject">
+			<result name="success">/jsp/paramConfig/commonTable_Query.jsp</result>				
+			<result name="error">/jsp/fail.jsp</result>
+		</action>
+		
+		<action name="toAddObject" class="commonTableAction" method="toAddObject">
+			<result name="success">/jsp/paramConfig/commonTable_Add.jsp</result>				
+			<result name="error">/jsp/fail.jsp</result>
+		</action>
+		
+		<action name="toEditObject" class="commonTableAction" method="toEditObject">
+			<result name="success">/jsp/paramConfig/commonTable_Edit.jsp</result>				
+			<result name="error">/jsp/fail.jsp</result>
+		</action>
+		
+		<action name="saveObject" class="commonTableAction" method="saveObject">
+			<result name="success">/jsp/success.jsp</result>				
+			<result name="error">/jsp/fail.jsp</result>
+		</action>
+	</package>
+</struts>
