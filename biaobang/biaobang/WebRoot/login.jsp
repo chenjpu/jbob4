@@ -14,16 +14,16 @@
 		<script src="ajax/comm.js"></script>
 	</head>
 
-<body onload="document.all.crId.focus();">
+<body onload="document.all.user.focus();">
 <script>
 	function login(){
-		var crId=document.all("operatorInfo.crId").value;
-		var password=document.all("operatorInfo.password").value;
-		if(crId == "" || password == ""){
+		var user=document.all("operatorinfo.user").value;
+		var password=document.all("operatorinfo.password").value;
+		if(user == "" || password == ""){
 			alert("请输入账号密码");
 			return;
 		}
-		var url="login/login.action?operatorInfo.crId="+crId+"&operatorInfo.password="+password;
+		var url="login/login.action?operatorinfo.user="+user+"&operatorinfo.password="+password;
 		send(url);
 		if(strText == 'true'){
 			window.location.href='index.jsp';
@@ -33,8 +33,8 @@
 	}
 	
 	function reInput(){
-		document.all("operatorInfo.crId").value="";
-		document.all("operatorInfo.password").value="";
+		document.all("operatorinfo.user").value="";
+		document.all("operatorinfo.password").value="";
 	}
 	
 	  //回车触发某按钮的单击事件 
@@ -54,11 +54,11 @@
         <td align="left" valign="top" class="lodinbg"><table border="0" cellspacing="10" cellpadding="0" class="lodintab">
           <tr>
             <td height="30">用户名：</td>
-            <td><input type="text" id="crId" name="operatorInfo.crId" onkeydown="Query()" /></td>
+            <td><input type="text" id="user" name="operatorinfo.user" onkeydown="Query()" /></td>
           </tr>
           <tr>
             <td height="30">密　码：</td>
-            <td><input type="password" id="password" name="operatorInfo.password" onkeydown="Query()" /></td>
+            <td><input type="password" id="password" name="operatorinfo.password" onkeydown="Query()" /></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
