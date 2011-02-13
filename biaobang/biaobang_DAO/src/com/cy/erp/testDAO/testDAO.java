@@ -14,7 +14,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import com.cy.erp.daolayer.base.Trackorder;
 import com.cy.erp.daolayer.dao.DaoImpl;
 import com.cy.erp.daolayer.dao.DaoInit;
 
@@ -50,13 +49,7 @@ public class testDAO extends HibernateDaoSupport {
 		
 		try {
 			DaoImpl dao=new DaoImpl();
-			List list=dao.pubFind("from Trackorder");
-			Trackorder bean=(Trackorder)list.get(0);
-			System.out.println(bean.getXtime());
-//			Trackorder bean=new Trackorder();
-//			bean.setId("sadf");
-//			bean.setOrderNo("as");
-//			dao.save(bean);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
