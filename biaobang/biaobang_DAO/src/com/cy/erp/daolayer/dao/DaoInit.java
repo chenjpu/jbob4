@@ -29,7 +29,7 @@ public class DaoInit {
 		SessionFactory tmpFactory = null;
 		// 读取配置文件 RTS_DAO.xml
 		try {
-			rs = new FileSystemResource("etc/HF_DAO.xml");
+			rs = new FileSystemResource("etc/BIAOBANG_DAO.xml");
 		} catch (Exception e) {
 			logger.error("初始化默认配置文件[RTS_DAO.xml]失败,请检查文件路径,系统中止执行",e);
 			System.exit(-1);
