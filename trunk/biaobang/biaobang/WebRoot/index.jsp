@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=GBK"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@page import="com.cy.erp.web.model.LoginData;"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%
 LoginData loginData = (LoginData) request.getSession().getAttribute("loginData");
 if (loginData == null) {
