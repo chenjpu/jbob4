@@ -1,5 +1,5 @@
 /* CSS Document */
-*{ margin:0px; padding:0px; font-size:12px; font-family:"文泉驿正黑";}
+*{ margin:0px; padding:0px; font-size:13px; font-family:"文泉驿正黑";}
 ul,li{ list-style:none;}
 h1,h2{ font-size:12px; font-weight:normal;}
 dl,dt,dd{ list-style:none;}
@@ -40,8 +40,8 @@ img{vertical-align:middle; margin:0; border:0;}
 
 .listtabtit{background:url(../img/list_titbg.gif) left top repeat-x; height:22px;}
 .listtab{margin:0;}
-.listtab th{border-bottom:solid 1px #d0d0d0; border-left:solid 1px #d0d0d0;}
-.listtab td{border-bottom:solid 1px #ededed; border-left:solid 1px #ededed; line-height:22px;}
+.listtab th{border:solid 1px #d0d0d0;}
+.listtab td{border-bottom:solid 1px #0066CC; border-left:solid 1px #0066CC; line-height:22px;}
 .listtab a{color:#003366; text-decoration:underline;}
 
 .divtopleft{background:url(../img/div_tleft.png) left top no-repeat; width:15px; height:37px;}
@@ -51,3 +51,5 @@ img{vertical-align:middle; margin:0; border:0;}
 .divtopleft01{background:url(../img/div_bleft.png) left top no-repeat; width:13px; height:37px;}
 .divtopright01{background:url(../img/div_bright.png) left top no-repeat; width:13px; height:37px;}
 .divtopmid01{background:url(../img/div_bmid.png) left top repeat-x; height:37px; color:#fff;}
+
+.text{background:#ffffff;border-bottom: #000000 1px solid;border-top:solid 1xp #ffffff;border-left:solid 1xp #ffffff;border-right:solid 1xp #ffffff;}
