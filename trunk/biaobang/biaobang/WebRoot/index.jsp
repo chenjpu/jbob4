@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=GBK"%>
-<%@page import="com.cy.erp.web.model.LoginData;"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@page import="com.cy.erp.web.model.LoginData;"%>
 <%
 LoginData loginData = (LoginData) request.getSession().getAttribute("loginData");
 if (loginData == null) {
@@ -63,47 +63,59 @@ if (loginData == null) {
 				<div title="货单管理" selected="true" style="overflow:auto;">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="topline">
 				      <tr>
-				        <td align="center"><a href="#" onclick="addTab('提货单输单','jsp/trackOrder/trackOrderQuery.jsp');"><img src="img/bot_xiangmu.gif" border="0" /><br/>提货单输单</a></td>
+				        <td align="center"><a href="#" onclick="addTab('提货单输单','jsp/commodityOrder/commodityOrderAdd.jsp');"><img src="img/bot_xiangmu.gif" border="0" /><br/>提货单输单</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center"><a href="#" onclick="addTab('提货单查询','jsp/trackOrder/trackOrderQuery.jsp');"><img src="img/bot_shengji.gif" border="0" /><br/>提货单查询</a></td>
+				        <td align="center"><a href="#" onclick="addTab('提货单查询','jsp/commodityOrder/commodityOrderQuery.jsp');"><img src="img/bot_shengji.gif" border="0" /><br/>提货单查询</a></td>
 				      </tr>
 				    </table>
 				</div>
 				<div title="统计报表" style="overflow:auto;">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="topline">
 				      <tr>
-				        <td align="center" ><a href="#" onclick="addTab('风险管理','risk/queryObject.action');"><img src="img/bot_faxian.gif" border="0" /></a></td>
+				        <td align="center" ><a href="#" onclick="addTab('销售动态','jsp/statanalyse/1.jsp');">销售动态</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('区域销售状况','jsp/statanalyse/2.jsp');">区域销售状况</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('客户等级分类销售状况','jsp/statanalyse/3.jsp');">客户等级分类销售状况</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('产品分类销售状况','jsp/statanalyse/4.jsp');">产品分类销售状况</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('客户月销售状况','jsp/statanalyse/5.jsp');">客户月销售状况</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('产品月销售情况','jsp/statanalyse/6.jsp');">产品月销售情况</a></td>
 				      </tr>
 				      
 				    </table>
 				</div>
-				<div title="业务数据管理">
+				<div title="业务数据维护">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="topline">
 				      <tr>
-				        <td align="center"><a href="#" onclick="addTab('项目覆盖情况统计','totalInfo/queryObject.action');"><img src="img/bot_fugai.gif" border="0" /></a></td>
+				        <td align="center"><a href="#" onclick="addTab('客户信息','jsp/customerInfo/customerInfoQuery.jsp');">客户信息</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center"><a href="#" onclick="addTab('审计发现问题情况统计','totalRisks/queryObject.action');"><img src="img/bot_wenti.gif" border="0" /></a></td>
+				        <td align="center"><a href="#" onclick="addTab('产品信息','jsp/productInfo/productInfoQuery.jsp');">产品信息</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center"><a href="#" onclick="addTab('项目情况统计','totalMember/queryObject.action');"><img src="img/bot_qingkuang.gif" border="0" /></a></td>
+				        <td align="center"><a href="#" onclick="addTab('商品价格信息','jsp/commodityPrice/commodityPriceQuery.jsp');">商品价格信息</a></td>
 				      </tr>
 				    </table>
 				</div>
-				<div title="数据维护" style="">
+				<div title="系统数据维护" style="">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="topline">
 				      <tr>
-				        <td align="center"><a href="#"><img src="img/bot_shengji.gif" border="0" /></a></td>
+				        <td align="center"><a href="#">用户信息</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center"><a href="#"><img src="img/bot_laiyuan.gif" border="0" /></a></td>
+				        <td align="center"><a href="#">系统角色</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center"><a href="#"><img src="img/bot_zuzhi.gif" border="0" /></a></td>
-				      </tr>
-				      <tr>
-				        <td align="center"><a href="#"><img src="img/bot_fengxian.gif" border="0" /></a></td>
+				        <td align="center"><a href="#">数据备份</a></td>
 				      </tr>
 				    </table>
 				</div>
