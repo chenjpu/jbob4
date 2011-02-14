@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFirstBackForUser</name>
+	<display-name>深圳首次回单量</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOther">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/itsm/szFirstBackForUserBill')</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="orgcode">
+			<index>30</index>
+			<display-name>处理部门</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend>{0001100000030004:深圳分部,00010755:sz业务支持中心}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+			<td align='center'>${1}</td>
+			<td align='center'>${2}</td>
+			<td align='center'><a href="javascript:openList('/itsm/szFirstBackForUserBill','${3}','fgroupname=${1}&fname=${2}')">${3}</a></td>
+		</tr>
+		]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#FF0000;line-height:14pt;	background-color:white;'>
+			<td align='center' colspan='2'>合计</td>
+			<td align='center'><a href="javascript:openList('/itsm/szFirstBackForUserBill','$[round(${3})]','fgroupname=${1}&fname=${2}')">$[round(${3})]</a></td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+		select rn.executergroupname 处理组,
+		       rn.executername 处理人,
+		       count(*) 首次回单数
+		from
+		(
+		  select f.flowlsh,n.executercode,n.executername,n.executergroupid,n.executergroupname,n.executedate,row_number() over(partition by n.flowlsh order by n.gendate) rn
+		  from rec_flow f,rec_node n--,rec_node n2
+		  where f.flowlsh=n.flowlsh
+		    --and n.nodelsh=n2.prenodelsh      
+		    and f.status!='XJ'
+		    and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+		    and n.submitinfo like '%回单%'
+		    --and n2.preroutecode in (
+		    --    select r.routecode from flw_route r 
+		    --    where r.flowcode='86b47b100a11226801c8c29cc4f3df3f' 
+		    --      and r.routename like '%回单%'
+		    --)
+		) rn
+		where rn.rn=1
+		  #[and rn.executedate>=${startDate}]
+		  #[and rn.executedate<${endDate}]
+		  #[
+		  and rn.executergroupid in(
+		      select g.id from sec_group g,sec_org o where g.org_id=o.id and o.org_code like ${orgcode}||'%'
+		  )
+		  ]
+		group by rn.executercode,rn.executername,rn.executergroupid,rn.executergroupname
+		order by rn.executergroupname,首次回单数 desc
+		]]></ksql>
+</kreport>

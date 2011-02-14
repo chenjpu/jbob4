@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>ExportModel</name>
+	<display-name>导出模板</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>20</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>10</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="export2">
+			<index>15</index>
+			<display-name>导出模板</display-name>
+			<do>doExport2()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="tab_name">
+			<index>30</index>
+			<display-name>导出表</display-name>
+			<type>select</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select sc.tab_name,sc.tab_path from temp_cmdb_sc sc order by sc.tab_path
+			]]></extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody></tbody>
+	</data>	
+	<ksql><![CDATA[
+    	select sc2.tab_id 表ID,
+		       sc2.tab_comment 表名,
+           	   cm.col_comment 列显示名,
+		       cm.col_e_type,cm.tab_name||':ID' ID列,
+		       cm.col_name 字段名,
+		       cm.col_ext1 扩展1,
+		       cm.col_ext2 扩展2
+        from TEMP_CMDB_MODEL cm,temp_cmdb_sc2 sc2
+		where nvl(cm.col_name,' ')!='ID'
+		  and cm.status=1
+          and cm.tab_name=sc2.tab_pname
+          and sc2.tab_name=${tab_name}		
+		order by cm.tab_code,cm.rank
+		]]></ksql>
+</kreport>

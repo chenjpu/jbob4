@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>sqlQuery</name>
+	<display-name>SQL查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>40</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="sql">
+			<index>10</index>
+			<display-name>执行语句</display-name>
+			<type>text</type>
+			<required>true</required>
+			<return-type>void</return-type>
+		</condition>
+	</conditions>	
+	<ksql><![CDATA[
+		${sql}
+		]]></ksql>
+</kreport>

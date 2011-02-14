@@ -1,0 +1,15 @@
+<popedom>
+	<block name="b1" displayName="fdssfs">
+		<kReport>itsm/szLoadForGroup</kReport>
+		<kReport>itsm/szLoadForGroup</kReport>
+		<kReport>itsm/szLoadForGroup</kReport>
+		<kReport>itsm/szLoadForGroup</kReport>
+	</block>
+	
+	<user name="buliao" password="1" displayName="王治平">
+		<block>b1</block>
+	</user>
+	<user name="buliao2" password="1" displayName="王治平">
+		<block>b1</block>
+	</user>
+</popedom>

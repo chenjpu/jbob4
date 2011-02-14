@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultSystemCaseBill</name>
+	<display-name>深圳故障原因分析清单</display-name>
+	<condition-size>4</condition-size>
+	<pageable>true</pageable>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="sort">
+			<index>30</index>
+			<display-name>排序</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{fieldvalue:涉及系统,billfaultreason:工单故障原因}</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="relationsys">
+			<index>0</index>
+			<display-name>涉及系统</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+		<condition name="billfaultreason">
+			<index>0</index>
+			<display-name>工单故障原因</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td nowrap>${0}</td>
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td>${6}</td>
+				<td nowrap>${7}</td>
+				<td nowrap>${8}</td>
+				<td>${9}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+    --已完成工单按涉及系统统计
+    select f.serialno 工单编号,
+           f.title 工单标题,
+           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+           to_char(f.completedate,'yyyy-mm-dd hh24:mi') 回单时间,
+           f.organiger 报障人,
+           f.organigerdept 报障部门,
+           rend(s.fieldvalue) 涉及系统,
+           rend(f.billfaultreason) 工单故障原因,
+           f.faultdescription 故障描述
+    from(
+      select cf.flowlsh,cf.serialno,cf.title,cf.gendate,i.organiger,i.organigerdept,i.billfaultreason,max(cn.executedate) completedate ,i.faultdescription
+      from rec_flow cf,ins_frm_fault i, rec_node cn
+      where cf.flowlsh=i.flowlsh
+        and cf.flowlsh = cn.flowlsh
+        and cf.flowcode='86b47b100a11226801c8c29cc4f3df3f' 
+        and i.fualtstatus in ('230','240','250')
+        and cn.nodecode not in ('86c9dd900a11226800316ae4eb406c1e','870bb7f90a11226801f8cfbbeebbcb95') --不是报障和报障人确认环节
+        and i.area='0755' 
+      group by cf.flowlsh,cf.serialno,cf.title,cf.gendate,i.organiger,i.organigerdept,i.billfaultreason,i.faultdescription
+    ) f,ins_frm_sub_namevalue s
+    where 'MUL_'||f.flowlsh||'_relationsys'=s.parentrelid(+)
+      #[and completedate>=${startDate}]
+      #[and completedate< ${endDate}]  
+      #[and nvl(rend(s.fieldvalue),'空')=${relationsys}]
+      #[and nvl(rend(f.billfaultreason),'空')=${billfaultreason}]
+    order by #[${sort},] f.gendate desc
+		]]></ksql>
+</kreport>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>onLandTodayForFactory</name>
+	<display-name>厂家今日登陆用户</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>40</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="factoryId">
+			<index>30</index>
+			<display-name>厂家</display-name>
+			<type>select</type>
+			<required>true</required>
+			<default-value>亿迅IBSS/CRM</default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+		        select o.id,o.org_name from sec_org o 
+		        where o.org_name in(
+		              '亿迅IBSS/CRM',
+		              'MBOSS省集中CRM系统支撑厂家',
+		              'MBOSS省集中SPS系统支撑厂家',
+		              '亿迅大客户管理系统CMMS',
+		              '亿迅网厅和掌厅',
+		              '亿迅维系挽留系统'
+		          )
+			]]></extend>
+		</condition>
+	</conditions>	
+	<ksql><![CDATA[
+		select u.login_id 登陆ID,
+			   u.user_name 用户名,
+			   u.telephone 电话,
+			   u.mobile 手机,
+			   u.email 邮箱,
+			   u.last_login_date 最后登陆时间 
+		from sec_user u,sec_r_user_org uo
+		where u.id=uo.user_id
+		  and u.last_login_date>=trunc(sysdate)
+		  and u.id in(
+		  	select ug.user_id from sec_r_user_group ug,sec_group g
+			where ug.group_id=g.id
+			  and g.org_id=${factoryId}
+		  )
+		  ]]></ksql>
+</kreport>

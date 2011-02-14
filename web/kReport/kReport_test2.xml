@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>BillQuery3</name>
+	<display-name>按系统统计CI数量报表</display-name>
+	<comment><![CDATA[注释：
+	1.文件fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+	fff;
+	2.text]]></comment>
+	<page-size></page-size>
+	<pageable></pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="crossQuery">
+			<index>5</index>
+			<display-name>交叉报表</display-name>
+			<do>doCrossQurey()</do>
+		</action>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="exportCrossTable">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExportCrossTable()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>43</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<default-value></default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+		</condition>
+		<condition name="endDate">
+			<index>46</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+		</condition>
+	</conditions>	
+	<cross>
+		<cross-text></cross-text>
+		<row-field>ORDERNUM:DATA_NAME,BSNAME</row-field>
+		<col-field>F_DISPLAY_NAME</col-field>
+		<value-field>CINUM</value-field>
+		<row-count>True</row-count>
+		<col-count>true</col-count>
+		<openkreport>/test</openkreport>
+	</cross>
+	<data></data>	
+	<ksql><![CDATA[
+		select t2.ordernum, 
+			   t2.data_name,
+			   t2.bsname,
+			   t3.f_display_name,
+			   t2.cinum 
+		from (
+		  select t1.ordernum, t1.data_name, t1.bsname,t1.f_category_id,count(*) as cinum from (
+		    select i1.id,i1.f_code,i1.f_display_name as ciname,i1.f_category_id,i2.id as bsid,i2.f_display_name as bsname,bs.f_type,dd.data_name,dd.ordernum
+		    from cmdb_configuration_item i1,cmdb_configuration_item i2,cmdb_r_ci_relation cr,cmdb_businesssystem bs,cmdb_data_dictionary dd
+		    where i1.id = cr.f_start_ci_id
+		    and cr.f_end_ci_id = i2.id
+		    and i2.id = bs.id
+		    and bs.f_type = dd.data_value
+		    and dd.data_group = 'as_type'
+		    and i2.f_category_id = 35
+		    and i1.f_category_id in
+		    (
+		        select c.id from cmdb_category c where c.f_leaf = 1 and c.f_url is not null start with c.id =6 connect by prior c.id=c.f_parent_id
+		    )
+		  ) t1 group by t1.data_name,t1.bsname,t1.f_category_id,t1.ordernum
+		) t2,
+		(
+		  select c.id,c.f_display_name from cmdb_category c where c.f_leaf = 1 and c.f_url is not null start with c.id =6 connect by prior c.id=c.f_parent_id order by c.f_code
+		) t3
+		where t2.f_category_id = t3.id    
+		]]></ksql>
+</kreport>

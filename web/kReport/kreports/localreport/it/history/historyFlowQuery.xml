@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>historyFlowQuery</name>
+	<display-name>历史工单查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>	
+		<condition name="serialNO">
+			<index>10</index>
+			<display-name>工单编号</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="title">
+			<index>20</index>
+			<display-name>标题</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="organiger">
+			<index>30</index>
+			<display-name>报障人</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="faultdescription">
+			<index>40</index>
+			<display-name>故障描述</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="startDate">
+			<index>50</index>
+			<display-name>跟踪发起时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="endDate">
+			<index>60</index>
+			<display-name>跟踪发起时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="faultlinkman">
+			<index>70</index>
+			<display-name>联系人</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="faultlinktel">
+			<index>80</index>
+			<display-name>联系电话</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openList('/itsm/localreport/historyNodeQuery','${1}','serialno=${1}')">${1}</a></td>
+				<td><a href="javascript:openList('/itsm/localreport/historyNodeQuery','${2}','serialno=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td nowrap>${8}</td>
+				<td>${9}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select f.serialno 工单编号,
+		       f.title 工单标题,
+		       to_char(f.gendate,'yyyy-mm-dd hh24:mm') 报障时间,
+		       i.organiger 报障人,
+		       i.organigerdept 报障部门,
+		       to_char(i.replytime,'yyyy-mm-dd hh24:mm') 回单时间,
+			   i.faultlinkman 联系人,
+			   i.faultlinktel 联系人电话,
+		       i.faultdescription 故障描述 
+		 from rec_flow_201007 f,ins_frm_fault_201007 i
+		where f.flowlsh=i.flowlsh
+		      and f.status!='XJ'
+			  #[and f.serialno like ${serialNO}]
+			  #[and f.title like ${title}]
+			  #[and i.faultdescription like ${faultdescription}]
+			  #[and i.organiger like ${organiger}]
+			  #[and i.faultlinkman like ${faultlinkman}]
+			  #[and i.faultlinktel like ${faultlinktel}]
+			  #[and f.gendate >= ${startDate}]
+			  #[and f.gendate <  ${endDate}]
+		order by f.gendate desc
+		]]></ksql>
+</kreport>

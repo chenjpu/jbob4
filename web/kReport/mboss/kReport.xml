@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name></name>
+	<display-name></display-name>
+	<page-size></page-size>
+	<pageable></pageable>
+	<condition-size></condition-size>
+	<skin></skin>	
+	<d
+	<actions></actions>	
+	<conditions></conditions>	
+	<data></data>	
+	<ksql></ksql>
+</kreport>

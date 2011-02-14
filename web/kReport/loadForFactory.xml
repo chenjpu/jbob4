@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>loadForFactory</name>
+	<display-name>厂家工作量</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOther">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/query2/loadForFactoryBill')</do>
+		</action>
+		<action name="reset">
+			<index>40</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>处理完成时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>处理完成时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="factoryId">
+			<index>30</index>
+			<display-name>厂家</display-name>
+			<type>select</type>
+			<required>true</required>
+			<default-value>亿迅IBSS/CRM</default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+		        select o.id,o.org_name from sec_org o 
+		        where o.org_name in(
+		              '亿迅IBSS/CRM',
+		              'MBOSS省集中CRM系统支撑厂家',
+		              'MBOSS省集中SPS系统支撑厂家',
+		              '亿迅大客户管理系统CMMS',
+		              '亿迅网厅和掌厅',
+		              '亿迅维系挽留系统'
+		          )
+			]]></extend>
+		</condition>
+		<condition name="outers">
+			<index>40</index>
+			<display-name>过滤人员</display-name>
+			<type>mselect</type>
+			<return-type>string</return-type>
+			<extend>{8a91a287231cdcbe01231ce0789d0011:李婷,8D6F27CFCDFCB93CE040798494823BD1:陈晓莉}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[]]></thead>
+		<tbody><![CDATA[]]></tbody>
+	</data>	
+	<ksql><![CDATA[
+		--厂家工作量统计（查询时间段内进入厂家的工单，不包括回退和撤消的工单）
+		select n.executername 处理人,
+		       count(*) 工单数,
+		       round(sum(ar.used_time)/60000) 工作量,
+		       sum(decode(sign(ar.total_time-ar.used_time/60000),-1,1,0)) 超时数,
+		       nvl(sum(nvl(r2.r2,r1.r1)),0) 重派数
+		from rec_flow f,v_rank v_r,chk_assessment_result ar,
+		  (
+		        select dgn.flowlsh,dgn.nodelsh,dgn.status,dgn.executercode,dgn.executername,dgn.executedate,row_number() over (partition by dgn.flowlsh order by dgn.gendate desc) rn
+		        from rec_node dgn
+		        where dgn.flowcode='86b47b100a11226801c8c29cc4f3df3f' --故障流程
+		            and dgn.nodecode='8707d5ab0a112268006fa804cb1cbc30' --经过厂家处理环节
+		            and dgn.executergrouporgid=${factoryId}         --厂家
+		  			and dgn.status not in('SC','TH')
+		  			#[and dgn.executercode not in(${outers})]
+		  ) n,
+		  (     --厂家处理过多次
+		        select n.flowlsh,1 r1 from 
+		        (
+		                select n.flowlsh,n.nodecode,n.prenodelsh,lag (n.nodelsh,1,0) over (PARTITION BY n.flowlsh order by n.nodelsh) lagnodelsh
+		                from rec_node n
+		                where n.nodecode ='8707d5ab0a112268006fa804cb1cbc30'
+		                  and n.executergrouporgid=${factoryId}         --厂家    
+		        ) n
+		        where n.prenodelsh=n.lagnodelsh
+		        group by n.flowlsh
+		        having count(*)>1
+		  ) r1,
+		  (     --重派单
+		      select f.flowlsh,1 r2 from rec_flow f,rec_flow pf
+		      where f.relatedserialno is not null
+		        and pf.serialno=substr(f.serialno,0,instr(f.serialno,'-',length(f.serialno)-3)-1)
+		        and exists(
+		            select 1 from rec_node n where n.executergrouporgid=${factoryId}         --厂家    
+		        )
+		  ) r2
+		where f.flowlsh=n.flowlsh
+		  and n.flowlsh=ar.rec_flow_id
+		  and f.flowlsh=r1.flowlsh(+)
+		  and f.flowlsh=r2.flowlsh(+)
+		  and ar.assessment_id=v_r.assessment_id
+		  and n.rn=1
+		  and f.status!='XJ'   --不是新建单
+		  and ar.assessment_type='O'
+		  and v_r.value=${factoryId}
+		  and n.status='YB'
+		  #[and n.executedate>=${startDate}] --首次进入时间（开始）
+		  #[and n.executedate< ${endDate}+1] --首次进入时间（结束）不包含此天  
+		group by n.executercode,n.executername
+		]]></ksql>
+</kreport>

@@ -1,0 +1,23 @@
+.mselect_hideDiv{
+	display:none;
+}
+.mselect_showDiv{	
+	background-color:#FFFFFF;
+	border:#bbb 1px solid;
+	padding:2px;
+	position:absolute;
+	min-width:180px;
+}
+.mselect_showDiv *{font-size:9pt;}
+
+.mselect_tableDiv {
+	overflow: auto; 
+	max-height:250px; 
+	word-break:break-all;
+}
+
+.mselect{
+	border:#999 1px solid;
+	height:20px;
+	background:#fff url(mselect.gif) no-repeat right;
+}

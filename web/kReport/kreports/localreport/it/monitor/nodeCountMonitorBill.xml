@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>nodeCountMonitorBill</name>
+	<display-name>工单流转次数监控</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="exportCrossTable">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="flowType">
+			<index>50</index>
+			<display-name>流转状态</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{null:在途,not null:已回单}</extend>
+			<default-value>在途</default-value>
+		</condition>		
+		<condition name="times">
+			<index>60</index>
+			<display-name>流转次数></display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>void</return-type>
+			<extend>{5:5,10:10,15:15,20:20,25:25,30:30,35:35,40:40,50:50,60:60,70:70,80:80,100:100}</extend>
+			<default-value>20</default-value>
+		</condition>		
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td>${7}</td>
+			</tr>]]>
+		</tbody>
+	</data>		
+	<ksql><![CDATA[
+		select f.serialno 工单编号,
+		       f.title 工单标题,
+		       count(*) 流转次数,
+		       to_char(f.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+		       round(r.used_time/60000) "工单历时(分钟)",
+		       strcat(decode(n.status,'DT',n.executergrouporgname,'DB',n.executergrouporgname,'SF',n.executergrouporgname,'')) 当前停留部门,
+		       strcat(n.executergrouporgname) 流转部门
+		from rec_flow f,ins_frm_fault i,rec_node n,chk_assessment_result r
+		where f.flowlsh=i.flowlsh
+		  and f.flowlsh=n.flowlsh
+		  and f.flowlsh=r.rec_flow_id
+		  and f.status!='XJ'
+		  and r.assessment_type='F'
+		  #[and i.replytime is ${flowType}]
+		  #[and f.startercode ${startercode}]
+		  #[and f.startercode=${type10000}]
+		  #[and f.gendate>=${startDate}]
+	  	  #[and f.gendate<${endDate}]
+		  #[and f.flowlsh in (
+		      select subn.flowlsh 
+		      from rec_node subn 
+		      group by subn.flowlsh having count(*)>${times}
+		  )]
+		group by f.serialno,f.title,f.gendate,r.used_time
+		order by 流转次数 desc,"工单历时(分钟)" desc
+		]]></ksql>
+	<page-size></page-size>
+</kreport>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultDept</name>
+	<display-name>深圳报障部门统计</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOthers">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/itsm/szFaultDeptBill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="organigerdept">
+			<index>0</index>
+			<display-name>报障部门</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+			<td align='center'>${1}</td>
+			<td align='center'><a href="javascript:openList('/itsm/szFaultDeptBill','${2}','orgname=${1}')">${2}</a></td>
+		</tr>
+		]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#FF0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'><a href="javascript:openList('/itsm/szFaultDeptBill','$[round(${2})]','')">$[round(${2})]</a></td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+		--按报障部门统计
+		select decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept) 报障部门,count(*) 工单数
+		from rec_flow f,ins_frm_fault i
+		where f.flowlsh=i.flowlsh
+		  and f.status!='XJ'
+	      #[and f.gendate>=${startDate}]
+		  #[and f.gendate< ${endDate}]	
+		  and i.area='0755'  --深圳
+		  #[and i.organigerdept like ${organigerdept}]
+		group by decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept)
+		order by count(*) desc
+		]]></ksql>
+</kreport>

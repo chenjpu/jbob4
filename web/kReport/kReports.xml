@@ -1,0 +1,354 @@
+﻿<kreports>
+	<data-sources>
+		<data-source name="test">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@132.121.130.139:5521:itsm</url>
+			<username>flow_test</username>
+			<password>password</password>
+		</data-source>
+		<data-source name="iftest">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@132.121.130.139:5521:itsm</url>
+			<username>iftest</username>
+			<password>password</password>
+		</data-source>
+		<data-source name="local">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@localhost:1521:itsm</url>
+			<username>flow</username>
+			<password>password</password>
+		</data-source>
+		<data-source name="product">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@132.121.130.147:5521:itsm</url>
+			<username>GDTELITSM</username>
+			<password>itsm2009gdtel</password>
+		</data-source>
+		<data-source name="mysql">
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url>jdbc:mysql://localhost:3306/kreport</url>
+			<username>root</username>
+			<password>blsoft</password>
+		</data-source>
+	</data-sources>
+	<kreport-group name="test" namespace="/test" path="/kReport">
+		<default-data-source>product</default-data-source>
+		<skin>itsm</skin>
+		<display-name>product</display-name>
+		<kreport name="product">kReport_product.xml</kreport>
+		<kreport name="product2">kReport_product2.xml</kreport>
+	</kreport-group>
+	<kreport-group name="ifproduct" namespace="/query" path="/kReport">
+		<default-data-source>product</default-data-source>
+		<display-name>测试查询</display-name>
+		<kreport name="billQuery">kReport.xml</kreport>
+		<kreport name="SecRankQuery">kReport2.xml</kreport>
+		<kreport name="NodeCodeQuery">kReport3.xml</kreport>
+		<kreport name="BillCount">kReport4.xml</kreport>
+		<kreport name="exportModel">exportModel.xml</kreport>
+	</kreport-group>
+	 
+	<kreport-group name="query2" namespace="/query2" path="/kReport">
+		<default-data-source>product</default-data-source>
+		<display-name>生产监控</display-name>
+		<kreport name="billQuery">kReport.xml</kreport>
+		<kreport name="BillCount">kReport4.xml</kreport>
+		<kreport name="onLandTodayForFactory">onLandTodayForFactory.xml</kreport>
+		<kreport name="loadForFactory">loadForFactory.xml</kreport>
+		<kreport name="loadForFactoryBill">loadForFactoryBill.xml</kreport>
+		<kreport name="sqlQuery">sqlQuery.xml</kreport>
+	</kreport-group>
+	<!-- 
+	<kreport-group name="mysql" namespace="/mysql" path="/kReport">
+		<default-data-source>mysql</default-data-source>
+		<display-name>MySQL测试</display-name>
+		<kreport name="mysqlproduct">mysqlproduct.xml</kreport>
+	</kreport-group>
+	 -->
+	<kreport-group name="LOCALREPORT" namespace="/itsm/localreport" path="/kReport/kreports/localreport">
+		<default-data-source>product</default-data-source>
+		<display-name>本地报表</display-name>
+		<skin>itsmReport</skin>
+				
+		<!-- 故障原因分析-->
+		<kreport name="faultreasonCount">it/faultreasonCount.xml</kreport>		
+		
+		<!-- 故障原因分析一 -->
+		<kreport name="faultreasonByType1">it/faultreasonByType1.xml</kreport>		
+		
+		<!-- 故障原因分析二 -->
+		<kreport name="faultreasonByType2">it/faultreasonByType2.xml</kreport>
+		
+		<!-- 故障原因分析(涉及系统)-->
+		<kreport name="faultreasonByS">it/faultreasonBySys.xml</kreport>
+			
+		<!-- 故障原因分析(故障类型)-->
+		<kreport name="faultreasonByLevel">it/faultreasonByLevel.xml</kreport>
+			
+		<!-- 区域预处理率-->
+		<kreport name="areaForecloseRate">it/forecloseRate/areaForecloseRate.xml</kreport>
+		
+		<!-- 分公司预处理率-->
+		<kreport name="yzForecloseRate">it/forecloseRate/yzForecloseRate.xml</kreport>
+		
+		<!-- 分部预处理率-->
+		<kreport name="fbForecloseRate">it/forecloseRate/fbForecloseRate.xml</kreport>
+			
+		<!-- 分公司重派率-->
+		<kreport name="redoRate">it/redoRate/redoRate.xml</kreport>
+								
+		<!-- 组回单率-->
+		<kreport name="replyRate">it/replyRate/replyRate.xml</kreport>
+		
+		<!-- 组在途工单监控-->
+		<kreport name="onwaryBillForGMonitor">it/monitor/onwaryBillForGMonitor.xml</kreport>
+		
+		<!-- 满意度统计-->
+		<kreport name="satisfactionForUser">it/satisfaction/satisfactionForUser.xml</kreport>
+		<kreport name="satisfactionForFactory">it/satisfaction/satisfactionForFactory.xml</kreport>
+		<kreport name="satisfactionFor10000">it/satisfaction/satisfactionFor10000.xml</kreport>
+		
+		<!-- ITSM受理申告完成情况 -->
+		<kreport name="overallHandlingOfBill">it/handling/overallHandlingOfBill.xml</kreport>
+				
+		<!-- ITSM受理申告已完成工单流程超时统计 -->
+		<kreport name="flowOvertimeHandlingOfBill">it/handling/flowOvertimeHandlingOfBill.xml</kreport>
+					
+		<!-- 已完成工单超时环节分析 -->
+		<kreport name="nodeOvertimeHandlingOfBill">it/handling/nodeOvertimeHandlingOfBill.xml</kreport>
+			
+		<!-- 广州在途工单监控 -->
+		<kreport name="gzGroupMonitor">gz/gzGroupMonitor.xml</kreport>
+		
+		<!-- 广州分部预处理率 -->
+		<kreport name="gzForecloseRate">gz/gzForecloseRate.xml</kreport>
+		
+		<!-- 广州预处理率 -->
+		<kreport name="gzForecloseRate2">gz/gzForecloseRate2.xml</kreport>
+		
+		<!-- 广州分部组处理量 -->
+		<kreport name="gzLoadForGroup">gz/gzLoadForGroup.xml</kreport>
+				
+		<!-- 深圳服务台提单量 -->
+		<kreport name="szFwtHourlyBill">sz/szFwtHourly.xml</kreport>
+				
+		<!-- 深圳工作量统计 -->
+		<kreport name="szLoadForUser">sz/szLoadForUser.xml</kreport>
+		
+		<!-- 深圳分部预处理率 -->
+		<kreport name="szForecloseRate">sz/szForecloseRate.xml</kreport>
+	</kreport-group>
+	
+	<kreport-group name="LOCALREPORTBILL" namespace="/itsm/localreport" path="/kReport/kreports/localreport">
+		<default-data-source>product</default-data-source>
+		<display-name>本地报表清单</display-name>
+		<skin>itsm</skin>
+		<!-- 历史工单查询 -->
+		<kreport name="historyFlowQuery">it/history/historyFlowQuery.xml</kreport>
+		<kreport name="historyNodeQuery">it/history/historyNodeQuery.xml</kreport>
+			
+		<!-- 故障原因分析清单 -->
+		<kreport name="faultreasonCountBill">it/faultreasonCountBill.xml</kreport>		
+		
+		<!-- 故障原因分析一清单 -->
+		<kreport name="faultreasonByType1Bill">it/faultreasonByType1Bill.xml</kreport>		
+		
+		<!-- 故障原因分析二清单 -->
+		<kreport name="faultreasonByType2Bill">it/faultreasonByType2Bill.xml</kreport>
+		
+		<!-- 故障原因分析(涉及系统)清单-->
+		<kreport name="faultreasonBySysBill">it/faultreasonBySysBill.xml</kreport>
+					
+		<!-- 故障原因分析(故障类型)清单-->
+		<kreport name="faultreasonByLevelBill">it/faultreasonByLevelBill.xml</kreport>
+		
+		<!-- 区域预处理率-->
+		<kreport name="areaForecloseRate_sl">it/forecloseRate/areaForecloseRate_sl.xml</kreport>
+		<kreport name="areaForecloseRate_zp">it/forecloseRate/areaForecloseRate_zp.xml</kreport>
+		
+		<!-- 分公司预处理率清单-->
+		<kreport name="yzForecloseRate_sl">it/forecloseRate/yzForecloseRate_sl.xml</kreport>
+		<kreport name="yzForecloseRate_zh">it/forecloseRate/yzForecloseRate_zh.xml</kreport>
+		<kreport name="yzForecloseRate_sp">it/forecloseRate/yzForecloseRate_sp.xml</kreport>
+						
+		<!-- 分部预处理率清单-->
+		<kreport name="fbForecloseRate_sl">it/forecloseRate/fbForecloseRate_sl.xml</kreport>
+		<kreport name="fbForecloseRate_zh">it/forecloseRate/fbForecloseRate_zh.xml</kreport>
+		<kreport name="fbForecloseRate_sp">it/forecloseRate/fbForecloseRate_sp.xml</kreport>	
+		<kreport name="fbForecloseRate_zx">it/forecloseRate/fbForecloseRate_zx.xml</kreport>
+		<kreport name="fbForecloseRate_yz">it/forecloseRate/fbForecloseRate_yz.xml</kreport>	
+			
+		
+		<!-- 组回单率-->
+		<kreport name="replyRate_jd">it/replyRate/replyRate_jd.xml</kreport>
+		<kreport name="replyRate_hd">it/replyRate/replyRate_hd.xml</kreport>
+			
+		<!-- 分部预重派率清单-->
+		<kreport name="redoRate_bz">it/redoRate/redoRate_bz.xml</kreport>
+		<kreport name="redoRate_cp">it/redoRate/redoRate_cp.xml</kreport>
+		<kreport name="redoRate_cpfb">it/redoRate/redoRate_cpfb.xml</kreport>
+		<kreport name="redoRate_cpyz">it/redoRate/redoRate_cpyz.xml</kreport>
+		<kreport name="redoRate_cpzzx">it/redoRate/redoRate_cpzzx.xml</kreport>
+		
+		<!-- 组在途工单监控清单-->
+		<kreport name="onwaryBillForGMonitorBill">it/monitor/onwaryBillForGMonitorBill.xml</kreport>
+		
+		<!-- 满意度统计清单-->
+		<kreport name="satisfactionForUserBill">it/satisfaction/satisfactionForUserBill.xml</kreport>
+		<kreport name="satisfactionForFactoryBill">it/satisfaction/satisfactionForFactoryBill.xml</kreport>
+		<kreport name="satisfactionFor10000Bill">it/satisfaction/satisfactionFor10000Bill.xml</kreport>
+						
+		<!-- ITSM受理申告完成情况 -->
+		<kreport name="overallHandlingOfBill_sl">it/handling/overallHandlingOfBill_sl.xml</kreport>
+		<kreport name="overallHandlingOfBill_wc">it/handling/overallHandlingOfBill_wc.xml</kreport>
+		<kreport name="overallHandlingOfBill_bill">it/handling/overallHandlingOfBill_bill.xml</kreport>
+				
+		<!-- ITSM受理申告已完成工单流程超时统计 -->
+		<kreport name="flowOvertimeHandlingOfBill_bill">it/handling/flowOvertimeHandlingOfBill_bill.xml</kreport>
+					
+		<!-- 已完成工单超时环节分析 -->
+		<kreport name="nodeOvertimeHandlingOfBill_bill">it/handling/nodeOvertimeHandlingOfBill_bill.xml</kreport>
+	
+		<!-- 广州在途工单监控 -->
+		<kreport name="gzGroupMonitorBill">gz/gzGroupMonitorBill.xml</kreport>
+		
+		<!-- 广州分部预处理率 -->
+		<kreport name="gzForecloseRateAll">gz/gzForecloseRateAll.xml</kreport>
+		<kreport name="gzForecloseRateZT">gz/gzForecloseRateZT.xml</kreport>
+		<kreport name="gzForecloseRateZH">gz/gzForecloseRateZH.xml</kreport>
+		<kreport name="gzForecloseRateZP">gz/gzForecloseRateZP.xml</kreport>
+		
+		<!-- 广州分部预处理率 -->
+		<kreport name="gzForecloseRate2Bill">gz/gzForecloseRate2Bill.xml</kreport>
+		
+		<!-- 广州分部组处理量 -->
+		<kreport name="gzLoadForGroupBill">gz/gzLoadForGroupBill.xml</kreport>
+						
+		<!-- 广州客服报障清单-->
+		<kreport name="faultreasonByLevelBill">gz/gz10000FaultBill.xml</kreport>
+				
+						
+		<!-- 深圳工作量统计 -->
+		<kreport name="szLoadForUserBill">sz/szLoadForUserBill.xml</kreport>
+			
+		<!-- 深圳分部预处理率 -->
+		<kreport name="szForecloseRateBill">sz/szForecloseRateBill.xml</kreport>
+		
+	</kreport-group>
+	
+	 <kreport-group name="MBOSSREPORT" namespace="/itsm" path="/kReport/mboss">
+		<default-data-source>product</default-data-source>
+		<display-name>报表数据</display-name>
+		<skin>itsmReport</skin>
+		
+		<!-- 流经IT中心工单数 -->
+		<kreport name="blowoverIT">blowoverIT.xml</kreport>
+		
+		<!-- 深圳报障类型统计 -->
+		<kreport name="szFaultType">szFaultType.xml</kreport>
+		
+		<!-- 深圳报障部门统计 -->
+		<kreport name="szFaultDept">szFaultDept.xml</kreport>
+		
+		<!-- 深圳涉及系统统计 -->
+		<kreport name="szFaultSystem">szFaultSystem.xml</kreport>
+		
+		<!-- 深圳故障原因分析 -->
+		<kreport name="szFaultSystemCase">szFaultSystemCase.xml</kreport>
+		
+		<!-- 深圳预处理率 -->
+		<kreport name="szFaultForecloseRate">szFaultForecloseRate.xml</kreport>
+		
+		<!-- 深圳工单平均历时
+		<kreport name="szAvgUserTime">szAvgUserTime.xml</kreport>
+		 -->
+	</kreport-group>
+	
+	<kreport-group name="MBOSSREPORTBILL" namespace="/itsm" path="/kReport/mboss">
+		<default-data-source>product</default-data-source>
+		<display-name>报表数据清单</display-name>
+		<skin>itsm</skin>
+		
+		<!-- 流经IT中心工单清单-->
+		<kreport name="blowoverITBill">blowoverITBill.xml</kreport>
+		
+		<!-- 深圳报障部门清单 -->
+		<kreport name="szFaultDeptBill">szFaultDeptBill.xml</kreport>
+		
+		<!-- 深圳故障原因分析清单 -->
+		<kreport name="szFaultSystemCaseBill">szFaultSystemCaseBill.xml</kreport>
+				
+	</kreport-group>
+	
+	<kreport-group name="ITSMREPORT" namespace="/itsm" path="/kReport/kreports">
+		<default-data-source>product</default-data-source>
+		<display-name>ITSM报表</display-name>
+		<skin>itsmReport</skin>
+		
+		<!-- 深圳组处理量统计 -->
+		<kreport name="szLoadForEG">szLoadForEG.xml</kreport>
+		
+		<!-- 深圳服务台提单量 -->
+		<kreport name="szFwtHourlyBill">szFwtHourly.xml</kreport>
+		
+		<!-- 深圳首次回单量 -->
+		<kreport name="szFirstBackForUser">szFirstBackForUser.xml</kreport>
+		
+		<!-- 深圳工作量统计 -->
+		<kreport name="szLoadForUser">szLoadForUser.xml</kreport>
+		
+		<!-- 深圳分部预处理率 -->
+		<kreport name="szForecloseRate">szForecloseRate.xml</kreport>
+		
+		<!-- 深圳组停留单量 -->
+		<kreport name="szLoadForGroup">szLoadForGroup.xml</kreport>
+		
+		<!-- 广州在途工单监控 -->
+		<kreport name="gzGroupMonitor">gzGroupMonitor.xml</kreport>
+		
+		<!-- 广州分部预处理率 -->
+		<kreport name="gzForecloseRate">gzForecloseRate.xml</kreport>
+		
+		<!-- 广州分部组处理量 -->
+		<kreport name="gzLoadForGroup">gzLoadForGroup.xml</kreport>
+	</kreport-group>	
+	<kreport-group name="ITSMBILL" namespace="/itsm" path="/kReport/kreports">
+		<default-data-source>product</default-data-source>
+		<display-name>ITSM清单</display-name>
+		<skin>itsm</skin>
+		
+		<!-- 深圳组处理量清单 -->
+		<kreport name="szLoadForEGBill">szLoadForEGBill.xml</kreport>
+		
+		<!-- 深圳报障工单 -->
+		<kreport name="szCreateFaultBill">szCreateFaultBill.xml</kreport>
+		
+		<!-- 深圳工作量统计 -->
+		<kreport name="szLoadForUserBill">szLoadForUserBill.xml</kreport>
+		
+		<!-- 深圳首次回单清单-->
+		<kreport name="szFirstBackForUserBill">szFirstBackForUserBill.xml</kreport>
+		
+		<!-- 深圳分部预处理率 -->
+		<kreport name="szForecloseRateBill">szForecloseRateBill.xml</kreport>
+		
+		<!-- 深圳组停留单清单 -->
+		<kreport name="szLoadForGroupBill">szLoadForGroupBill.xml</kreport>
+		
+		<!-- 广州在途工单监控 -->
+		<kreport name="gzGroupMonitorBill">gzGroupMonitorBill.xml</kreport>
+		
+		<!-- 广州分部预处理率 -->
+		<kreport name="gzForecloseRateAll">gzForecloseRateAll.xml</kreport>
+		<kreport name="gzForecloseRateZT">gzForecloseRateZT.xml</kreport>
+		<kreport name="gzForecloseRateZH">gzForecloseRateZH.xml</kreport>
+		<kreport name="gzForecloseRateZP">gzForecloseRateZP.xml</kreport>
+		
+		
+		<!-- 广州分部组处理量 -->
+		<kreport name="gzLoadForGroupBill">gzLoadForGroupBill.xml</kreport>
+		
+		<!-- 广州组首次处理清单 -->
+		<kreport name="gzGroupFirstExeBill">gzGroupFirstExeBill.xml</kreport>
+	</kreport-group>
+</kreports>

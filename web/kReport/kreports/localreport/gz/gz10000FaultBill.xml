@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>gz10000FaultBill</name>
+	<display-name>广州客服报障清单</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="orgCode">
+			<index>30</index>
+			<display-name>报障部门</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend>{000100202400:客户服务中心,000100200027:10000号客户服务中心}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+			<tr  style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>序号</td>
+				<td nowrap>工单编号</td>
+				<td nowrap>工单名称</td>
+				<td nowrap>发起时间</td>
+				<td nowrap>完成日期</td>
+				<td nowrap>报障人</td>
+				<td nowrap>承载网络类型</td>
+				<td nowrap>报障部门</td>
+				<td nowrap>报障人联系电话</td>
+				<td nowrap>区域</td>
+				<td nowrap>故障发生时间</td>
+				<td nowrap>故障提交时间</td>
+				<td nowrap>故障解决人</td>
+				<td nowrap>故障解决用时</td>
+				<td nowrap>故障单状态</td>
+				<td nowrap>流转状态</td>
+				<td nowrap>故障级别</td>
+				<td nowrap>是否越级投诉</td>
+				<td nowrap>是否加急</td>
+				<td nowrap>IT业务类型</td>
+				<td nowrap>一级故障类型</td>
+				<td nowrap>二级故障类型</td>
+				<td nowrap>三级故障类型</td>
+				<td nowrap>业务范畴</td>
+				<td nowrap>涉及系统</td>
+				<td nowrap>故障描述</td>
+			</tr>	]]>
+		</thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td>${6}</td>
+				<td nowrap>${7}</td>
+				<td nowrap>${8}</td>
+				<td nowrap>${9}</td>
+				<td nowrap>${10}</td>
+				<td nowrap>${11}</td>
+				<td nowrap>${12}</td>
+				<td nowrap>${13}</td>
+				<td nowrap>${14}</td>
+				<td nowrap>${15}</td>
+				<td nowrap>${16}</td>
+				<td nowrap>${17}</td>
+				<td nowrap>${18}</td>
+				<td nowrap>${19}</td>
+				<td nowrap>${20}</td>
+				<td nowrap>${21}</td>
+				<td nowrap>${22}</td>
+				<td nowrap>${23}</td>
+				<td>${24}</td>
+				<td width=600>${25}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select f.serialno 工单编号,
+		       f.title 工单名称,
+		       f.gendate 发起时间,
+		       f.completedate 完成日期,
+		       u.user_name 报障人,
+		       rend(i.businesstype) 承载网络类型,
+		       i.organigerdept 报障部门,
+		       i.organigertel 报障人联系电话,
+		       rend(i.area) 区域,
+		       i.faultgendate 故障发生时间,
+		       f.gendate 故障提交时间,
+		       i.faultresolver 故障解决人,
+		       i.faultdealtime 故障解决用时,
+		       rend(i.fualtstatus) 故障单状态,
+		       decode(f.status,'JS','结束','在途') 流转状态,
+		       rend(i.fualtlevel) 故障级别,
+		       i.flgskipgrade 是否越级投诉,
+		       i.urgent 是否加急,
+		       rend(i.itbusinesstype) IT业务类型,
+		       rend(i.itbizfaulttypel1) 一级故障类型,
+		       rend(i.itbizfaulttypel2) 二级故障类型,
+		       rend(i.itbizfaulttypel3) 三级故障类型,
+		       rend(i.businessscope) 业务范畴,
+		       (select strcat(d.dname) system
+		       from ins_frm_sub_namevalue s, sys_data_dictionary d
+		       where s.insfrmfieldname = 'relationsys'
+		       and s.fieldvalue = d.dvalue
+		       and s.flowlsh = f.flowlsh) 涉及系统,
+		       i.faultdescription 故障描述,
+		       'http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo='||f.serialno 故障工单处理详情,
+		       '' 销障类别
+		   from rec_flow f,ins_frm_fault i,sec_user u,sec_r_user_org uo,sec_org o
+		   where f.flowlsh = i.flowlsh
+		   and f.startercode = u.id
+		   and u.id=uo.user_id
+		   and o.id=uo.org_id
+		   and f.status!='XJ'
+		   #[and o.org_code like ${orgCode}||'%' ]
+		   #[and f.gendate>= ${startDate}] --报障时间（开始）
+		   #[and f.gendate < ${endDate}]   --报障时间（结束）
+		   order by f.gendate
+		]]></ksql>
+</kreport>

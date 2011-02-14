@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>gzLoadForGroupBill</name>
+	<display-name>广州分部组处理清单</display-name>
+	<condition-size>4</condition-size>
+	<pageable>true</pageable>
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="executergroupid">
+			<index>30</index>
+			<display-name>处理组</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select g.id,g.fw_name from sec_group g,sec_org o
+				where g.org_id=o.id
+				and (o.org_code like '0001100000030001')
+				order by o.org_code
+			]]></extend>
+		</condition>		
+		<condition name="gstatus">
+			<index>40</index>
+			<display-name>处理状态</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend>{未签收:未签收,处理中:处理中,已处理:已处理}</extend>
+		</condition>		
+		<condition name="overtime">
+			<index>50</index>
+			<display-name>是否超时</display-name>
+			<type>mselect</type>
+			<return-type>string</return-type>
+			<extend>{是:超时}</extend>
+		</condition>		
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td>${8}</td>
+				<td nowrap>${9}</td>
+				<td nowrap>${10}</td>
+				<td nowrap>${11}</td>
+				<td nowrap>${12}</td>
+				<td nowrap>${13}</td>
+				<td nowrap>${14}</td>
+				<td nowrap>${15}分钟</td>
+				<td nowrap>${16}分钟</td>
+				<td nowrap>${17}</td>
+				<td width='400'>${18}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		--广州分部组工单处理清单
+		select f.serialno 工单编号,
+           f.title 工单标题,
+           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+           i.organiger 报障人,
+           f.gstatus 处理状态,
+           to_char(f.gintime,'yyyy-mm-dd hh24:mi') 组进入时间,
+           f.executergroupname 处理组,
+           f.gexecutername 处理人,
+           rend(i.itbusinesstype) IT业务类型,
+           rend(i.itbizfaulttypel1) 一级故障类型,
+           rend(i.itbizfaulttypel2) 二级故障类型,
+           rend(i.itbizfaulttypel3) 三级故障类型,
+           rend(i.urgent) 是否加急,
+           rend(i.fualtlevel) 故障级别,
+           r.total_time 处理时限,
+           r.used_time 使用时限,
+           r.overtime 是否超时,
+           i.faultdescription 故障描述
+		from ins_frm_fault i,
+		(
+	      select f.flowlsh,f.serialno,f.title,f.gendate,
+	             n.executergroupname,
+	             min(n.gendate) gintime,
+	             min(decode(n.status,'DT','未签收','DB','处理中','已处理')) gstatus,
+	             strcat(distinct n.executername) gexecutername
+	      from rec_flow f,rec_node n
+	      where f.flowlsh=n.flowlsh
+	        and f.status != 'XJ'
+	        and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+	        and n.executergrouporgid='8a92635521a51e8f0121a5211f3e02c2' --经过广州分部
+	        and n.executergroupid is not null
+	        #[and n.executergroupid=${executergroupid}]
+	        and n.nodecode not in('86c9dd900a11226800316ae4eb406c1e','870bb7f90a11226801f8cfbbeebbcb95') --不是报障 报障人确认环节
+		    #[and f.gendate>=${startDate}]
+		    #[and f.gendate< ${endDate}+1]
+	      group by f.flowlsh,f.serialno,f.title,f.gendate,n.executergroupname
+	    ) f,
+	    (
+	      select f.flowlsh,
+	             r.total_time,
+	             round(r.used_time/60000) used_time,
+	             decode(sign(round(r.used_time/60000)-total_time),1,'是','否') overtime
+	      from rec_flow f,chk_assessment_result r,chk_entity e
+	      where f.status != 'XJ'
+	        and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'       
+	        and f.flowlsh=r.rec_flow_id
+	        and r.assessment_id=e.assessment_id
+	        and r.assessment_type='O'
+	        and e.entiy_id='8a92635521a51e8f0121a5211f3e02c2'   --经过广州分部
+			    #[and f.gendate>=${startDate}]
+			    #[and f.gendate< ${endDate}+1]
+	    ) r
+	    where i.flowlsh=f.flowlsh
+	      and f.flowlsh=r.flowlsh(+)
+	      #[and r.overtime=${overtime}]
+	      #[and f.gstatus=${gstatus}]
+	    order by f.gendate
+		]]></ksql>
+</kreport>
