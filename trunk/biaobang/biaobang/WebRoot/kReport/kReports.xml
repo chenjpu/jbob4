@@ -25,7 +25,7 @@
 	<kreport-group name="hr" namespace="/hr/localreport" path="/kReport/kreports/localreport/hr">
 		<default-data-source>default</default-data-source>
 		<display-name>综合查询</display-name>
-		<skin>itsm</skin>
+		<skin>hr</skin>
 		<!-- 年度计划综合查询 -->
 		<kreport name="itschemeQueryStat">itschemeQueryStat.xml</kreport>
 		<!-- IT制度综合查询 -->

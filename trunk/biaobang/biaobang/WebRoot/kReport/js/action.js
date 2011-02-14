@@ -5,7 +5,7 @@ function doQuery(){
 	if(_submitValid(queryForm)){
 		queryForm.submit();
 	}
-	return false;
+	//return false;
 }
 
 function doCrossQuery(){
@@ -15,7 +15,7 @@ function doCrossQuery(){
 	if(_submitValid(queryForm)){
 		queryForm.submit();
 	}
-	return false;
+	//return false;
 }
 
 function doReset(){
