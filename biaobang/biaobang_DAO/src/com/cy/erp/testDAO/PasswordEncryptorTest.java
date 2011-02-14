@@ -10,7 +10,7 @@ public class PasswordEncryptorTest {
         //º”√‹ 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor(); 
         textEncryptor.setPassword("root");
-        String newPassword = textEncryptor.encrypt("123456Qw");
+        String newPassword = textEncryptor.encrypt("1");
         System.out.println(newPassword);
 //        Ω‚√‹ 
         BasicTextEncryptor textEncryptor2 = new BasicTextEncryptor(); 
