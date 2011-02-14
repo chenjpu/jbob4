@@ -1,0 +1,83 @@
+.kReportActionTable {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #666666;
+	color: #FFFFFF;
+}
+.kReportActionTable tr {
+}
+.kReportActionTable tr td {
+}
+.kReportConditionTable {	
+	left: 5px;
+	top: 1px;
+	right: 5px;
+	bottom: 1px;
+	margin: 0px;
+	padding: 0px;
+	background-color:#7BA6D6;
+}
+.kReportConditionTable tr {
+	font-size:9pt;
+	font-family:宋体;
+	line-height:14pt;
+	margin: 0px;
+	background-color:white;
+}
+.kReportConditionTable tr td {
+}
+.kReportDataTable {
+	left: 5px;
+	top: 5px;
+	right: 5px;
+	bottom: 5px;
+	margin: 0px;
+	padding: 0px;
+	background-color:#7BA6D6;
+}
+.kReportDataTable_thead tr td {
+  	color:#ffffff;
+  	font-size:9pt;
+  	font-family:宋体;
+  	line-height:14pt;
+  	text-align:center;
+  	background-color:#A5C7EF;
+}
+.kReportDataTable_tbody tr td {
+	font-size:9pt;
+	font-family:宋体;
+	line-height:14pt;
+	background-color:white;
+}
+.kReportCrossTable {
+	left: 5px;
+	top: 5px;
+	right: 5px;
+	bottom: 5px;
+	margin: 0px;
+	padding: 0px;
+	background-color:#7BA6D6;
+}
+.kReportCrossTable tr th {
+  	color:#ffffff;
+  	font-size:9pt;
+  	font-family:宋体;
+  	line-height:14pt;
+  	text-align:center;
+  	background-color:#A5C7EF;
+}
+.kReportCrossTable tr td {
+	font-size:9pt;
+	font-family:宋体;
+	line-height:14pt;
+  	text-align:center;
+	background-color:white;
+}
+
+.kReportPaginationDiv {
+	margin-top:1px;
+	font-size:9pt;
+	font-family:宋体;
+	line-height:14pt;
+}
