@@ -18,6 +18,7 @@ public class Franchiser implements java.io.Serializable {
 	private String faxNumber;
 	private String receivingDetails;
 	private Long parentId;
+	private String customer;
 
 	// Constructors
 
@@ -36,7 +37,7 @@ public class Franchiser implements java.io.Serializable {
 	/** full constructor */
 	public Franchiser(Long id, String number, String level, String area,
 			String phoneCode, String faxNumber, String receivingDetails,
-			Long parentId) {
+			Long parentId, String customer) {
 		this.id = id;
 		this.number = number;
 		this.level = level;
@@ -45,6 +46,7 @@ public class Franchiser implements java.io.Serializable {
 		this.faxNumber = faxNumber;
 		this.receivingDetails = receivingDetails;
 		this.parentId = parentId;
+		this.customer = customer;
 	}
 
 	// Property accessors
@@ -111,6 +113,14 @@ public class Franchiser implements java.io.Serializable {
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getCustomer() {
+		return this.customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
 	}
 
 }
