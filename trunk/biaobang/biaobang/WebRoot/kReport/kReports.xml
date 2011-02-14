@@ -1,6 +1,6 @@
 ﻿<kreports>
 	<data-sources>
-		<data-source name="local">
+		<data-source name="default">
 			<driver>com.mysql.jdbc.Driver</driver>
 			<url>jdbc:mysql://127.0.0.1:3306/biaobang</url>
 			<username>root</username>
@@ -13,7 +13,7 @@
 			<password>itsm2009gdtel</password>
 		</data-source>
 		
-		<data-source name="default">
+		<data-source name="default_2">
 			<driver>oracle.jdbc.driver.OracleDriver</driver>
 			<url>jdbc:oracle:thin:@132.121.130.139:5521:itsm</url>
 			<username>flow_test</username>
@@ -26,9 +26,19 @@
 		<default-data-source>default</default-data-source>
 		<display-name>综合查询</display-name>
 		<skin>hr</skin>
-		<!-- 年度计划综合查询 -->
-		<kreport name="itschemeQueryStat">itschemeQueryStat.xml</kreport>
-		<!-- IT制度综合查询 -->
-		<kreport name="itsystemQueryStat">itsystemQueryStat.xml</kreport>
-		</kreport-group>
+		
+		<!-- 销售动态 -->
+		<kreport name="saleDynamic">saleDynamic.xml</kreport>
+		<!-- 区域销售状况 -->
+		<kreport name="regionSaleStatus">regionSaleStatus.xml</kreport>
+		<!-- 客户等级分类销售状况 -->
+		<kreport name="ordinalscaleSaleStatus">ordinalscaleSaleStatus.xml</kreport>
+		<!-- 产品分类销售状况 -->
+		<kreport name="productsSortSaleStatus">productsSortSaleStatus.xml</kreport>
+		<!-- 客户月销售状况 -->
+		<kreport name="clientSellNumberSaleStatus">clientSellNumberSaleStatus.xml</kreport>
+		<!-- 产品月销售情况  -->
+		<kreport name="productsSellNumberSaleStatus">productsSellNumberSaleStatus.xml</kreport>
+		
+	</kreport-group>
 </kreports>
