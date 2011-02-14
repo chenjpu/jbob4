@@ -69,7 +69,6 @@
 		</tbody>
 	</data>
 	<ksql><![CDATA[
-	  --综合查询
 		select * from (
 		select distinct f.serialno 工单编号,
            f.title 年度计划名称,

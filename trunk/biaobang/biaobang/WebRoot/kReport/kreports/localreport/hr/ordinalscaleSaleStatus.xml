@@ -73,9 +73,8 @@
 		DAYOFMONTH(bl.tTime) 月份,
 		bl.`level` 等级,
 		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-		
-		
 		where bl.id = bp.ladingId
+
 		group by DAYOFMONTH(bl.tTime),bl.`level`
 		
 		UNION
@@ -85,9 +84,9 @@
 		'合计' 月份,
 		
 		bl.`level` 等级,
-		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-		
+		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
 		where bl.id = bp.ladingId
+
 		group by bl.`level`
 		
 		UNION
@@ -97,9 +96,9 @@
 		'合计'  月均,
 		
 		bl.`level` 等级,
-		avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-		
+		avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
 		where bl.id = bp.ladingId
+
 		group by bl.`level`
 
 		]]></ksql>
