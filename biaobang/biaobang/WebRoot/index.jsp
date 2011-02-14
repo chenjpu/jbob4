@@ -76,9 +76,6 @@ if (loginData == null) {
 				        <td align="center" ><a href="#" onclick="addTab('销售动态','jsp/statanalyse/1.jsp');">销售动态</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center" ><a href="#" onclick="addTab('区域销售状况','hr/localreport/itschemeQueryStat.kReport');">区域销售状况</a></td>
-				      </tr>
-				      <tr>
 				        <td align="center" ><a href="#" onclick="addTab('区域销售状况1','jsp/statanalyse/2.jsp');">区域销售状况1</a></td>
 				      </tr>
 				      <tr>
@@ -94,6 +91,41 @@ if (loginData == null) {
 				        <td align="center" ><a href="#" onclick="addTab('产品月销售情况','jsp/statanalyse/6.jsp');">产品月销售情况</a></td>
 				      </tr>
 				      
+				    </table>
+				</div>
+				<div title="统计报表(kr)" style="overflow:auto;">
+				
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="topline">
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('销售动态','hr/localreport/saleDynamic.kReport');">销售动态</a>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('区域销售状况','hr/localreport/regionSaleStatus.kReport');">区域销售状况</a>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('客户等级分类销售状况','hr/localreport/ordinalscaleSaleStatus.kReport');">客户等级分类销售状况</a>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('产品分类销售状况','hr/localreport/productsSortSaleStatus.kReport');">产品分类销售状况</a>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('客户月销售状况','hr/localreport/clientSellNumberSaleStatus.kReport');">客户月销售状况</a>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td align="center" >
+				        <a href="#" onclick="addTab('产品月销售情况','hr/localreport/productsSellNumberSaleStatus.kReport');">产品月销售情况</a>
+				        </td>
+				      </tr>
 				    </table>
 				</div>
 				<div title="业务数据维护">
