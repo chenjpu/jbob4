@@ -76,7 +76,10 @@ if (loginData == null) {
 				        <td align="center" ><a href="#" onclick="addTab('销售动态','jsp/statanalyse/1.jsp');">销售动态</a></td>
 				      </tr>
 				      <tr>
-				        <td align="center" ><a href="#" onclick="addTab('区域销售状况','jsp/statanalyse/2.jsp');">区域销售状况</a></td>
+				        <td align="center" ><a href="#" onclick="addTab('区域销售状况','hr/localreport/itschemeQueryStat.kReport');">区域销售状况</a></td>
+				      </tr>
+				      <tr>
+				        <td align="center" ><a href="#" onclick="addTab('区域销售状况1','jsp/statanalyse/2.jsp');">区域销售状况1</a></td>
 				      </tr>
 				      <tr>
 				        <td align="center" ><a href="#" onclick="addTab('客户等级分类销售状况','jsp/statanalyse/3.jsp');">客户等级分类销售状况</a></td>

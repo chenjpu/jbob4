@@ -23,6 +23,14 @@
 		</action>
 	</actions>	
 	<conditions>
+	
+	   <condition name="autoRun">
+			<index>0</index>
+			<display-name>自动执行</display-name>
+			<type>initaction</type>
+			<extend>doQuery()</extend>
+		</condition>
+	
 		<condition name="title">
 			<index>10</index>
 			<display-name>年度计划名称</display-name>
@@ -110,13 +118,7 @@
 		where f.flowlsh=e.flowlsh
 		and u.id=f.startercode and u.id=uo.user_id
 		and f.status!='XJ' and fw.flowcode=f.flowcode
-		  #[and f.title like ${title}]
-		  #[and e.schemeproperty=${schemeproperty}]
-		  #[and e.principal like ${principal}]
-		  #[and e.auditingtime=${auditingtime}]		  
-		  #[and (f.STARTERCODE in (${order_dept}) or uo.org_id in (select ID from SEC_ORG so start with so.ID in (${order_dept})  connect by prior so.ID=so.PARENT_ID)) ] 
-		  #[and f.gendate>=${startDate}]
-		  #[and f.gendate< ${endDate}]
+		  
 		
 		) yb
 		order by yb.gendate desc

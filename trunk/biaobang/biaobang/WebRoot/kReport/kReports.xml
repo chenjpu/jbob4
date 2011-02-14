@@ -6,11 +6,11 @@
 			<username>root</username>
 			<password>1</password>
 		</data-source>
-		<data-source name="product">
-			<driver>com.mysql.jdbc.Driver</driver>
-			<url>jdbc:mysql://127.0.0.1:3306/biaobang</url>
-			<username>root</username>
-			<password>1</password>
+		<data-source name="default_1">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@132.121.130.147:5521:itsm</url>
+			<username>GDTELITSM</username>
+			<password>itsm2009gdtel</password>
 		</data-source>
 		
 		<data-source name="default">
