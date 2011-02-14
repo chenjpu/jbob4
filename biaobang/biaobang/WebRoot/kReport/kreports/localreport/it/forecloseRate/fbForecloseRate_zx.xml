@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>fbForecloseRate_zx</name>
+	<display-name>分部转IT中心清单</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="deptId">
+			<index>45</index>
+			<display-name>部门</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[select v_o.id,v_o.org_name from v_org v_o where v_o.type='分部' and v_o.area in(${s@user_areas}) order by v_o.type_order,v_o.org_order]]></extend>
+		</condition>
+		<condition name="area">
+			<index>50</index>
+			<display-name>区域</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='区域' order by d.ordernum
+			]]></extend>
+		</condition>	
+		<condition name="relationsys">
+			<index>60</index>
+			<display-name>涉及系统</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='涉及系统' order by d.ordernum
+			]]></extend>
+		</condition>
+		<condition name="org_name">
+			<index>0</index>
+			<display-name>分部</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>		
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td>${1}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${2}')">${2}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${2}')">${3}</a></td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td width=600>${8}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+	--转IT中心工单清单
+    select distinct v_o.org_name 分部,
+           f.serialno 工单编号,
+           f.title 工单标题,
+           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+           i.organiger 报障人,
+           i.organigerdept 报障部门,
+           rend(i.area) 区域,
+           i.faultdescription 故障描述
+    from rec_flow f,ins_frm_fault i,rec_node n,rec_node n2,v_org v_o
+	    where f.flowlsh=i.flowlsh
+	      and n.flowlsh=f.flowlsh
+	      and n2.flowlsh=f.flowlsh
+          and v_o.id=n.executergrouporgid
+	      and v_o.type='分部'
+	      and f.status!='XJ'
+	      and n.nodecode='8705e3d30a112268006ecb0498438858'  --IT分部接口
+	      and n.status='YB'
+	      and n.nodelsh=n2.prenodelsh
+	      and n2.preroutecode='871605de0a1122680005e6411105e5d9'  --转省IT中心协助
+	      #[and f.startercode ${startercode}]
+	      #[and f.startercode=${type10000}]
+		  #[and i.area=${area}]
+	      #[and i.replytime>=${startDate}]
+	      #[and i.replytime<${endDate}]
+	      #[and n.executergrouporgname=${org_name}]
+	      #[and v_o.id=${deptId}]
+	      #[and v_o.area in(${s@user_areas})]	      
+	      #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+		]]></ksql>
+</kreport>

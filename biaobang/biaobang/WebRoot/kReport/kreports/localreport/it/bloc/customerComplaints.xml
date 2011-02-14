@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>customerComplaints</name>
+	<display-name>客户投诉用户数</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1M.1d.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.1d.0H.0m.0s</default-value>
+		</condition>
+		<condition name="dispatchdest">
+			<index>30</index>
+			<display-name>首派部门</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend>{ITZX:IT中心,YZ:业支}</extend>
+			<default-value>IT中心</default-value>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td>${1}</td>
+				<td>${2}</td>
+				<td>${3}</td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/customerComplaintsBill','${4}','T${1}=${1}')">${4}</a></td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select type 指标代码,
+		       decode(type,
+		       '04050101','该指标指当月投诉的用户总数',
+		       '04050102','当月IT投诉总用户数',
+		       '04050103','其中:收费投诉用户数',
+		       '04050104','其中:充值投诉用户数',
+		       '04050105','其中:停开机投诉用户数',
+		       '其中:其他投诉用户数') 指标名称,
+		       decode(type,
+		       '04050101','该指标指当月投诉的用户总数',
+		       '04050102','该指标指当月定责后IT投诉的用户总数',
+		       '04050103','该指标指当月定责后涉及收费的投诉用户总数',
+		       '04050104','该指标指当月定责后涉及充值的投诉用户总数',
+		       '04050105','该指标指当月定责后涉及停开机的投诉用户总数',
+		       '该指标指当月定责后IT投诉总用户数中，除收费、充值、停开机外的其他投诉用户总数') 指标解释口径,
+		       sum(total) 数据采集
+		from
+		(
+		    select '04050101' type,count(*) total
+		    from rec_flow f,ins_frm_fault i
+		    where f.flowlsh=i.flowlsh
+		      and f.status!='XJ'
+		      and f.startercode='8a92634621adf5510121ae02a34f0003'  --10000号主办
+		      and f.relatedserialno is null --不是重派工单
+		      #[and i.dispatchdest=${dispatchdest} --IT中心]
+		      #[and f.gendate>=${startDate} --报障时间（开始）]
+		      #[and f.gendate< ${endDate} --报障时间（结束）]
+		    union all
+		    select '04050102' type,count(*) total
+		    from rec_flow f,ins_frm_fault i
+		    where f.flowlsh=i.flowlsh
+		      and f.status!='XJ'
+		      and f.startercode='8a92634621adf5510121ae02a34f0003'  --10000号主办
+		      and f.relatedserialno is null --不是重派工单
+		      #[and i.dispatchdest=${dispatchdest} --IT中心]
+		      #[and f.gendate>=${startDate} --报障时间（开始）]
+		      #[and f.gendate< ${endDate} --报障时间（结束）]
+		      and i.billfaultreason in (
+		          'BILLFAULTREASON_003',	--版本升级
+		          'BILLFAULTREASON_004',	--数据割接
+		          'BILLFAULTREASON_005',	--参数配置
+		          'BILLFAULTREASON_014',	--应用软件故障
+		          'BILLFAULTREASON_015',	--中间件故障
+		          'BILLFAULTREASON_016',	--数据库故障
+		          'BILLFAULTREASON_017',	--硬件故障
+		          'BILLFAULTREASON_018' 	--设备性能
+		      )
+		    union all
+		    select decode(i.itbizfaulttypel3,
+		            'ITBUT_1#FT_002_004_001','04050103',
+		            'ITBUT_1#FT_002_004_006','04050103',
+		            'ITBUT_1#FT_001_004_006','04050103',
+		            'ITBUT_1#FT_002_009_002','04050104',
+		            'ITBUT_1#FT_002_009_003','04050104',
+		            'ITBUT_1#FT_001_009_002','04050104',
+		            'ITBUT_1#FT_001_009_003','04050104',
+		            'ITBUT_1#FT_002_008_001','04050105',
+		            'ITBUT_1#FT_001_008_001','04050105',
+		            '04050199') type,count(*) total
+		    from rec_flow f,ins_frm_fault i
+		    where f.flowlsh=i.flowlsh
+		      and f.status!='XJ'
+		      and f.startercode='8a92634621adf5510121ae02a34f0003'  --10000号主办
+		      and f.relatedserialno is null --不是重派工单
+		      #[and i.dispatchdest=${dispatchdest} --IT中心]
+		      #[and f.gendate>=${startDate} --报障时间（开始）]
+		      #[and f.gendate< ${endDate} --报障时间（结束）]
+		      and i.billfaultreason in (
+		          'BILLFAULTREASON_003',	--版本升级
+		          'BILLFAULTREASON_004',	--数据割接
+		          'BILLFAULTREASON_005',	--参数配置
+		          'BILLFAULTREASON_014',	--应用软件故障
+		          'BILLFAULTREASON_015',	--中间件故障
+		          'BILLFAULTREASON_016',	--数据库故障
+		          'BILLFAULTREASON_017',	--硬件故障
+		          'BILLFAULTREASON_018' 	--设备性能
+		      )
+		    group by decode(i.itbizfaulttypel3,
+		            'ITBUT_1#FT_002_004_001','04050103',
+		            'ITBUT_1#FT_002_004_006','04050103',
+		            'ITBUT_1#FT_001_004_006','04050103',
+		            'ITBUT_1#FT_002_009_002','04050104',
+		            'ITBUT_1#FT_002_009_003','04050104',
+		            'ITBUT_1#FT_001_009_002','04050104',
+		            'ITBUT_1#FT_001_009_003','04050104',
+		            'ITBUT_1#FT_002_008_001','04050105',
+		            'ITBUT_1#FT_001_008_001','04050105',
+		            '04050199')
+		      union all select '04050103',0 from dual
+		      union all select '04050104',0 from dual
+		      union all select '04050105',0 from dual
+		      union all select '04050199',0 from dual      
+		)  
+		group by type 
+		order by type
+		]]></ksql>
+	<comment><![CDATA[报表说明：
+04050101指标:统计10000号主办单单数，剔除重派单。
+04050102指标:统计工单故障原因是版本升级、数据割接、参数配置、应用软件故障、
+             中间件故障、数据库故障、硬件故障、设备性能的10000号主办单，剔除重派单。
+04050103指标:04050102指标中，三级故障类型是“配置错误”（含预付费和后付费）和“OCS扣费异常”的投诉单数。
+04050104指标:04050102指标中，三级故障类型是“充值不到帐”和“充值送赠款不到帐”的投诉单数。
+04050105指标:04050102指标中，三级故障类型是“缴费/充值后开机单延迟竣工”的投诉单数。
+04050199指标:04050102指标统计值-04050103指标统计值-04050104指标统计值-04050105指标统计值
+	]]>	
+	</comment>
+</kreport>

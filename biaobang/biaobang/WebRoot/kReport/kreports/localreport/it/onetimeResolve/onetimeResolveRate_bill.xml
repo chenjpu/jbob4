@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>onetimeResolveRate_bill</name>
+	<display-name>一次性解决率清单</display-name>
+	<page-size></page-size>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="type">
+			<index>50</index>
+			<display-name>部门类型</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+			select decode(v_o.type,'分公司','业支',v_o.type) 
+			from  v_org v_o 
+			where v_o.type in ('分部','分公司','科室','厂家') 
+			  and v_o.area in (${s@user_areas})
+			group by v_o.type,v_o.type_order 
+			order by v_o.type_order
+  			]]>
+  			</extend>
+		</condition>			
+		<condition name="org_name">
+			<index>0</index>
+			<display-name>部门名称</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>		
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap>${1}</td>
+				<td nowrap>${2}</td>
+				<td nowrap>${3}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${4}')">${4}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${4}')">${5}</a></td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td>${8}</td>
+				<td nowrap>${9}</td>
+				<td nowrap>${10}</td>
+				<td nowrap>${11}</td>
+				<td width=600>${12}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+        select r.name 一次解决部门,
+           ar.total_time "环节处理时限(分钟)",
+           round(ar.used_time/60000) "环节处理时间(分钟)",
+           f.serialno 工单编号,
+	       f.title 工单标题,
+	       to_char(f.gendate,'yyyy-mm-dd hh24:mm') 报障时间,
+	       i.organiger 报障人,
+	       i.organigerdept 报障部门,
+	       to_char(i.replytime,'yyyy-mm-dd hh24:mm') 回单时间,
+           i.faultlinkman 联系人,
+           i.faultlinktel 联系人电话,
+	       i.faultdescription 故障描述         
+        from rec_flow f,ins_frm_fault i,sec_rank r,v_org v_o,sec_org o,chk_assessment_result ar,chk_entity ae,
+        (        
+          select flowlsh,strcat(executergrouporgid) executergrouporgid from(
+            select n.flowlsh,n.nodecode,n.executergrouporgid,lag (n.executergrouporgid,1,0) over (PARTITION BY n.flowlsh order by n.gendate) lagexecutergrouporgid 
+            from rec_flow f,ins_frm_fault i,rec_node n
+            where f.flowlsh=i.flowlsh
+              and f.flowlsh=n.flowlsh
+              and n.nodecode in(
+                '8707d5ab0a112268006fa804cb1cbc30', --厂家处理
+                '8705e3d30a112268006ecb0498438858', --IT分部接口
+                '45c8ab1cc0a86b4e012447e3ab54ba62', --IT分部处理
+                '8706e7770a11226800104dac10cfa517', --业务支持中心接口
+                '95e87c590a112268017f3be1d42c0688', --省IT中心科室处理
+                '5c0f45e30a112211013df5e327d23d55', --电子运维处理  
+                '8704d4d70a11226800834bbe3cb68d92',  --省IT中心管控
+                '45c80d11c0a86b4e01ea1f505eae726f'  --省IT中心处理
+                  )--八个环节
+	          #[and f.startercode ${startercode}]
+              #[and f.startercode=${type10000}]
+	          #[and i.replytime>=${startDate}]
+	          #[and i.replytime<${endDate}]
+              )
+          where nodecode!='8704d4d70a11226800834bbe3cb68d92'
+          group by flowlsh
+          having count(*)=1
+         ) n
+         where f.flowlsh=i.flowlsh
+           and f.flowlsh=n.flowlsh
+           and f.flowlsh=ar.rec_flow_id
+           and ar.assessment_id=ae.assessment_id
+           and n.executergrouporgid=r.value
+           and ar.assessment_type='O'
+           and ae.entiy_id=r.value
+           and exists (select 1 from sec_rank r1 where r1.type in ('科室','分部','业支','厂家') and r1.id=r.id) 
+	       #[and r.type = ${type}]
+	       #[and r.value = ${org}]
+	       #[and r.name=${org_name}]	       
+           and r.value=o.id
+           and o.org_code like v_o.org_code||'%'
+           and v_o.area in (${s@user_areas})
+	       
+		]]></ksql>
+
+</kreport>

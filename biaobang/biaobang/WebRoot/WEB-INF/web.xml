@@ -60,6 +60,20 @@
   <servlet-class>com.cy.erp.web.dataGate.MemoryDataBox</servlet-class>
   <load-on-startup>100</load-on-startup>
  </servlet>
+ 
+ <!--  kReport begin -->
+  	<servlet>  
+		<servlet-name>kReport</servlet-name>  
+		<servlet-class>cn.blsoft.krport.engine.KReportEngine</servlet-class>  
+		<load-on-startup>1</load-on-startup>  
+	</servlet> 
+	
+	<servlet-mapping>
+		<servlet-name>kReport</servlet-name>
+		<url-pattern>*.kReport</url-pattern>
+	</servlet-mapping>
+  <!--  kReport end   -->
+ 
  <!-- session超时定义,单位为分钟 -->
  <session-config>
   <session-timeout>120</session-timeout>

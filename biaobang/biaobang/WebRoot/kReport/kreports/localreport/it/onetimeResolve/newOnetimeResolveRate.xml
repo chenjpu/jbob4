@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>newOnetimeResolveRate</name>
+	<display-name>一次性解决率</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="type">
+			<index>50</index>
+			<display-name>部门类型</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+			select v_o.type,decode(v_o.type,'分公司','业支',v_o.type)
+			from  v_org v_o 
+			where v_o.type in ('分部','分公司') 
+			  and v_o.area in (${s@user_areas})
+			group by v_o.type,v_o.type_order 
+			order by v_o.type_order
+  			]]>
+  			</extend>
+		</condition>			
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td align='center'>${1}</td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/newOnetimeResolveRate_bill','${2}','org_name=${1}&isonetime=no')">${2}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/newOnetimeResolveRate_bill','${3}','org_name=${1}')">${3}</a></td>			
+				<td align='center'>${4}%</td>
+			</tr>]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#ff0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/newOnetimeResolveRate_bill','$[round(${2})]','isonetime=no')">$[round(${2})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/newOnetimeResolveRate_bill','$[round(${3})]','')">$[round(${3})]</a></td>
+			<td align='center'>$[round(${3}*10000/${2})/100]%</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>	
+	<ksql><![CDATA[
+		--新一次性解决率
+		select replace(bn.org_name,'分公司','业支') 首派部门,
+		       nvl(data.sptotal,0) 首派工单数,
+		       nvl(data.onetimetotal,0) 一次性解决数,
+		       decode(data.sptotal,null,0,0,0,round(nvl(data.onetimetotal,0)*100/data.sptotal,2)) 一次性解决率
+		from 
+		(
+		    select v_o.org_name,v_o.type_order,v_o.org_order 
+		    from v_org v_o 
+		    where v_o.type in ('分部','分公司') 
+		    #[and v_o.type=${type}]
+		    #[and v_o.area in(${s@user_areas})]
+		)bn,
+		(
+		    select v_o.org_name,count(*) sptotal,count(onetime.flowlsh) onetimetotal
+		    from sec_org o,v_org v_o,
+		    (
+		      select f.flowlsh,n.executergrouporgid,n.nodecode,i.dispatchdest,row_number() over(PARTITION BY f.flowlsh order by n.gendate) rn 
+		      from rec_flow f,ins_frm_fault i,rec_node n
+		      where f.flowlsh=i.flowlsh
+		        and f.flowlsh=n.flowlsh
+		        and f.status!='XJ'
+		        and n.nodecode in
+		        (
+		          '8705e3d30a112268006ecb0498438858',  --IT分部接口
+		          '8706e7770a11226800104dac10cfa517',  --业务支持中心接口
+		          '8707d5ab0a112268006fa804cb1cbc30',  --厂家处理
+		          '95e87c590a112268017f3be1d42c0688'  --省IT中心科室处理
+		        )
+		        and f.startercode='8a92634621adf5510121ae02a34f0003' --10000号主办单
+		        #[and i.replytime>=${startDate}]
+		        #[and i.replytime<${endDate}]
+		    ) sp,
+		    (   
+		        select flowlsh from 
+		        (
+		            select f.flowlsh,count(distinct n.executergrouporgid) num
+		            from rec_flow f,ins_frm_fault i,rec_node n
+		            where f.flowlsh=i.flowlsh
+		              and f.flowlsh=n.flowlsh
+		              and f.status!='XJ'
+		              and n.nodecode in
+		              (
+		                '8705e3d30a112268006ecb0498438858',  --IT分部接口
+		                '8706e7770a11226800104dac10cfa517',  --业务支持中心接口
+		                '8707d5ab0a112268006fa804cb1cbc30',  --厂家处理
+		                '95e87c590a112268017f3be1d42c0688'  --省IT中心科室处理
+		              )
+		              and f.startercode='8a92634621adf5510121ae02a34f0003' --10000号主办单
+		              #[and i.replytime>=${startDate}]
+		              #[and i.replytime<${endDate}]
+		            group by f.flowlsh
+		        )
+		        where num=1
+		    ) onetime
+		    where sp.executergrouporgid=o.id
+		      and sp.flowlsh=onetime.flowlsh(+)
+		      and o.org_code like v_o.org_code||'%'
+		      and sp.rn=1
+		      and sp.nodecode=decode(sp.dispatchdest,'YZ','8706e7770a11226800104dac10cfa517', '8705e3d30a112268006ecb0498438858') 
+		    group by v_o.org_name
+		) data
+		where bn.org_name=data.org_name(+)
+		order by bn.type_order,bn.org_order 
+		]]></ksql>
+	<comment><![CDATA[报表说明：
+1) 一次性解决率报表统计10000号主办单的一次解决情况；
+2) 一次性解决率=一次性解决单数/首派单数×100%；
+3) 首派单数是10000号系统首派给某工单处理部门的10000号主办单数；
+4) 一次性解决单数是首派单数里在首派部门直接解决回单，没有转其他部门处理的工单。在首派部门内部多次流转，
+	没有转派其他部门处理的工单也计算在一次性解决单数；
+]]>
+	</comment>
+</kreport>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>WorkList</name>
+	<display-name>变更管理草稿查询列表</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+	    <condition name="autoRun">
+			<index>0</index>
+			<display-name>自动执行</display-name>
+			<type>initaction</type>
+			<extend>doQuery()</extend>
+		</condition>
+		<condition name="serialno">
+			<index>10</index>
+			<display-name>工单编号：</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="title">
+			<index>20</index>
+			<display-name>工单标题：</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="startDate">
+			<index>50</index>
+			<display-name>发单时间(开始)：</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<defaut-value>.0H.0m.0s</defaut-value>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>60</index>
+			<display-name>发单时间(结束)：</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>序号</td>
+				<td nowrap>工单编号</td>
+				<td nowrap>工单主题</td>
+				<td nowrap>发单时间</td>
+				<td nowrap>发单人</td>
+				<td nowrap>发单部门</td>
+				<td nowrap>工单状态</td>
+				<td nowrap>当前环节</td>
+				<td nowrap>环节生成时间</td>
+			</tr>]]>
+		</thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;' 
+			onmouseover='this.style.backgroundColor="#EFEFEF"' style.cursor='default' onmouseout='this.style.backgroundColor="#ffffff"' bgcolor="#ffffff">		
+				<td align="center">${0}</td>
+				<td nowrap><a href="javascript:loadLocation('/modify/modifyWorkOrder!openNode.do?nodeLsh=${NODELSH}')">${工单编号}</a></td>
+				<td nowrap><a href="javascript:loadLocation('/modify/modifyWorkOrder!openNode.do?nodeLsh=${NODELSH}')">${工单主题}</a></td>
+				<td nowrap>${发单时间}</td>
+				<td nowrap>${发单人}</td>
+				<td nowrap>${发单部门}</td>
+				<td nowrap>${工单状态}</td>
+				<td nowrap>${当前环节}</td>
+				<td nowrap>${环节生成时间}</td>
+			</tr>]]>
+		</tbody>
+	</data>
+	<ksql><![CDATA[
+		--草稿
+		select distinct 
+		       SUBSTR(f.serialno,1,13) || SUBSTR(f.serialno,23) 工单编号,
+		       --f.title 工单主题,
+		       '变更草稿单' || to_char(f.gendate,'yyyy-mm-dd hh24:mi') 工单主题,
+		       to_char(f.gendate,'yyyy-mm-dd hh24:mi') 发单时间,
+		       n.nodename 当前环节,
+		       to_char(n.gendate,'yyyy-mm-dd hh24:mi') 环节生成时间,
+		       --rend(a.status) 工单状态,
+		       '草稿' 工单状态,
+		       u.user_name 发单人,
+		       getdepnamepath(uo.org_id) 发单部门,
+		       n.nodelsh,
+		       n.gendate
+		from rec_flow f,rec_node n,
+		sec_user u,
+		sec_r_user_org uo
+		where f.flowlsh=n.flowlsh 
+		  --and f.flowlsh=a.flowlsh
+		  and u.id=f.startercode and u.id=uo.user_id
+		  and f.status ='XJ'
+		  and f.flowcode='9a22c1a9c0a86b4e0050fe10f0abee3b'
+		  #[and n.executercode = '${s@user_id}']
+		  #[and f.serialno like ${serialno}]
+		  #[and f.title like ${title}]
+		  #[and f.gendate>=${startDate}]
+		  #[and f.gendate< ${endDate}]
+		order by n.gendate desc
+		]]></ksql>
+</kreport>

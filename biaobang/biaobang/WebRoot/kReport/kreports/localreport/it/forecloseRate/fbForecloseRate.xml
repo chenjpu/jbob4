@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>fbForecloseRate</name>
+	<display-name>分部预处理率</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOthers">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOthers('/itsm/localreport/fbForecloseRate_sl,/itsm/localreport/fbForecloseRate_sp,/itsm/localreport/fbForecloseRate_zh,/itsm/localreport/fbForecloseRate_yz,/itsm/localreport/fbForecloseRate_zx')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="deptId">
+			<index>45</index>
+			<display-name>部门</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[select v_o.id,v_o.org_name from v_org v_o where v_o.type='分部' and v_o.area in(${s@user_areas}) order by v_o.type_order,v_o.org_order]]></extend>
+		</condition>
+		<condition name="area">
+			<index>50</index>
+			<display-name>区域</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='区域' order by d.ordernum
+			]]></extend>
+		</condition>
+		<condition name="relationsys">
+			<index>60</index>
+			<display-name>涉及系统</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='涉及系统' order by d.ordernum
+			]]></extend>
+		</condition>		
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td rowspan=2 nowrap>分公司</td>
+				<td rowspan=2 nowrap>受理单数</td>
+				<td colspan=3 nowrap>首派工单</td>
+				<td rowspan=2 nowrap>直接回单数</td>
+				<td rowspan=2 nowrap>转分公司单数</td>
+				<td rowspan=2 nowrap>转省中心单数</td>
+				<td rowspan=2 nowrap>预处理率</td>
+			</tr>
+			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>首派单数</td>
+				<td nowrap>首派未处理单数</td>
+				<td nowrap>首派退回单数</td>				
+			</tr>]]>
+		</thead>	
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td align='center'>${1}</td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sl','${2}','org_name=${1}')">${2}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','${3}','org_name=${1}')">${3}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','${4}','org_name=${1}&dt=1')">${4}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','${5}','org_name=${1}&th=1')">${5}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_zh','${6}','org_name=${1}')">${6}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_yz','${7}','org_name=${1}')">${7}</a></td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_zx','${8}','org_name=${1}')">${8}</a></td>
+				<td align='center'>${9}%</td>
+			</tr>]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#ff0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sl','$[round(${2})]','')">$[round(${2})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','$[round(${3})]','')">$[round(${3})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','$[round(${4})]','dt=1')">$[round(${4})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_sp','$[round(${5})]','th=1')">$[round(${5})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_zh','$[round(${6})]','')">$[round(${6})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_yz','$[round(${7})]','')">$[round(${7})]</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/fbForecloseRate_zx','$[round(${8})]','')">$[round(${8})]</a></td>
+			<td align='center'>$[round(${6}*10000/${2})/100]%</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>	
+	<ksql><![CDATA[
+	select bn.org_name 分部,
+	       nvl(sl.slcount,0) 受理单数,
+	       nvl(sp.spcount,0) 首派单数,
+	       nvl(sp.spdtcount,0) 首派未处理单数,
+	       nvl(sp.spthcount,0) 首派退回单数,
+	       nvl(zh.zhcount,0) 直接回单数,
+	       nvl(yz.yzcount,0) 转分公司单数,
+	       nvl(zx.zxcount,0) 转省中心单数,
+	       decode(sl.slcount,null,0,round(nvl(zh.zhcount,0)*100/sl.slcount,2)) 预处理率
+	from 
+	(
+	    select v_o.org_name,v_o.org_order 
+	    from v_org v_o 
+	    where v_o.type='分部' 
+	    #[and v_o.id=${deptId}]
+	    #[and v_o.area in(${s@user_areas})]
+	)bn,
+	(
+	    --受理工单数
+	    select n.executergrouporgname,count(distinct f.flowlsh) slcount
+	    from rec_flow f,ins_frm_fault i,rec_node n
+	    where f.flowlsh=i.flowlsh
+	      and f.flowlsh=n.flowlsh
+	      and f.status!='XJ'
+	      and n.nodecode='8705e3d30a112268006ecb0498438858'  --IT分部接口
+	      and n.status='YB'
+	      #[and f.startercode ${startercode}]
+	      #[and f.startercode=${type10000}]
+		  #[and i.area=${area}]
+	      #[and i.replytime>=${startDate}]
+	      #[and i.replytime<${endDate}]
+	      #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+	    group by n.executergrouporgname
+	)sl,
+	(
+	    --直接回单数
+	    select n.executergrouporgname,count(distinct f.flowlsh) zhcount
+	    from rec_flow f,ins_frm_fault i,rec_node n
+	    where f.flowlsh=i.flowlsh
+	      and f.flowlsh=n.flowlsh
+	      and f.status!='XJ'
+	      and n.nodecode='8705e3d30a112268006ecb0498438858'  --IT分部接口
+	      and n.status='YB'
+	      and not exists(
+	          select 1 from rec_node n1,rec_node n2
+	          where n1.flowlsh=f.flowlsh
+	            and n2.flowlsh=f.flowlsh
+	            and n1.nodelsh=n2.prenodelsh
+	            and n2.preroutecode in(
+	              '871581c50a112268002e1b03d5bb18c3',  --转业务支持中心
+	              '871605de0a1122680005e6411105e5d9',  --转省IT中心协助
+	              '56750a8d0a11221100ca4c95630e4872',  --派电子运维
+	              '9767c6030a1122110106173bbdc058ab'   --派厂家
+	            )
+	      )
+	      #[and f.startercode ${startercode}]
+	      #[and f.startercode=${type10000}]
+		  #[and i.area=${area}]
+	      #[and i.replytime>=${startDate}]
+	      #[and i.replytime<${endDate}]
+	      #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+	    group by n.executergrouporgname
+	)zh,
+	(
+	    --转IT中心数
+	    select n.executergrouporgname,count(distinct f.flowlsh) zxcount
+	    from rec_flow f,ins_frm_fault i,rec_node n,rec_node n2
+	    where f.flowlsh=i.flowlsh
+	      and n.flowlsh=f.flowlsh
+	      and n2.flowlsh=f.flowlsh
+	      and f.status!='XJ'
+	      and n.nodecode='8705e3d30a112268006ecb0498438858'  --IT分部接口
+	      and n.status='YB'
+	      and n.nodelsh=n2.prenodelsh
+	      and n2.preroutecode='871605de0a1122680005e6411105e5d9'  --转省IT中心协助
+	      #[and f.startercode ${startercode}]
+	      #[and f.startercode=${type10000}]
+		  #[and i.area=${area}]
+	      #[and i.replytime>=${startDate}]
+	      #[and i.replytime<${endDate}]
+	      #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+	    group by n.executergrouporgname
+	)zx,
+	(
+	    --转业支数
+	    select n.executergrouporgname,count(distinct f.flowlsh) yzcount
+	    from rec_flow f,ins_frm_fault i,rec_node n,rec_node n2
+	    where f.flowlsh=i.flowlsh
+	      and n.flowlsh=f.flowlsh
+	      and n2.flowlsh=f.flowlsh
+	      and f.status!='XJ'
+	      and n.nodecode='8705e3d30a112268006ecb0498438858'  --IT分部接口
+	      and n.status='YB'
+	      and n.nodelsh=n2.prenodelsh
+	      and n2.preroutecode ='871581c50a112268002e1b03d5bb18c3'  --转业务支持中心
+	      #[and f.startercode ${startercode}]
+	      #[and f.startercode=${type10000}]
+		  #[and i.area=${area}]
+	      #[and i.replytime>=${startDate}]
+	      #[and i.replytime<${endDate}]
+	      #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+	    group by n.executergrouporgname
+	)yz,
+	(
+	    --首派工单数
+	    select n.executergrouporgname,count(*) spcount,sum(decode(n.status,'DT',1,'DB',1,0)) spdtcount,sum(decode(n.status,'TH',1,'SC',1,0)) spthcount
+	    from 
+	    (
+	        select f.flowlsh,n.nodelsh,n.nodecode,n.status,n.executergrouporgname,row_number() over (partition by f.flowlsh order by n.gendate) rn
+	        from rec_flow f,rec_node n ,ins_frm_fault i
+	        where f.flowlsh=i.flowlsh
+	          and f.flowlsh=n.flowlsh
+	          and f.status!='XJ'
+	          and n.nodecode in (
+	              '8705e3d30a112268006ecb0498438858',  --IT分部接口
+	              '8706e7770a11226800104dac10cfa517',  --业务支持中心接口
+	              '8707d5ab0a112268006fa804cb1cbc30',  --厂家处理
+	              '5c0f45e30a112211013df5e327d23d55',  --电子运维处理
+	              '95e87c590a112268017f3be1d42c0688'  --省IT中心科室处理        
+	          )
+	          #[and f.startercode ${startercode}]
+	          #[and f.startercode=${type10000}]
+	          #[and i.area=${area}]
+	          #[and i.replytime>=${startDate}]
+	          #[and i.replytime<${endDate}]
+	      	  #[and exists(select 1 from ins_frm_sub_namevalue s where i.relationsys=s.parentrelid and s.fieldvalue=${relationsys})]
+	    ) n
+	    where n.rn=1
+	      and n.nodecode='8705e3d30a112268006ecb0498438858' --IT分部接口
+	    group by n.executergrouporgname
+	)sp
+	where bn.org_name=sl.executergrouporgname(+)
+	  and bn.org_name=zh.executergrouporgname(+)
+	  and bn.org_name=zx.executergrouporgname(+)
+	  and bn.org_name=yz.executergrouporgname(+)
+	  and bn.org_name=sp.executergrouporgname(+)
+	order by bn.org_order
+		]]></ksql>
+	<comment><![CDATA[报表说明：
+1) 受理单数：经过分部处理的工单数（不包含退回及未处理过的工单）
+2) 首派单数：除去IT中心，第一个到的部门为分部的工单，首派单数-首派未处理单数-首派退回单数<=受理单数
+3) 首派未处理单数：首派单中还未被处理过的工单数
+4) 首派退回单数：首派单中被退回或撤消的工单数
+5) 直接回单数：首派或转派到分部一次性办结的工单数量
+6) 预处理率=直接回单工单数/总工单数×100%]]>
+	</comment>
+</kreport>

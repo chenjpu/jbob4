@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>syspoints</name>
+	<display-name>应用厂家月评分报表</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="edit">
+			<index>30</index>
+			<display-name>编辑</display-name>
+			<do>doExportOther('/itsm/localreport/faultreasonByLevelBill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="month">
+			<index>10</index>
+			<display-name>查询月份</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select p.month,regexp_replace(p.month,'(....)(..)','\1年\2月') 
+				from qry_sys_points p
+				where p.month<to_char(sysdate,'yyyymm')
+				group by p.month
+				order by p.month desc
+			]]></extend>
+		</condition>	
+	</conditions>	
+	<data>
+			<thead>
+			<![CDATA[<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>系统</td>
+				<td>应用软件升级（5分）</td>
+				<td>维护类需求完成率（12分）</td>
+				<td>预防性检查（3分）</td>
+				<td>工单处理及时率（30分）</td>
+				<td>责任工单数量（20分）</td>
+				<td>问题处理完成率（10分）</td>
+				<td>重大故障（20分）</td>
+				<td>集团考核关联扣分（-20分）</td>
+				<td nowrap>总分</td>
+				<td nowrap>备注</td>
+			</tr>
+			]]>
+		</thead>
+	</data>
+	<ksql><![CDATA[
+		select p.sysname 系统,
+		       p.version 应用软件升级,
+		       p.requirement 维护类需求完成率,
+		       p.preventive 预防性检查,
+		       p.forecloserate 工单处理及时率,
+		       case when p.liablebase is null then 20 
+		            when p.liablebase=0 then 20 
+		            when p.liable<p.liablebase then 20 else greatest(20-(p.liable/p.liablebase-1)*20,0) 
+		       end  责任工单数量,
+		       p.problem 问题处理完成率,
+		       p.extraevent 重大故障,
+		       p.blocchackpoints 集团考核关联扣分,
+		       p.version+p.requirement+p.preventive+p.forecloserate+p.problem+p.extraevent+p.blocchackpoints+case when p.liablebase is null then 20 
+		            when p.liablebase=0 then 20 
+		            when p.liable<p.liablebase then 20 else greatest(20-(p.liable/p.liablebase-1)*20,0) 
+		       end  总分,
+		       p.remark 备注
+		from qry_sys_points p
+		#[where p.month=${month}]
+		]]>
+	</ksql>
+</kreport>
