@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="GB2312"?> 
 <kreport>
 	<name>itschemeQueryStat</name>
-	<display-name>综合查询</display-name>
+	<display-name>产品分类销售状况 </display-name>
 	<pageable>true</pageable>
 	<condition-size>3</condition-size>
 	<skin></skin>	
@@ -24,55 +24,20 @@
 	</actions>	
 	<conditions>
 	
-	   <condition name="autoRun">
+	   <!-- condition name="autoRun">
 			<index>0</index>
 			<display-name>自动执行</display-name>
 			<type>initaction</type>
 			<extend>doQuery()</extend>
 		</condition>
-	
-		<condition name="title">
-			<index>10</index>
-			<display-name>年度计划名称</display-name>
-			<type>text</type>
-			<return-type>like</return-type>
-		</condition>
-		<condition name="schemeproperty">
-			<index>20</index>
-			<display-name>计划属性</display-name>
-			<type>select</type>
-			<return-type>string</return-type>
-			<extend><![CDATA[
-				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='(IT制度)计划属性' order by d.ordernum
-			]]></extend>
-		</condition>
-		<condition name="auditingtime">
-			<index>30</index>
-			<display-name>计划提交综合会审时间</display-name>
-			<type>date</type>
-			<return-type>date</return-type>
-			<extend>yyyy-MM-dd</extend>
-		</condition>
-		<condition name="principal">
-			<index>40</index>
-			<display-name>制度责任人</display-name>
-			<type>text</type>
-			<return-type>like</return-type>
-		</condition>
-		<condition name="startDate">
+		-->
+		<condition name="date">
 			<index>50</index>
-			<display-name>发单时间(起始)</display-name>
+			<display-name>统计年份</display-name>
 			<type>date</type>
 			<return-type>date</return-type>
 			<defaut-value>.0H.0m.0s</defaut-value>
-			<extend>yyyy-MM-dd</extend>
-		</condition>
-		<condition name="endDate">
-			<index>60</index>
-			<display-name>发单时间(结束)</display-name>
-			<type>date</type>
-			<return-type>date</return-type>
-			<extend>yyyy-MM-dd</extend>
+			<extend>yyyy</extend>
 		</condition>
 	</conditions>	
 	<data>
