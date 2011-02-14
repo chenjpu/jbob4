@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultForecloseRate</name>
+	<display-name>深圳处理情况</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<ksql><![CDATA[
+		--深圳预处理率
+		select 当天受理数量,
+			加急单数,
+		   "平均处理时间(分钟)",
+		       转派量,
+		       直接回单数,
+		       在途单数,
+		   decode(当天受理数量,在途单数,0,round(直接回单数*100/(当天受理数量-在途单数),2)) 预处理率 
+		from 
+		(
+		--当天受理数量  
+		select count(*) 当天受理数量,
+		       nvl(sum(decode(i.urgent,'yes',1,0)),0) 加急单数,
+		       round(avg(r.used_time)/60000) "平均处理时间(分钟)"
+		from rec_flow f,ins_frm_fault i,chk_assessment_result r
+		where f.flowlsh=i.flowlsh
+		    and f.flowlsh=r.rec_flow_id
+		    and r.assessment_type='F'
+		    and f.status!='XJ'
+	        #[and f.gendate>=${startDate}]
+		    #[and f.gendate< ${endDate}]	
+		    and i.area='0755' 
+		    and exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		              '8706e7770a11226800104dac10cfa517'  --业务支持中心接口 
+		              ) 
+		    )
+		),
+		
+		(
+		--转派量  
+		select count(*) 转派量
+		from rec_flow f,ins_frm_fault i
+		where f.flowlsh=i.flowlsh
+		    and f.status!='XJ'	 
+			#[and f.gendate>=${startDate}]
+			#[and f.gendate< ${endDate}]	
+		    and i.area='0755' --广州
+		    and exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '95e87c590a112268017f3be1d42c0688', --省IT中心科室处理 
+		              '8707d5ab0a112268006fa804cb1cbc30'  --厂家处理 
+		              )        
+		    )
+		    and exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		              '8706e7770a11226800104dac10cfa517'  --业务支持中心接口 
+		              ) 
+		    )
+		),
+		(
+		--直接回单数/在途单数
+		select sum(decode(i.fualtstatus,'230',1,'240',1,'250',1,0)) 直接回单数,
+		       sum(decode(i.fualtstatus,'230',0,'240',0,'250',0,1)) 在途单数
+		from rec_flow f,ins_frm_fault i
+		where f.flowlsh=i.flowlsh
+		    and f.status!='XJ'
+			#[and f.gendate>=${startDate}]
+			#[and f.gendate< ${endDate}]	
+		    and i.area='0755' --广州
+		    and not exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '95e87c590a112268017f3be1d42c0688', --省IT中心科室处理 
+		              '8707d5ab0a112268006fa804cb1cbc30'  --厂家处理 
+		              )        
+		    )
+		    and exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		              '8706e7770a11226800104dac10cfa517'  --业务支持中心接口 
+		              ) 
+		    )
+		 )
+		]]></ksql>
+</kreport>

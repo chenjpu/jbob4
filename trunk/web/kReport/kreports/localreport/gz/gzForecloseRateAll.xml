@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>gzForecloseRateAll</name>
+	<display-name>广州分部受理工单清单</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="oneDate">
+			<index>20</index>
+			<display-name>统计时间</display-name>
+			<type>hidden</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td>${5}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+	  --广州分部受理总工单数
+	  select f.serialno 工单编号,
+	         f.title 工单标题,
+			 to_char(f.gendate,'yyyy-mm-dd HH24:mi') 报障时间,
+	         i.organiger 报障人,
+	         i.faultdescription 故障描述
+	 from rec_flow f,ins_frm_fault i
+     where f.flowlsh=i.flowlsh
+       and f.status != 'XJ'
+       and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+       and exists(
+          select 1 from rec_node n 
+          where n.flowlsh=f.flowlsh 
+            and n.executergrouporgid='8a92635521a51e8f0121a5211f3e02c2'
+       ) --经过广州分部
+	   #[and f.gendate>=${startDate}]
+	   #[and f.gendate< ${endDate}+1]
+	   #[and trunc(f.gendate)=${oneDate}]
+		]]></ksql>
+</kreport>

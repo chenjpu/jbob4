@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szLoadForEG</name>
+	<display-name>深圳组处理量统计 </display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOthers">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/itsm/szLoadForEGBill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="executergroupid">
+			<index>30</index>
+			<display-name>处理组</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select g.id,g.fw_name from sec_group g,sec_org o
+				where g.org_id=o.id
+				  and (o.org_code like '0001100000030004%' or o.org_code like '000107550025%') 
+				order by o.org_code,g.fw_name		
+			]]></extend>
+		</condition>
+		<condition name="refresh">
+			<index>100</index>
+			<display-name>自动刷新</display-name>
+			<type>refresh</type>
+			<default-value>300</default-value>
+			<extend>doQuery()</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+			<td align='center'>${1}</td>
+			<td align='center'><a href="javascript:openList('/itsm/szLoadForEGBill','${2}','exename=${1}')">${2}</a></td>
+		</tr>
+		]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#ff0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'>$[round(${2})]</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+      select n.executername 处理人,count(distinct f.flowlsh) 处理工单数
+      from rec_flow f,rec_node n 
+      where f.flowlsh=n.flowlsh
+        and f.status != 'XJ'
+        and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+        --and n.executergrouporgid='8a92635521a51e8f0121a5212d8f032e' --经过深圳分部
+        and n.executergroupid is not null
+        and n.nodecode not in('86c9dd900a11226800316ae4eb406c1e','870bb7f90a11226801f8cfbbeebbcb95') --不是报障 报障人确认环节
+        #[and f.gendate>=${startDate}]
+		#[and f.gendate< ${endDate}]
+        #[and n.executergroupid=${executergroupid}]
+      group by n.executergroupid,n.executername
+		]]></ksql>
+</kreport>

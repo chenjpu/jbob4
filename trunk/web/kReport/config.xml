@@ -1,0 +1,37 @@
+<config>
+	<actions>
+		<action name="main">cn.blsoft.krport.action.MainAction</action>
+		<action name="query">cn.blsoft.krport.action.QueryAction</action>
+		<action name="crossQurey">cn.blsoft.krport.action.CrossQueryAction</action>
+		<action name="export">cn.blsoft.krport.action.ExportAction</action>
+		<action name="exportTable">cn.blsoft.krport.action.TableExportAction</action>
+		<action name="exportCrossTable">cn.blsoft.krport.action.CrossTableExportAction</action>
+		<action name="export2">cn.blsoft.krport.action.Export2Action</action>
+		<action name="exportOthers">cn.blsoft.krport.action.ExportOthersAction</action>
+		<action name="openList">cn.blsoft.krport.action.OpenListAction</action>
+	</actions>
+	<htmlwidgets>
+		<htmlwidget name="text">cn.blsoft.krport.htmlwidget.TextHtmlWidget</htmlwidget>
+		<htmlwidget name="hidden">cn.blsoft.krport.htmlwidget.HiddenHtmlWidget</htmlwidget>
+		<htmlwidget name="date">cn.blsoft.krport.htmlwidget.DateHtmlWidget</htmlwidget>
+		<htmlwidget name="select">cn.blsoft.krport.htmlwidget.SelectHtmlWidget</htmlwidget>
+		<htmlwidget name="mselect">cn.blsoft.krport.htmlwidget.MSelectHtmlWidget</htmlwidget>
+		<htmlwidget name="rselect">cn.blsoft.krport.htmlwidget.RSelectHtmlWidget</htmlwidget>
+		<htmlwidget name="refresh">cn.blsoft.krport.htmlwidget.RefreshHtmlWidget</htmlwidget>
+		<htmlwidget name="blank">cn.blsoft.krport.htmlwidget.BlankHtmlWidget</htmlwidget>
+		<htmlwidget name="initaction">cn.blsoft.krport.htmlwidget.InitActionHtmlWidget</htmlwidget>
+	</htmlwidgets>	
+	<returntypes>
+		<returntype name="void">cn.blsoft.krport.returntype.VoidReturnType</returntype>
+		<returntype name="string">cn.blsoft.krport.returntype.StringReturnType</returntype>
+		<returntype name="date">cn.blsoft.krport.returntype.DateReturnType</returntype>
+		<returntype name="like">cn.blsoft.krport.returntype.LikeReturnType</returntype>
+	</returntypes>
+	<dialects>
+		<dialect driver="oracle.jdbc.driver.OracleDriver">cn.blsoft.krport.dialect.OracleDialect</dialect>
+		<dialect driver="com.mysql.jdbc.Driver">cn.blsoft.krport.dialect.MySQLDialect</dialect>
+	</dialects>
+	<initparams>
+		<initparam name="user_area">cn.blsoft.krport.initparam.UserInitparam</initparam>
+	</initparams>
+</config>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>gzGroupMonitorBill</name>
+	<display-name>广州在途工单监控清单</display-name>
+	<page-size></page-size>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="executergroupid">
+			<index>10</index>
+			<display-name>处理组</display-name>
+			<type>select</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select g.id,g.fw_name from sec_group g,sec_org o
+				where g.org_id=o.id
+				and (o.org_code like '0001100000030001%' or o.org_code like '00010020%')
+				order by o.org_code
+			]]></extend>
+		</condition>		
+		<condition name="executercode">
+			<index>20</index>
+			<display-name>处理人ID</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>	
+		<condition name="status">
+			<index>30</index>
+			<display-name>状态</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend>{DT:未签收,DB:签收未处理,YB:签收已处理}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>序号</td>
+				<td nowrap>工单编号</td>
+				<td nowrap>工单标题</td>
+				<td nowrap>报障时间</td>
+				<td nowrap>环节状态</td>
+				<td nowrap>处理人</td>
+			</tr>
+			]]>
+		</thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select f.serialno 工单编号,
+		       f.title 工单标题,
+		       to_char(f.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+		       decode(n.status,'DT','未签收',decode(n.status,'DB','待办','已办')) 环节状态,
+		       n.executername 处理人
+		from rec_flow f,ins_frm_fault i,rec_node n
+		where f.flowlsh=n.flowlsh
+		  and f.flowlsh=i.flowlsh
+		  and f.status!='XJ'
+		  and f.flowcode='86b47b100a11226801c8c29cc4f3df3f' --故障流程
+		  #[and n.executergroupid=${executergroupid}]  
+		  #[and n.executercode=${executercode}]
+		  #[and n.status=${status}]
+		  and n.status in ('DT','DB','YB')
+		  and i.fualtstatus not in ('230','240','250')
+		group by f.serialno,f.title,to_char(f.gendate,'yyyy-mm-dd hh24:mi'),decode(n.status,'DT','未签收',decode(n.status,'DB','待办','已办')),n.executername
+		order by f.serialno
+		]]></ksql>
+</kreport>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>BillCount</name>
+	<display-name>建单数查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<default-value>-1d.0H.0m.0s</default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<default-value>.0H.0m.0s</default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="flowcodes">
+			<index>30</index>
+			<display-name>流程名称</display-name>
+			<type>mselect</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select f.flowcode,f.flowname from flw_flow f
+			]]></extend>
+		</condition>
+		<condition name="granularity">
+			<index>50</index>
+			<display-name>粒度</display-name>
+			<type>select</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				{yyyy:年,yyyy-mm:月,yyyy-mm-dd:日,yyyy-mm-dd hh24:时}
+			]]></extend>
+		</condition>
+		<condition name="area">
+			<index>40</index>
+			<display-name>区域</display-name>
+			<type>select</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='区域' order by d.ordernum
+			]]></extend>
+		</condition>
+		<condition name="b2">
+			<index>60</index>
+			<display-name></display-name>
+			<type>blank</type>
+		</condition>
+		<condition name="b3">
+			<index>60</index>
+			<display-name></display-name>
+			<type>blank</type>
+		</condition>
+		<condition name="refresh">
+			<index>100</index>
+			<display-name>自动刷新</display-name>
+			<type>refresh</type>
+			<default-value>300</default-value>
+			<extend>doQuery()</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody></tbody>
+	</data>	
+	<ksql><![CDATA[
+		select #[to_char(f.gendate,${granularity})时间,]count(*) 建单数
+		from rec_flow f,ins_frm_fault i
+		where f.status!='XJ'
+		  and f.flowlsh=i.flowlsh
+		  #[and f.flowcode = ${flowcode}]
+		  #[and f.flowcode in (${flowcodes})]
+		  #[and f.gendate >= ${startDate}]
+		  #[and f.gendate <  ${endDate}]
+		  #[and i.area=${area}]
+		#[group by to_char(f.gendate,${granularity})]
+		#[order by to_char(f.gendate,${granularity})]
+		]]></ksql>
+</kreport>

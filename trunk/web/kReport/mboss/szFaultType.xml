@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultType</name>
+	<display-name>深圳报障类型统计</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<data>	
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#FF0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'>$[round(${2})]</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+		--已完成业务运营类工单按故障类型统计
+		select d.dname 报障类型,count(*) 工单数
+		from ins_frm_fault i,sys_data_dictionary d,v_ctime vc,rec_flow f
+		where i.itbizfaulttypel2=d.dvalue
+		    and i.flowlsh = vc.flowlsh
+		    and i.flowlsh = f.flowlsh
+		    #[and vc.ctime>=${startDate}]
+			#[and vc.ctime< ${endDate}]		   
+		    and i.itbusinesstype='ITBUT_1'
+		  and i.area='0755' 
+		  --and f.title like '%MBOSS%'
+		group by d.dname
+		order by count(*) desc
+		]]></ksql>
+</kreport>

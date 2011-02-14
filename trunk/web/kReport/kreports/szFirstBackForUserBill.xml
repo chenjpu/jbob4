@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFirstBackForUserBill</name>
+	<display-name>深圳首次回单清单</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="orgcode">
+			<index>30</index>
+			<display-name>处理部门</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend>{0001100000030004:深圳分部,00010755:sz业务支持中心}</extend>
+		</condition>
+		<condition name="fgroupname">
+			<index>0</index>
+			<display-name>首次回单组</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+		<condition name="fname">
+			<index>0</index>
+			<display-name>首次回单人</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+	</conditions>			
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td nowrap>${8}</td>
+				<td>${9}</td>
+				<td>${10}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<data>
+		<thead></thead>
+		<tbody></tbody>
+	</data>	
+	<ksql><![CDATA[
+		select rn.serialno 工单编号,
+		       rn.title 工单标题,
+		       to_char(rn.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+		       rn.organiger 报障人,
+		       rn.organigerdept 报障部门,
+		       to_char(rn.rtime,'yyyy-mm-dd hh24:mi') 首次回单时间,
+		       rn.executername 首次回单人,
+		       rn.executergroupname 首次回单组,
+		       getdepnamepath(rn.executergrouporgid) 首次回单部门,
+		       rn.faultdescription 故障描述       
+		from
+		(
+		  select f.flowlsh,f.serialno,f.title,f.gendate,n.executercode,i.organiger,i.organigerdept,i.faultdescription,
+		         n.executername,n.executergroupid,n.executergroupname,n.executergrouporgid,n.executedate rtime,
+		         row_number() over(partition by n.flowlsh order by n.gendate) rn
+		  from rec_flow f,ins_frm_fault i,rec_node n--,rec_node n2
+		  where f.flowlsh=n.flowlsh
+		    and f.flowlsh=i.flowlsh
+		    --and n.nodelsh=n2.prenodelsh      
+		    and f.status!='XJ'
+		    and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'		    
+		    and n.submitinfo like '%回单%'
+		    --and n2.preroutecode in (
+		    --    select r.routecode from flw_route r 
+		    --    where r.flowcode='86b47b100a11226801c8c29cc4f3df3f' 
+		    --      and r.routename like '%回单%'
+		    --)
+		) rn
+		where rn.rn=1
+		  #[and rn.rtime>=${startDate}]
+		  #[and rn.rtime<${endDate}]
+		  #[
+		  and rn.executergroupid in(
+		      select g.id from sec_group g,sec_org o where g.org_id=o.id and o.org_code like ${orgcode}||'%'
+		  )
+		  ]
+		  #[and rn.executergroupname=${fgroupname}]
+		  #[and rn.executername=${fname}]
+		]]></ksql>
+</kreport>

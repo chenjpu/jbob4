@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szCreateFaultBill</name>
+	<display-name>深圳报障工单 </display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="serialno">
+			<index>10</index>
+			<display-name>工单编号</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="title">
+			<index>20</index>
+			<display-name>工单标题</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="startDate">
+			<index>30</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>40</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}">${1}</a></td>
+				<td><a href="http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td>${5}</td>
+				<td>${6}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+	select f.serialno 工单编号,
+	       f.title 工单标题,
+	       f.gendate 报障时间,
+	       i.organiger 报障人,
+	       i.organigerdept 报障部门,
+	       i.faultdescription 故障描述 
+	from rec_flow f,ins_frm_fault i
+	where f.flowlsh=i.flowlsh
+	  and f.status != 'XJ'
+	  and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+	  and i.area='0755'
+	  and f.startercode not in (
+	      '8a92634621adf5510121ae02a34f0003',
+	      '8a92634621adf5510121ae034eff0003',
+	      '8a91a29124466980012446a13077008b'
+	  )
+	  #[and f.serialno like ${serialno}]
+	  #[and f.title like ${title}]
+	  #[and f.gendate>=${startDate}]
+	  #[and f.gendate< ${endDate}]
+		]]></ksql>
+</kreport>

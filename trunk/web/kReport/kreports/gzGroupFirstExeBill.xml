@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>gzGroupFirstExeBill</name>
+	<display-name>广州组首次处理清单</display-name>
+	<pageable>true</pageable>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>环节进入时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>+1d.1d-2M</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>环节进入时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+			<default-value>+1d.1d-1M</default-value>
+		</condition>
+		<condition name="executergroupid">
+			<index>30</index>
+			<display-name>处理组</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select g.id,g.fw_name from sec_group g,sec_org o
+				where g.org_id=o.id
+				and (o.org_code like '0001100000030001%' or o.org_code like '00010020%')
+				order by o.org_code
+			]]></extend>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td nowrap>${2}</td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td>${8}</td>
+				<td>${9}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select f.serialno 工单编号,
+		       n.executername 第一个处理人,
+		       round((decode(n.status,'DB',sysdate,'DT',sysdate,'SF',sysdate,n.executedate)-n.gendate)*24*60) 第一个处理人停留时间,
+		       rend(i.fualtlevel) 故障级别,
+		       decode(i.urgent,'yes','加急','') 是否加急,
+		       decode(sign(round(r.used_time/60000)-r.total_time),1,'超时','未超时') 是否超时,
+		       rend(i.fualtstatus) 工单状态,
+		       i.faultdescription 故障描述,
+		       n.executemsg 回单信息
+		from rec_flow f,ins_frm_fault i,rec_node n,chk_assessment_result r,chk_entity e,
+		(
+		  select n.flowlsh,min(n.gendate) fgendate
+		  from rec_node n 
+		  where n.executergroupid=${executergroupid} --组ID
+		  group by n.flowlsh
+		  having 1=1 
+		  	 #[and min(n.gendate)>${startDate}  --环节进入时间（开始）]
+		     #[and min(n.gendate)<${endDate}+1  --环节进入时间（结束）]
+		) t
+		where f.flowlsh=n.flowlsh
+		  and f.flowlsh=i.flowlsh
+		  and f.flowlsh=t.flowlsh
+		  and n.gendate=t.fgendate
+		  and f.flowlsh=r.rec_flow_id
+		  and r.assessment_type='O'
+		  and r.assessment_id=e.assessment_id
+		  and e.entiy_id=n.executergrouporgid
+		]]></ksql>
+</kreport>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>BillQuery</name>
+	<display-name>工单查询</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="serialno">
+			<index>10</index>
+			<display-name>工单编号</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="title">
+			<index>20</index>
+			<display-name>工单标题</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="organiger">
+			<index>30</index>
+			<display-name>报障人</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="faultdescription">
+			<index>40</index>
+			<display-name>故障描术</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="startDate">
+			<index>43</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<default-value>-1d.16H.0m.0s</default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>46</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<default-value>.16H.0m.0s</default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="faultlinkman">
+			<index>50</index>
+			<display-name>联系人</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="faultlinktel">
+			<index>60</index>
+			<display-name>联系人电话</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="fs">
+			<index>60</index>
+			<type>initaction</type>
+			<extend>q</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td>${7}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		select f.serialno 工单编号,f.title 工单标题,i.organiger 报障人,
+		       i.faultlinkman 联系人,i.faultlinktel 联系人电话,f.gendate 报障时间,i.faultdescription 故障描术
+		from rec_flow f,ins_frm_fault i
+		where f.flowlsh=i.flowlsh
+		  and f.status!='XJ'
+		  #[and f.serialno like ${serialno}]
+		  #[and f.title like ${title}]
+		  #[and i.faultdescription like ${faultdescription}]
+		  #[and i.organiger like ${organiger}]
+		  #[and i.faultlinkman like ${faultlinkman}]
+		  #[and i.faultlinktel like ${faultlinktel}]
+		  #[and f.gendate >= ${startDate}]
+		  #[and f.gendate <  ${endDate}]
+		]]></ksql>
+</kreport>

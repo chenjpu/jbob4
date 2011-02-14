@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>SecRankQuery</name>
+	<display-name>排序表查询</display-name>
+	<pageable>true</pageable>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="name">
+			<index>10</index>
+			<display-name>名称</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="type">
+			<index>20</index>
+			<display-name>类型</display-name>
+			<type>select</type>
+			<default-value>厂家</default-value>
+			<return-type>string</return-type>
+			<extend>{IT中心:IT中心,分部:分部,业支:业支,科室:科室,厂家:厂家}</extend>
+		</condition>
+		<condition name="types">
+			<index>20</index>
+			<display-name>类型</display-name>
+			<type>mselect</type>
+			<default-value>厂家</default-value>
+			<return-type>string</return-type>
+			<extend>{IT中心:IT中心,分部:分部,业支:业支,科室:科室,厂家:厂家}</extend>
+		</condition>
+		<condition name="rank">
+			<index>15</index>
+			<display-name>序号</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<extend></extend>
+		</condition>
+		<condition name="refresh">
+			<index>100</index>
+			<display-name>自动刷新</display-name>
+			<type>refresh</type>
+			<default-value>100</default-value>
+			<extend>doQuery()</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+		<tr style="border: 1px solid #000000; background-color:#FF0000">
+			<td colspan="2" nowrap><div align="center" class="STYLE2">名称值</div></td>
+			<td rowspan="2" nowrap><div align="center" class="STYLE2">类型</div></td>
+			<td rowspan="2" nowrap><div align="center" class="STYLE2">序号</div></td>
+		</tr>
+		<tr style="border: 1px solid #000000; background-color:#FF0000">
+			<td nowrap><div align="center" class="STYLE2">名称</div></td>
+			<td nowrap><div align="center" class="STYLE2">值</div></td>
+		</tr>
+		]]>	</thead>
+		<tbody><![CDATA[
+		<tr bgcolor="#FF00FF">
+			<td><a herf="#" title="${2}">${1}</td>
+			<td>1</td>
+			<td>${3}</td>
+			<td>${序号}</td>
+		</tr>
+		
+		]]></tbody>
+	</data>	
+	<ksql><![CDATA[
+		select r.name 名称,'<'||r.value||'>' 值,r.type 类型,r.rank 序号  from sec_rank r
+		where 1=1 
+		#[and name like ${name}] 
+		#[and type=${type}]
+		#[and rank=${rank}]
+		#[and type in (${types})]
+		]]></ksql>
+</kreport>

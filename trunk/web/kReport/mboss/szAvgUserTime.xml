@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szAvgUserTime</name>
+	<display-name>深圳工单平均历时</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<ksql><![CDATA[
+		--当天受理数量  
+		select count(*) 当天受理量,
+		       nvl(sum(decode(i.urgent,'yes',1,0)),0) 加急单数,
+		       round(avg(r.used_time)/60000) "平均处理时间(分钟)"
+		from rec_flow f,ins_frm_fault i,chk_assessment_result r
+		where f.flowlsh=i.flowlsh
+		    and f.flowlsh=r.rec_flow_id
+		    and r.assessment_type='F'
+		    and f.status!='XJ'
+	        #[and f.gendate>=${startDate}]
+		    #[and f.gendate< ${endDate}]	
+		    and i.area='0755' 
+		    and exists(
+		        select 1 from rec_node n
+		        where n.flowlsh=f.flowlsh
+		          and n.nodecode in (
+		              '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		              '8706e7770a11226800104dac10cfa517'  --业务支持中心接口 
+		              ) 
+		    )
+
+		]]></ksql>
+</kreport>

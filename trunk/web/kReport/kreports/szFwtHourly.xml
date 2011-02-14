@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFwtHourly</name>
+	<display-name>深圳服务台提单量</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>		
+		<condition name="flowcode">
+			<index>30</index>
+			<display-name>工单类型</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend>{86b47b100a11226801c8c29cc4f3df3f:故障单,9bb5c8f7c0a86b4e01edad7e55e0a1b5:服务单}</extend>
+		</condition>	
+	</conditions>	
+	<ksql><![CDATA[
+		--服务台每小时请求单量
+		select to_char(f.gendate,'yyyy-mm-dd hh24') 时间,count(*) 工单数
+		from rec_flow f,sec_user u,sec_r_user_group ug,sr_jobnumber_user ju
+		where f.startercode=u.id
+		  and u.id=ug.user_id
+		  and u.login_id=ju.loginid
+		  and f.status!='XJ'
+		  and f.flowcode in ('9bb5c8f7c0a86b4e01edad7e55e0a1b5','86b47b100a11226801c8c29cc4f3df3f')
+		  #[and f.flowcode=${flowcode}]
+		  and ug.group_id='04f902112956072901296e63a1fe0ec4'    --深圳远端坐席组
+		  #[and f.gendate >= ${startDate}]  --建单时间(开始)
+		  #[and f.gendate <  ${endDate}]  --建单时间(结束)
+		group by to_char(f.gendate,'yyyy-mm-dd hh24')
+		order by to_char(f.gendate,'yyyy-mm-dd hh24')
+		]]></ksql>
+</kreport>

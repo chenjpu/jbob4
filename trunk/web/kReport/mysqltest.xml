@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>mysqltest</name>
+	<display-name>MySQL查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="name">
+			<index>10</index>
+			<display-name>姓名</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>like</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="age">
+			<index>20</index>
+			<display-name>年龄</display-name>
+			<type>text</type>
+			<default-value></default-value>
+			<return-type>string</return-type>
+			<extend></extend>
+		</condition>
+		<condition name="startDate">
+			<index>43</index>
+			<display-name>注册时间(开始)</display-name>
+			<type>date</type>
+			<default-value></default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>46</index>
+			<display-name>注册时间(结束)</display-name>
+			<type>date</type>
+			<default-value></default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+	</conditions>	
+	<ksql><![CDATA[
+		SELECT * FROM sec_user as u
+		where 1=1
+		  #[and name like ${name}]
+		  #[and age=${age}]
+		  #[and sex=${sex}]
+		  #[and regdate>=${startDate}]
+		  #[and regdate<${endDate}]
+		]]></ksql>
+</kreport>

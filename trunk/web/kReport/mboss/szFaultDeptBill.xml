@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultDeptBill</name>
+	<display-name>深圳报障部门清单</display-name>
+	<condition-size>4</condition-size>
+	<pageable>true</pageable>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+		<condition name="organigerdept">
+			<index>0</index>
+			<display-name>报障部门</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="orgname">
+			<index>0</index>
+			<display-name>部门</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('http://132.121.130.146:8603/esys/externalSysOutLookFlow!tisson10000SOutLookFlow.do?serialNo=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td>${5}</td>
+				<td nowrap>${6}</td>
+				<td>${7}</td>
+				<td nowrap>${8}</td>
+				<td nowrap>${9}</td>
+				<td nowrap>${10}</td>
+				<td>${11}</td>
+				<td nowrap>${12}</td>
+				<td nowrap>${13}</td>
+				<td nowrap>${14}分钟</td>
+				<td nowrap>${15}分钟</td>
+				<td nowrap>${16}</td>
+				<td>${17}</td>
+				<td>${18}</td>
+			</tr>]]>
+		</tbody>
+	</data>	
+	<ksql><![CDATA[
+		--按报障部门统计清单
+		select m.serialno 工单编号,
+		       m.title 工单标题,
+		       to_char(m.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+		       m.organiger 报障人,
+		       m.organigerdept 报障部门,
+		       n.executername 当前处理人,
+		       n.exeorg 当前处理部门,
+		       rend(m.itbusinesstype) IT业务类型,
+		       rend(m.itbizfaulttypel1) 一级故障类型,
+		       rend(m.itbizfaulttypel2) 二级故障类型,
+		       rend(m.itbizfaulttypel3) 三级故障类型,
+		       rend(m.urgent) 是否加急,
+		       rend(m.fualtlevel) 故障级别,
+		       m.total_time 处理时限,
+		       round(m.used_time/60000) 使用时限,
+	           rend(m.billfaultreason) 工单故障原因,
+	           m.rsys 涉及系统,
+		       m.faultdescription 故障描述 
+		from 
+		( 
+			select f.flowlsh,
+	           f.serialno,
+	           f.title,
+	           f.gendate,
+	           i.organiger,
+	           i.organigerdept,
+	           i.itbusinesstype,
+	           i.itbizfaulttypel1,
+	           i.itbizfaulttypel2,
+	           i.itbizfaulttypel3,
+	           i.urgent,
+	           i.fualtlevel,
+	           r.total_time,
+	           r.used_time,
+               i.billfaultreason,
+               strcat(distinct rend(s.fieldvalue)) rsys,
+	           i.faultdescription
+			from rec_flow f,ins_frm_fault i,chk_assessment_result r,ins_frm_sub_namevalue s
+			where f.flowlsh=i.flowlsh
+		      and f.flowlsh=r.rec_flow_id
+          	  and 'MUL_'||f.flowlsh||'_relationsys'=s.parentrelid(+)
+		      and r.assessment_type='F'
+			  and f.status!='XJ'
+			  and i.area='0755'  --深圳 
+			  #[and f.gendate>=${startDate}]
+			  #[and f.gendate< ${endDate}]	
+		      #[and decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept) like ${organigerdept}]
+		      #[and decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept)=${orgname}]
+		   group by f.flowlsh,f.serialno,f.title,f.gendate,i.organiger,i.organigerdept,i.itbusinesstype,i.itbizfaulttypel1,
+                    i.itbizfaulttypel2,i.itbizfaulttypel3,i.urgent,i.fualtlevel,r.total_time,r.used_time,i.billfaultreason,i.faultdescription
+		
+		) m,     
+		(  
+		    select f.flowlsh,n.executername,getdepnamepath(n.executergrouporgid) exeorg
+		    from rec_flow f,rec_node n,ins_frm_fault i
+		    where f.flowlsh=n.flowlsh
+		      and f.flowlsh=i.flowlsh
+		      and f.status != 'XJ'
+			  and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'
+		      and n.status in('DB','DT','SF')
+			  and i.area='0755'  --深圳 
+			  #[and f.gendate>=${startDate}]
+			  #[and f.gendate< ${endDate}]	
+		      #[and decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept) like ${organigerdept}]
+		      #[and decode(f.startercode,'8a92634621adf5510121ae02a34f0003','省工作流','8a92634621adf5510121ae034eff0003','省工作流','8a91a29124466980012446a13077008b','电子运维',i.organigerdept)=${orgname}]
+		) n
+		where m.flowlsh=n.flowlsh(+)
+		]]></ksql>
+</kreport>

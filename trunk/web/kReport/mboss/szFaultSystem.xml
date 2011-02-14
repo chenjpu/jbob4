@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szFaultSystem</name>
+	<display-name>深圳涉及系统统计</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<data>	
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#FF0000;line-height:14pt;	background-color:white;'>
+			<td align='center'>合计</td>
+			<td align='center'>$[round(${2})]</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+		--已完成工单按涉及系统统计
+		select d.dname 涉及系统,count(*) 工单数
+		from(
+		  select cf.flowlsh,max(cn.executedate) completedate 
+		  from rec_flow cf,ins_frm_fault i, rec_node cn
+		  where cf.flowlsh=i.flowlsh
+		    and cf.flowlsh = cn.flowlsh
+		    and cf.flowcode='86b47b100a11226801c8c29cc4f3df3f' 
+		    and i.fualtstatus in ('230','240','250')
+		    and cn.nodecode not in ('86c9dd900a11226800316ae4eb406c1e','870bb7f90a11226801f8cfbbeebbcb95') --不是报障和报障人确认环节
+		    and i.area='0755' 
+		    --and cf.title like '%MBOSS%'
+		  group by cf.flowlsh 
+		) f,ins_frm_sub_namevalue s,sys_data_dictionary d
+		where  f.flowlsh=s.flowlsh
+		and s.insfrmfieldname='relationsys'
+		and s.fieldvalue=d.dvalue 
+        #[and completedate>=${startDate}]
+	    #[and completedate< ${endDate}]	
+		group by d.DNAME
+		order by count(*) desc
+		]]></ksql>
+</kreport>

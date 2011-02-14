@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>historyNodeQuery</name>
+	<display-name>历史工单环节查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>	
+		<condition name="serialno">
+			<index>0</index>
+			<display-name>工单编号</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+	</conditions>		
+	<ksql><![CDATA[
+		select rend(n.status) 状态,
+		       n.nodename 环节,
+		       n.executergrouporgname 环节处理部门,
+		       n.executername 环节处理人,
+		       to_char(n.executedate,'yyyy-mm-dd hh24:mi') 环节处理时间,
+		       n.submitinfo 提交信息,
+		       nvl(round(r.used_time/60000),0) "考核时间(分钟)",
+		       n.executemsg 处理意见 
+		 from rec_flow_201007 f,rec_node_201007 n,chk_assessment_rs_node_201007 r
+		where f.flowlsh=n.flowlsh
+		  and n.nodelsh=r.rec_node_id(+)
+		  #[and f.serialno=${serialno}]
+		order by n.gendate
+		]]></ksql>
+</kreport>

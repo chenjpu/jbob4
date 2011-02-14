@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>BillQuery2</name>
+	<display-name>工单查询2</display-name>
+	<page-size></page-size>
+	<pageable></pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="crossQuery">
+			<index>5</index>
+			<display-name>交叉报表</display-name>
+			<do>doCrossQurey()</do>
+		</action>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>43</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<default-value></default-value>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+		</condition>
+		<condition name="endDate">
+			<index>46</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd</extend>
+		</condition>
+	</conditions>	
+	<cross>		
+		<cross-text></cross-text>
+		<row-field>IT业务类型:IT业务类型,一级业务类型:一级业务类型</row-field>
+		<col-field>区域:区域,状态:状态</col-field>
+		<value-field>工单量,工单量2</value-field>
+	</cross>
+	<data></data>	
+	<ksql><![CDATA[
+		select nvl(rend(i.area),'空') 区域,
+	       nvl(rend(i.itbusinesstype),'空') IT业务类型,
+	       nvl(rend(i.itbizfaulttypel1),'空') 一级业务类型,
+	       nvl(rend(i.fualtstatus),'空') 状态,
+	       count(*) 工单量,
+	       count(*) 工单量2
+		from rec_flow f,ins_frm_fault i
+		where f.flowlsh=i.flowlsh
+  		  and f.status!='XJ'
+		  #[and f.gendate>=${startDate}] --首次进入时间（开始）
+		  #[and f.gendate< ${endDate}+1] --首次进入时间（结束）不包含此天  
+		group by i.area,i.itbusinesstype,i.itbizfaulttypel1,i.fualtstatus
+		]]></ksql>
+</kreport>
