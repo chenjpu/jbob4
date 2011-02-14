@@ -73,8 +73,8 @@
 			DAYOFMONTH(bl.tTime) 月份,
 			bl.area 区域,
 			sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-			
 			where bl.id = bp.ladingId
+
 			group by DAYOFMONTH(bl.tTime),bl.area
 			
 			UNION
@@ -85,20 +85,17 @@
 			
 			bl.area 区域,
 			sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-			
 			where bl.id = bp.ladingId
+
 			group by bl.area
-			
 			UNION
-			
 			select 
-			
 			'合计'  月均,
 			
 			bl.area 区域,
 			avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
-			
 			where bl.id = bp.ladingId
+
 			group by bl.area
 		]]></ksql>
 </kreport>
