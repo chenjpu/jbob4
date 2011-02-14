@@ -25,6 +25,7 @@ public class Goods implements java.io.Serializable {
 	private String number;
 	private Integer specification;
 	private String standard;
+	private String specs;
 
 	// Constructors
 
@@ -42,7 +43,7 @@ public class Goods implements java.io.Serializable {
 			String netWeight, Double length, Double width, Double height,
 			Double volume, Double bottleWeight, Double boxWeight,
 			String barCode, String number, Integer specification,
-			String standard) {
+			String standard, String specs) {
 		this.id = id;
 		this.type = type;
 		this.name = name;
@@ -58,6 +59,7 @@ public class Goods implements java.io.Serializable {
 		this.number = number;
 		this.specification = specification;
 		this.standard = standard;
+		this.specs = specs;
 	}
 
 	// Property accessors
@@ -180,6 +182,14 @@ public class Goods implements java.io.Serializable {
 
 	public void setStandard(String standard) {
 		this.standard = standard;
+	}
+
+	public String getSpecs() {
+		return this.specs;
+	}
+
+	public void setSpecs(String specs) {
+		this.specs = specs;
 	}
 
 }
