@@ -1,5 +1,6 @@
 package com.cy.erp.daolayer.base;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,12 @@ public class BillOfLading implements java.io.Serializable {
 	private String sender;
 	private String client;
 	private Double otherFee;
+	private String busiKey;
+	private Date ttime;
+	private Date ctime;
+	private String cuser;
+	private String remark4;
+	private String remark5;
 	private Set billOfParticularses = new HashSet(0);
 
 	// Constructors
@@ -50,7 +57,9 @@ public class BillOfLading implements java.io.Serializable {
 			String receivingDetial, String freightName, String freightPhone,
 			String freightAddress, String remark1, String remark2,
 			String remark3, String sheetName, String auditor, String sender,
-			String client, Double otherFee, Set billOfParticularses) {
+			String client, Double otherFee, String busiKey, Date ttime,
+			Date ctime, String cuser, String remark4, String remark5,
+			Set billOfParticularses) {
 		this.id = id;
 		this.customer = customer;
 		this.contactInformation = contactInformation;
@@ -66,6 +75,12 @@ public class BillOfLading implements java.io.Serializable {
 		this.sender = sender;
 		this.client = client;
 		this.otherFee = otherFee;
+		this.busiKey = busiKey;
+		this.ttime = ttime;
+		this.ctime = ctime;
+		this.cuser = cuser;
+		this.remark4 = remark4;
+		this.remark5 = remark5;
 		this.billOfParticularses = billOfParticularses;
 	}
 
@@ -189,6 +204,54 @@ public class BillOfLading implements java.io.Serializable {
 
 	public void setOtherFee(Double otherFee) {
 		this.otherFee = otherFee;
+	}
+
+	public String getBusiKey() {
+		return this.busiKey;
+	}
+
+	public void setBusiKey(String busiKey) {
+		this.busiKey = busiKey;
+	}
+
+	public Date getTtime() {
+		return this.ttime;
+	}
+
+	public void setTtime(Date ttime) {
+		this.ttime = ttime;
+	}
+
+	public Date getCtime() {
+		return this.ctime;
+	}
+
+	public void setCtime(Date ctime) {
+		this.ctime = ctime;
+	}
+
+	public String getCuser() {
+		return this.cuser;
+	}
+
+	public void setCuser(String cuser) {
+		this.cuser = cuser;
+	}
+
+	public String getRemark4() {
+		return this.remark4;
+	}
+
+	public void setRemark4(String remark4) {
+		this.remark4 = remark4;
+	}
+
+	public String getRemark5() {
+		return this.remark5;
+	}
+
+	public void setRemark5(String remark5) {
+		this.remark5 = remark5;
 	}
 
 	public Set getBillOfParticularses() {

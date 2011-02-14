@@ -12,7 +12,6 @@ public class BillOfParticulars implements java.io.Serializable {
 
 	private Long id;
 	private BillOfLading billOfLading;
-	private Integer orderNum;
 	private String code;
 	private String specificationModel;
 	private String sort;
@@ -31,22 +30,19 @@ public class BillOfParticulars implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public BillOfParticulars(Long id, BillOfLading billOfLading,
-			Integer orderNum, String code) {
+	public BillOfParticulars(Long id, BillOfLading billOfLading, String code) {
 		this.id = id;
 		this.billOfLading = billOfLading;
-		this.orderNum = orderNum;
 		this.code = code;
 	}
 
 	/** full constructor */
-	public BillOfParticulars(Long id, BillOfLading billOfLading,
-			Integer orderNum, String code, String specificationModel,
-			String sort, String spec, Double unitPrice, Integer amount,
-			String units, Double weight, Double volume, Double sum) {
+	public BillOfParticulars(Long id, BillOfLading billOfLading, String code,
+			String specificationModel, String sort, String spec,
+			Double unitPrice, Integer amount, String units, Double weight,
+			Double volume, Double sum) {
 		this.id = id;
 		this.billOfLading = billOfLading;
-		this.orderNum = orderNum;
 		this.code = code;
 		this.specificationModel = specificationModel;
 		this.sort = sort;
@@ -75,14 +71,6 @@ public class BillOfParticulars implements java.io.Serializable {
 
 	public void setBillOfLading(BillOfLading billOfLading) {
 		this.billOfLading = billOfLading;
-	}
-
-	public Integer getOrderNum() {
-		return this.orderNum;
-	}
-
-	public void setOrderNum(Integer orderNum) {
-		this.orderNum = orderNum;
 	}
 
 	public String getCode() {
