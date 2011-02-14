@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>itschemeQueryStat</name>
+	<display-name>销售动态</display-name>
+	<pageable>true</pageable>
+	<condition-size>3</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>30</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+	   
+	   <!-- condition name="autoRun">
+			<index>0</index>
+			<display-name>自动执行</display-name>
+			<type>initaction</type>
+			<extend>doQuery()</extend>
+		</condition>
+		-->
+		<condition name="date">
+			<index>50</index>
+			<display-name>统计年份</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<defaut-value>.0H.0m.0s</defaut-value>
+			<extend>yyyy</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<thead><![CDATA[
+			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>序号</td>
+				<td>工单编号</td>
+				<td>年度计划名称</td>
+				<td>计划属性</td>
+				<td>提交人</td>
+				<td>提交单位</td>
+				<td>提交时间</td>
+				<td>计划提交综合会审时间</td>
+				<td>制度责任人</td>
+			</tr>]]>
+		</thead>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>		
+				<td align="center">${0}</td>
+				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${工单编号}</a></td>
+				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${年度计划名称}</a></td>
+				<td nowrap align="center">${计划属性}</td>
+				<td nowrap align="center">${提交人}</td>
+				<td nowrap align="center">${提交单位}</td>
+				<td nowrap align="center">${提交时间}</td>
+				<td nowrap align="center">${计划提交综合会审时间}</td>
+				<td nowrap align="center">${制度责任人}</td>
+			</tr>]]>
+		</tbody>
+	</data>
+	<ksql><![CDATA[
+	  --综合查询
+		select * from (
+		select distinct f.serialno 工单编号,
+           f.title 年度计划名称,
+           rend(e.schemeproperty) 计划属性,
+           u.user_name 提交人,getdepnamepath(uo.org_id) 提交单位,
+           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 提交时间,
+           to_char(e.auditingtime,'yyyy-mm-dd hh24:mi') 计划提交综合会审时间,
+           e.principal 制度责任人,f.flowlsh,f.gendate
+		from rec_flow f,sec_user u,sec_r_user_org uo,flw_flow fw
+		,ins_frm_itscheme e
+		where f.flowlsh=e.flowlsh
+		and u.id=f.startercode and u.id=uo.user_id
+		and f.status!='XJ' and fw.flowcode=f.flowcode
+		  
+		
+		) yb
+		order by yb.gendate desc
+		]]></ksql>
+</kreport>
