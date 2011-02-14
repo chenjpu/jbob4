@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>szForecloseRate</name>
+	<display-name>深圳预处理率</display-name>
+	<condition-size>4</condition-size>
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOther">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/itsm/localreport/szForecloseRateBill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.16H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.16H.0m.0s</default-value>
+		</condition>
+	</conditions>	
+	<data>
+		<thead></thead>
+		<tbody><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+			<td align='center'>${1}</td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/szForecloseRateBill','${2}','orgname=${1}')">${2}</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/szForecloseRateBill','${3}','orgname=${1}&type=转派单')">${3}</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/szForecloseRateBill','${4}','orgname=${1}&blowoverYZ=yes')">${4}</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/szForecloseRateBill','${5}','orgname=${1}&type=直接回单')">${5}</a></td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/szForecloseRateBill','${6}','orgname=${1}&type=在途单')">${6}</a></td>
+			<td align='center'>${7}%</td>
+		</tr>
+		]]>
+		</tbody>
+	</data>
+	<ksql><![CDATA[
+		--深圳预处理率
+		select executergrouporgname 部门,
+		       total 首派单数,
+		       zp 转派单数,
+		       zyz 经业支数,
+		       zh 直接回单数,
+		       total-zp-zh 在途单数,
+		       decode(zh,0,0,round(1/(1+zp/zh)*100,2)) 预处理率 
+		from(
+		  select fi.executergrouporgname,
+		         count(*) total,
+		         nvl(sum(decode(fi.executergrouporgid,co.executergrouporgid,0,1)),0) zp,
+		         nvl(sum(decode(instr(co.executergrouporgid,'8a92635521a51e8f0121a52a528d2998'),0,0,1)),0) zyz,
+		         nvl(sum(decode(fi.executergrouporgid,co.executergrouporgid,decode(co.isc,1,1,0),0)),0) zh    
+		  from
+		  (
+		    select f.flowlsh,n.executergrouporgid,n.executergrouporgname,
+		           ROW_NUMBER() OVER (PARTITION BY n.flowlsh ORDER BY n.gendate) rn
+		    from rec_flow f,rec_node n
+		    where f.flowlsh=n.flowlsh
+		      and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'  --故障管理流程 
+		      and n.nodecode in (
+		          '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		          '8706e7770a11226800104dac10cfa517', --业务支持中心接口 
+		          '95e87c590a112268017f3be1d42c0688', --省IT中心科室处理 
+		          '8707d5ab0a112268006fa804cb1cbc30'  --厂家处理 
+		          )
+			  #[and f.gendate>=${startDate}]
+			  #[and f.gendate< ${endDate}]
+		  ) fi,
+		  (    
+		    select f.flowlsh,
+		           strcat(distinct n.executergrouporgid) executergrouporgid,
+		           decode(i.fualtstatus,'230',1,'240',1,'250',1,0) isc
+		    from rec_flow f,rec_node n,ins_frm_fault i
+		    where f.flowlsh=n.flowlsh
+		      and f.flowlsh=i.flowlsh
+		      and f.flowcode='86b47b100a11226801c8c29cc4f3df3f'  --故障管理流程 
+		      and n.nodecode in (
+		          '8705e3d30a112268006ecb0498438858', --IT分部接口 
+		          '8706e7770a11226800104dac10cfa517', --业务支持中心接口 
+		          '95e87c590a112268017f3be1d42c0688', --省IT中心科室处理 
+		          '8707d5ab0a112268006fa804cb1cbc30'  --厂家处理 
+		          )
+			  #[and f.gendate>=${startDate}]
+			  #[and f.gendate< ${endDate}]
+		    group by f.flowlsh,decode(i.fualtstatus,'230',1,'240',1,'250',1,0)
+		  ) co
+		  where fi.flowlsh=co.flowlsh
+		    and fi.rn=1
+		    and fi.executergrouporgid in ('8a92635521a51e8f0121a52a528d2998','8a92635521a51e8f0121a5212d8f032e')
+		  group by fi.executergrouporgid,fi.executergrouporgname
+		)
+		]]></ksql>
+</kreport>

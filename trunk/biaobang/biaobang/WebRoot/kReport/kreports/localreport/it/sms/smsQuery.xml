@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>smsQuery</name>
+	<display-name>短信查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>	
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>发送时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>发送时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="phonecode">
+			<index>30</index>
+			<display-name>接收电话</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="status">
+			<index>40</index>
+			<display-name>发送状态</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend>{0:待发送,1:已发送,2:发送失败}</extend>
+			<default-value>待发送</default-value>
+		</condition>
+		<condition name="type">
+			<index>50</index>
+			<display-name>短信类型</display-name>
+			<type>select</type>			
+			<required>true</required>
+			<return-type>void</return-type>
+			<extend>{int_sms:最新短信,int_sms_201007:历史短信}</extend>
+			<default-value>最新短信</default-value>
+		</condition>
+		<condition name="sender">
+			<index>60</index>
+			<display-name>发送人</display-name>
+			<type>text</type>
+			<return-type></return-type>
+		</condition>
+		<condition name="message">
+			<index>70</index>
+			<display-name>发送内容</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+	</conditions>		
+	<ksql><![CDATA[
+		select s.phonecode 接收电话,
+		       decode(s.status,0,'待发送',1,'已发送','发送失败') 发送状态,       
+		       s.sendtime 发送时间,
+		       s.message 短信内容         
+		from ${type} s 
+		where 1=1
+		  #[and s.sendtime>=${startDate}]
+		  #[and s.sendtime<${endDate}]
+		  #[and s.phonecode like ${phonecode}]
+		  #[and s.status = ${status}]
+		  #[and s.message like '%${sender})']
+		  #[and s.message like ${message}]
+		order by s.sendtime desc
+		]]></ksql>
+</kreport>

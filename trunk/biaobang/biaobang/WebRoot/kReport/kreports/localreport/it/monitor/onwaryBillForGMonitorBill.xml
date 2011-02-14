@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>onwaryBillForGMonitorBill</name>
+	<display-name>组在途工单监控清单</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="exportCrossTable">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="deptType">
+			<index>10</index>
+			<display-name>部门类型</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend><![CDATA[select v_o.type from v_org v_o where v_o.area in(${s@user_areas}) group by v_o.type_order,v_o.type order by v_o.type_order]]></extend>
+		</condition>
+		<condition name="deptId">
+			<index>20</index>
+			<display-name>部门</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[deptType:select v_o.type,v_o.id,v_o.org_name from v_org v_o where v_o.area in(${s@user_areas}) order by v_o.type_order,v_o.org_order]]></extend>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="area">
+			<index>50</index>
+			<display-name>区域</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='区域' order by d.ordernum
+			]]></extend>
+		</condition>
+		<condition name="timeType">
+			<index>60</index>
+			<display-name>考核类型</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<required>true</required>
+			<extend>{used:历时,overtime:超时}</extend>
+		</condition>		
+		<condition name="部门">
+			<index>0</index>
+			<display-name>部门名称</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>		
+		<condition name="处理组">
+			<index>0</index>
+			<display-name>处理组名称</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>		
+		<condition name="时段">
+			<index>0</index>
+			<display-name>时段名称</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>		
+		<condition name="_valueField">
+			<index>0</index>
+			<display-name>统计字段</display-name>
+			<type>hidden</type>
+			<return-type>string</return-type>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap>${1}</td>
+				<td nowrap>${2}</td>
+				<td nowrap>${3}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${4}')">${4}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${4}')">${5}</a></td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td>${8}</td>
+				<td nowrap>${9}</td>
+				<td nowrap>${10}分钟</td>
+				<td nowrap>${11}</td>
+				<td width='600'>${12}</td>
+			</tr>]]>
+		</tbody>
+	</data>		
+	<ksql><![CDATA[
+	  select o2.org_name 部门,
+	         n.executergroupname 处理组,
+	         decode(n.status,'DT','未签('||n.executername||')','已签('||n.executername||')') 处理状态,
+	         f.serialno 工单编号,
+	         f.title 工单标题,
+	         to_char(f.gendate,'yyyy-mm-dd hh24:mm') 报障时间,
+	         i.organiger 报障人,
+	         i.organigerdept 报障部门,
+	         r.total_time 处理时限,
+	         decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000)) 使用时间,
+	         rend(i.area) 区域,
+	         i.faultdescription 故障描述
+	  from rec_flow f,ins_frm_fault i,rec_node n,chk_assessment_result r,chk_entity e,sec_org o1,v_org o2
+	  where f.flowlsh=i.flowlsh
+	    and f.flowlsh=n.flowlsh
+	    and f.flowlsh=r.rec_flow_id
+	    and n.executergroupid is not null
+	    and n.executergrouporgid=o1.id
+	    and r.assessment_id=e.assessment_id
+	    and f.status!='XJ'
+	    and r.assessment_type='O'
+	    and e.entiy_id=n.executergrouporgid
+	    and n.status in ('DB','DT','SF')
+	    and n.nodecode not in('86c9dd900a11226800316ae4eb406c1e','870bb7f90a11226801f8cfbbeebbcb95')
+	    and i.replytime is null   
+	    and o1.org_code like o2.org_code||decode(o2.org_code,'000110000003','','%')
+	    and o2.area in(${s@user_areas})
+	    #[and o2.type=${deptType}]
+	    #[and o2.id=${deptId}]   
+	    #[and f.startercode ${startercode}]
+	    #[and f.startercode=${type10000}]
+	    #[and i.area=${area}]
+	    #[and o2.org_name=${部门}]
+	    #[and n.executergroupname=${处理组}]
+	    #[and decode(n.status,'DT','未签','已签')=${_valueField}]
+	    #[and case ${timeType}
+	           when 'used' then
+	                case
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<4 then '0～4小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<8 then '4～8小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<12 then '8～12小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<24 then '12～24小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<72 then '24～72小时'
+	                   else '72小时以上'
+	                end
+	            else
+	                case
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000)))<=r.total_time-r.warn_threshold then '正常'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)<0 then '预警'         
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<4 then '0～4小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<8 then '4～8小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<12 then '8～12小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<24 then '12～24小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<72 then '24～72小时'
+	                   else '72小时以上'
+	                end
+	         end = ${时段}]
+	    #[--${时段}]/*
+	    and case ${timeType}
+	           when 'used' then
+	                case
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<4 then '0～4小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<8 then '4～8小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<12 then '8～12小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<24 then '12～24小时'
+	                   when decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))/60<72 then '24～72小时'
+	                   else '72小时以上'
+	                end
+	            else
+	                case
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000)))<=r.total_time-r.warn_threshold then '正常'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)<0 then '预警'         
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<4 then '0～4小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<8 then '4～8小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<12 then '8～12小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<24 then '12～24小时'
+	                   when (decode(r.clock_status,'active',round(r.used_time/60000+(sysdate-r.last_modify)*1440),round(r.used_time/60000))-r.total_time)/60<72 then '24～72小时'
+	                   else '72小时以上'
+	                end
+	         end != '正常'
+	     #[--${时段}]*/ 
+		]]></ksql>
+	<page-size></page-size>
+</kreport>

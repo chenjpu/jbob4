@@ -1,0 +1,34 @@
+﻿<kreports>
+	<data-sources>
+		<data-source name="local">
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url>jdbc:mysql://127.0.0.1:3306/biaobang</url>
+			<username>root</username>
+			<password>1</password>
+		</data-source>
+		<data-source name="product">
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url>jdbc:mysql://127.0.0.1:3306/biaobang</url>
+			<username>root</username>
+			<password>1</password>
+		</data-source>
+		
+		<data-source name="default">
+			<driver>oracle.jdbc.driver.OracleDriver</driver>
+			<url>jdbc:oracle:thin:@132.121.130.139:5521:itsm</url>
+			<username>flow_test</username>
+			<password>password</password>
+		</data-source>
+	</data-sources>
+
+
+	<kreport-group name="hr" namespace="/hr/localreport" path="/kReport/kreports/localreport/hr">
+		<default-data-source>default</default-data-source>
+		<display-name>综合查询</display-name>
+		<skin>itsm</skin>
+		<!-- 年度计划综合查询 -->
+		<kreport name="itschemeQueryStat">itschemeQueryStat.xml</kreport>
+		<!-- IT制度综合查询 -->
+		<kreport name="itsystemQueryStat">itsystemQueryStat.xml</kreport>
+		</kreport-group>
+</kreports>

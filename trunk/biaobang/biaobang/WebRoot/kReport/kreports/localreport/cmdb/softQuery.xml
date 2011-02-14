@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>softQuery</name>
+	<display-name>软件资源查询</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>0</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="reset">
+			<index>2</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+		<action name="export">
+			<index>1</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+	</actions>	
+	<conditions>	
+		<condition name="displayName">
+			<index>10</index>
+			<display-name>配置项名称</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="code">
+			<index>20</index>
+			<display-name>配置项编码</display-name>
+			<type>text</type>
+			<return-type>like</return-type>
+		</condition>
+		<condition name="categoryId">
+			<index>20</index>
+			<display-name>配置项分类</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{24:操作系统,25:集群软件,26:数据库,84:消息中间件,85:交易中间件,86:应用域,87:应用服务器,28:应用软件 ,55:应用软件程序}</extend>
+		</condition>
+		
+		<condition name="BusinessSytem">
+			<index>43</index>
+			<display-name>业务系统</display-name>
+			<type>treeSelect</type>
+			<default-value></default-value>
+			<return-type>void</return-type>
+			<extend>/commons/BusinessSystemsIndex.jsp</extend>
+		</condition>
+		
+		
+		<condition name="startDate">
+			<index>30</index>
+			<display-name>最后变更时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+		<condition name="endDate">
+			<index>40</index>
+			<display-name>最后变更时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value></default-value>
+		</condition>
+	</conditions>	
+	<data>
+	   <thead><![CDATA[
+		   <tr>
+				<td nowrap>序号</td>
+				<td nowrap>配置项名称</td>
+				<td nowrap>配置项编码</td>
+				<td nowrap>配置项分类</td>
+				<td nowrap>业务系统</td>
+				<td nowrap>最后变更时间</td>
+			</tr>]]>
+	   </thead>
+	   <tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td align='center'>${0}</td>
+				<td align='center'><a href="javascript:openWindow('/cmdb/DetailIndex.do?id=${1}&categoryId=${2}','CiDetail','toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=1,resizable=0,titlebar=0,width=800,height=500')">${3}</a></td>
+				<td align='center'>${4}</td>
+				<td align='center'>${5}</td>
+				<td align='center'>${6}</td>
+				<td align='center'>${7}%</td>
+			</tr>]]>
+		</tbody>
+	</data>
+	<ksql><![CDATA[
+		select 
+		i.id,
+		i.f_category_id,
+		i.f_display_name  配置项名称,
+		i.f_code          配置项编码,
+		ca.f_display_name 配置项分类,
+		(select strcat(ii.f_display_name) 
+		from cmdb_r_ci_relation ri,cmdb_configuration_item ii,cmdb_businesssystem b 
+		where ri.f_start_ci_id = i.id and ii.id = ri.f_end_ci_id and ii.id = b.id
+		) 业务系统,
+		to_char(i.f_lastmodified,'yyyy-MM-dd hh24:mm:ss')  最后变更时间
+		from cmdb_configuration_item i,cmdb_soft s,cmdb_category ca
+		where i.id = s.id
+		and i.f_category_id = ca.id
+		#[and i.f_display_name like ${displayName}]
+		#[and i.f_code like ${code}]
+		#[and i.f_category_id = ${categoryId}]
+		#[and i.f_lastmodified>=${startDate}]
+		#[and i.f_lastmodified<${endDate}]
+		#[and exists(select * from cmdb_r_ci_relation ri,cmdb_configuration_item ii,cmdb_businesssystem b 
+		      where ri.f_start_ci_id = i.id and ii.id = ri.f_end_ci_id and ii.id = b.id
+		      and ri.f_end_ci_id in (${BusinessSytem})
+		)]
+		order by i.f_lastmodified
+		]]></ksql>
+</kreport>

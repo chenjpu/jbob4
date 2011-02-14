@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>syspoints_edit</name>
+	<display-name>修改应用厂家月评分报表</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="edit">
+			<index>30</index>
+			<display-name>编辑</display-name>
+			<do>doExportOther('/itsm/localreport/faultreasonByLevelBill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="month">
+			<index>10</index>
+			<display-name>查询月份</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select p.month,regexp_replace(p.month,'(....)(..)','\1年\2月') 
+				from qry_sys_points p
+				where p.month<to_char(sysdate,'yyyymm')
+				group by p.month
+				order by p.month desc
+			]]></extend>
+		</condition>	
+	</conditions>	
+	<data>
+		<thead>
+			<![CDATA[<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
+				<td nowrap>系统</td>
+				<td>应用软件升级（5分）</td>
+				<td>维护类需求完成率（12分）</td>
+				<td>预防性检查（3分）</td>
+				<td>工单处理及时率（30分）</td>
+				<td>责任工单实际数量</td>
+				<td>责任工单数基数</td>
+				<td>问题处理完成率（10分）</td>
+				<td>重大故障（20分）</td>
+				<td>集团考核关联扣分（-20分）</td>
+				<td nowrap>备注</td>
+			</tr>
+			<script type="text/javascript">
+				function checkNum(Obj, min, max) {
+					var thisnum = Obj.value;
+					if (thisnum == "")
+						return true;					
+					if (isNaN(thisnum) != true)// 当输入为数值
+					{
+						if(thisnum<min || thisnum>max){
+							alert("请输入一个"+min+"与"+max+"之间的数值");
+							Obj.focus();
+						}
+					}else{
+						alert("请输入一个"+min+"与"+max+"之间的数值");
+						Obj.focus();
+					}
+				}
+				
+				function changremark(){
+					var remarks = document.getElementsByTagName("textarea");
+					for(var i=0;i<remarks.length;i++){
+						if(remarks[i].value!=""){
+						    remarks[i].value=encodeURI(remarks[i].value);
+						}
+					}
+				}
+				
+				function save(){
+					var editForm = document.getElementById("edit");
+					edit.submit();
+				}
+			</script>
+
+			<form id="edit" name="edit" method='post' action="/report/SysPoints!edit.do" onsubmit="changremark()">
+			]]>
+		</thead>
+		<tbody>
+			<![CDATA[<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td nowrap>${3}</td>
+				<td nowrap align="center">${4}</td>
+				<td nowrap align="center">${5}</td>
+				<td nowrap align="center"><input type="text" name="preventive_${1}_${2}" value="${6}" onblur="checkNum(this,0,3)" style="width:40px"/></td>
+				<td nowrap align="center">${7}</td>
+				<td nowrap align="center">${8}</td>
+				<td nowrap align="center"><input type="text" name="liablebase_${1}_${2}" value="${9}" onblur="checkNum(this,0,100000)" style="width:40px"/></td>
+				<td nowrap align="center">${10}</td>
+				<td nowrap align="center"><input type="text" name="extraevent_${1}_${2}" value="${11}" onblur="checkNum(this,0,20)" style="width:40px"/></td>
+				<td nowrap align="center">${12}</td>
+				<td align="center"><textarea name="remark_${1}_${2}"  cols="20" rows="2">${13}</textarea></td>
+			</tr>]]>
+		</tbody>
+		<tfoot>
+			<![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td colspan="11" align="center">
+					<input type="submit" value="保存" />
+				</td>
+			</tr>
+			</form>
+			]]>
+		</tfoot>
+	</data>
+	<ksql><![CDATA[
+		select p.month 月份,
+			   p.sysid 系统,			   
+			   p.sysname 系统,
+		       p.version 应用软件升级,
+		       p.requirement 维护类需求完成率,
+		       p.preventive 预防性检查,
+		       p.forecloserate 工单处理及时率,
+		       p.liable 责任工单实际数量,
+		       p.liablebase 责任工单数基数,
+		       p.problem 问题处理完成率,
+		       p.extraevent 重大故障,
+		       p.blocchackpoints 集团考核关联扣分,		       
+		       p.remark 备注
+		from qry_sys_points p
+		#[where p.month=${month}]
+		]]>
+	</ksql>
+</kreport>

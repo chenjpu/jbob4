@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>nodeCountMonitorBill</name>
+	<display-name>工单流转次数监控</display-name>
+	<pageable>true</pageable>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="exportCrossTable">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>报障时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>报障时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+		</condition>
+		<condition name="startercode">
+			<index>30</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>40</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="flowType">
+			<index>50</index>
+			<display-name>流转状态</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{null:在途,not null:已回单}</extend>
+			<default-value>在途</default-value>
+		</condition>		
+		<condition name="times">
+			<index>60</index>
+			<display-name>流转次数></display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>void</return-type>
+			<extend>{0:0,5:5,10:10,15:15,20:20,25:25,30:30,35:35,40:40,50:50,60:60,70:70,80:80,100:100}</extend>
+			<default-value>20</default-value>
+		</condition>	
+		<condition name="orgtype">
+			<index>70</index>
+			<display-name>停留部门</display-name>
+			<type>mselect</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[select v_o.type from v_org v_o group by v_o.type_order,v_o.type order by v_o.type_order]]></extend>
+			<default-value>20</default-value>
+		</condition>	
+		<condition name="isit">
+			<index>80</index>
+			<display-name>是否流经IT中心</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{exists:是,not exists:否}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>				
+				<td>${0}</td>
+				<td nowrap><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${1}</a></td>
+				<td><a href="javascript:openWindow('/viewFlow.do?serialNO=${1}')">${2}</a></td>
+				<td nowrap>${3}</td>
+				<td nowrap>${4}</td>
+				<td nowrap>${5}</td>
+				<td nowrap>${6}</td>
+				<td nowrap>${7}</td>
+				<td>${8}</td>
+			</tr>]]>
+		</tbody>
+	</data>		
+	<ksql><![CDATA[
+		select base.serialno 工单编号,
+		       base.title 工单标题,
+		       base.times 流转次数,
+		       to_char(base.gendate,'yyyy-mm-dd hh24:mi') 报障时间,
+		       round(base.used_time/60000) "工单历时(分钟)",
+		       cur.curorg 当前停留部门,
+		       cur.curexecuter 当前处理人,
+		       base.bns 流转部门  
+		from 
+		(
+		    select f.flowlsh,
+		           f.serialno,
+				   f.title,
+				   count(*) times,
+		           f.gendate,
+		           f.used_time,
+		           strcat(distinct f.executergrouporgname) bns 
+		    from (
+		        select f.flowlsh,f.serialno,f.title,f.gendate,r.used_time,n.nodecode,n.executergrouporgname,n.executergrouporgid,lag (n.executergrouporgid,1,0) over (PARTITION BY n.flowlsh order by n.gendate) lagexecutergrouporgid 
+		        from rec_flow f,ins_frm_fault i,rec_node n,chk_assessment_result r
+		        where f.flowlsh=i.flowlsh
+		          and f.flowlsh=n.flowlsh
+		          and f.flowlsh=r.rec_flow_id
+		          and f.status!='XJ'
+		          and r.assessment_type='F'
+		          #[and i.replytime is ${flowType}]
+		          #[and f.startercode ${startercode}]
+		          #[and f.startercode=${type10000}]
+		          #[and f.gendate>=${startDate}]
+		          #[and f.gendate<${endDate}]
+		    )f 
+		    where f.executergrouporgid!=f.lagexecutergrouporgid   --与前一个环节不是同一个部门
+		      and f.nodecode!='8704d4d70a11226800834bbe3cb68d92'	--省IT中心管控
+		    group by f.flowlsh,f.serialno,f.title,f.gendate,f.used_time
+		  	#[having count(*)>${times}]
+		) base,
+		( 
+		    select f.flowlsh,strcat(distinct v_o.type) orgtype,strcat(distinct n.executername) curexecuter,strcat(distinct n.executergrouporgname) curorg
+		    from rec_flow f,ins_frm_fault i,rec_node n,sec_org o,v_org v_o
+		    where f.flowlsh=i.flowlsh
+		      and f.flowlsh=n.flowlsh
+		      and f.status!='XJ'
+		      and n.status in ('DT','DB','SF')
+		      and n.executergrouporgid=o.id
+		      and o.org_code like v_o.org_code||decode(v_o.org_code,'000110000003','','%')
+		      #[and i.replytime is ${flowType}]
+		      #[and f.startercode ${startercode}]
+		      #[and f.startercode=${type10000}]
+		      #[and f.gendate>=${startDate}]
+		      #[and f.gendate<${endDate}]
+		    group by f.flowlsh
+		) cur
+		where base.flowlsh=cur.flowlsh(+)
+		  #[and cur.orgtype in (${orgtype})]
+		  #[and ${isit}(
+		  	select 1 from rec_node n where n.flowlsh=base.flowlsh and n.executergrouporgid='8a92635521a51e8f0121a5211f0202c1'
+		  )--是否流经省中心]
+		order by 流转次数 desc,"工单历时(分钟)" desc
+		]]>
+	</ksql>
+	<comment><![CDATA[报表说明：
+1) 流转次数的计算以进出某处理单位为一次，内部连续多次流转次数不累计；
+2) 剔除省中心故障管控组环节的次数计算，即流转次数全部针对故障处理部门的，管控组作为管控中转不计入次数；
+	]]>	
+	</comment>
+</kreport>

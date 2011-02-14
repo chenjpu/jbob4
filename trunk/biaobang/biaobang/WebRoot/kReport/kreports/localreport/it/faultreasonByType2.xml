@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<kreport>
+	<name>faultreasonByType2</name>
+	<display-name>故障原因分析二</display-name>
+	<page-size></page-size>
+	<condition-size>4</condition-size>
+	<skin></skin>	
+	<actions>
+		<action name="query">
+			<index>10</index>
+			<display-name>查询</display-name>
+			<do>doQuery()</do>
+		</action>
+		<action name="export">
+			<index>20</index>
+			<display-name>导出</display-name>
+			<do>doExport()</do>
+		</action>
+		<action name="exportOthers">
+			<index>30</index>
+			<display-name>导出清单</display-name>
+			<do>doExportOther('/itsm/localreport/faultreasonByType2Bill')</do>
+		</action>
+		<action name="reset">
+			<index>100</index>
+			<display-name>重置</display-name>
+			<do>doReset()</do>
+		</action>
+	</actions>	
+	<conditions>
+		<condition name="startDate">
+			<index>10</index>
+			<display-name>回单时间(开始)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>-1d.0H.0m.0s</default-value>
+		</condition>
+		<condition name="endDate">
+			<index>20</index>
+			<display-name>回单时间(结束)</display-name>
+			<type>date</type>
+			<return-type>date</return-type>
+			<extend>yyyy-MM-dd HH:mm</extend>
+			<default-value>.0H.0m.0s</default-value>
+		</condition>
+		<condition name="startercode">
+			<index>25</index>
+			<display-name>故障来源</display-name>
+			<type>select</type>
+			<return-type>void</return-type>
+			<extend>{not in('8a91a29124466980012446a13077008b'\,'8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):手工单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):10000号,in('8a91a29124466980012446a13077008b'):电子运维}</extend>
+		</condition>
+		<condition name="type10000">
+			<index>26</index>
+			<display-name>10000号工单类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend>startercode:{in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae02a34f0003:主办单,in('8a92634621adf5510121ae02a34f0003'\,'8a92634621adf5510121ae034eff0003'):8a92634621adf5510121ae034eff0003:协查单}</extend>
+		</condition>
+		<condition name="billfaultreason">
+			<index>50</index>
+			<display-name>工单故障原因</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='工单故障原因' order by d.ordernum
+			]]></extend>
+		</condition>
+		<condition name="itbusinesstype">
+			<index>30</index>
+			<display-name>IT业务类型</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend>{ITBUT_1:业务运营类,ITBUT_3:特定系统,ITBUT_4:跨网故障类}</extend>
+		</condition>
+		<condition name="itbizfaulttypel2">
+			<index>40</index>
+			<display-name>二级故障类型</display-name>
+			<type>rselect</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				itbusinesstype:select distinct substr(d.dvalue,1,7) pvalue,d.dname,d.dname from sys_data_dictionary d
+				where d.dgroup='业务故障类型(L2)'
+				  and substr(d.dvalue,1,7) in ('ITBUT_1','ITBUT_3','ITBUT_4')
+				
+			]]></extend>
+		</condition>		
+		<condition name="area">
+			<index>60</index>
+			<display-name>区域</display-name>
+			<type>select</type>
+			<return-type>string</return-type>
+			<extend><![CDATA[
+				select d.dvalue,d.dname from sys_data_dictionary d where d.dgroup='区域' #[and d.dvalue in (${s@user_areas})] order by d.ordernum
+			]]></extend>
+		</condition>	
+		<condition name="isflowITZX">
+			<index>80</index>
+			<display-name>是否流经IT中心</display-name>
+			<type>select</type>
+			<extend>{exists:是,not exists:否}</extend>
+		</condition>
+	</conditions>	
+	<data>
+		<tbody><![CDATA[
+			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>
+				<td align='center'>${1}</td>
+				<td align='center'>${2}</td>
+				<td align='center'><a href="javascript:openList('/itsm/localreport/faultreasonByType2Bill','${3}','billfaultreasonName=${1}&itbizfaulttypel2Name=${2}')">${3}</a></td>
+				<td align='center'>${4}%</td>
+			</tr>]]>
+		</tbody>
+		<tfoot><![CDATA[
+		<tr style='font-size:9pt;font-family:宋体;color:#ff0000;line-height:14pt;	background-color:white;'>
+			<td align='center' colspan=2>合计</td>
+			<td align='center'><a href="javascript:openList('/itsm/localreport/faultreasonByType2Bill','$[round(${3})]','')">$[round(${3})]</a></td>
+			<td align='center'>100%</td>
+		</tr>
+		]]>
+		</tfoot>
+	</data>	
+	<ksql><![CDATA[
+	select nvl(rend(st.billfaultreason),'空') 工单故障原因,nvl(st.itbizfaulttypel2Name,'空') 二级故障类型,st.total 工单数,round(st.total*100/t.total,2) 所占比例 from
+	(
+	  select i.billfaultreason,rend(i.itbizfaulttypel2) itbizfaulttypel2Name,count(*) total
+	  from rec_flow f,ins_frm_fault i
+	  where f.flowlsh=i.flowlsh
+	    and f.status!='XJ'
+	    and f.flowcode='86b47b100a11226801c8c29cc4f3df3f' --故障管理流程
+	    and i.replytime is not null
+      	#[and f.startercode ${startercode}]
+      	#[and f.startercode=${type10000}]
+	    #[and i.itbusinesstype=${itbusinesstype}] --业务运营，特定系统，跨网
+	    #[and rend(i.itbizfaulttypel2)=${itbizfaulttypel2}]
+	    #[and i.billfaultreason=${billfaultreason}]
+	    #[and i.area=${area}]
+      	#[and i.area in (${s@user_areas})]
+      #[and ${isflowITZX}(select 1 from rec_node itn where itn.flowlsh=f.flowlsh and itn.nodecode='8704d4d70a11226800834bbe3cb68d92')--是否流经IT中心管控]
+      	#[and i.replytime>=${startDate}]
+	  	#[and i.replytime<${endDate}]
+	  group by i.billfaultreason,rend(i.itbizfaulttypel2)
+	  order by i.billfaultreason
+	) st,
+	(
+	  select count(*) total
+	  from rec_flow f,ins_frm_fault i
+	  where f.flowlsh=i.flowlsh
+	    and f.status!='XJ'
+	    and f.flowcode='86b47b100a11226801c8c29cc4f3df3f' --故障管理流程
+	    and i.replytime is not null
+      	#[and f.startercode ${startercode}]
+      	#[and f.startercode=${type10000}]
+	    #[and i.itbusinesstype=${itbusinesstype}] --业务运营，特定系统，跨网
+	    #[and rend(i.itbizfaulttypel2)=${itbizfaulttypel2}]
+	    #[and i.billfaultreason=${billfaultreason}]
+	    #[and i.area=${area}]
+      	#[and i.area in (${s@user_areas})]
+      #[and ${isflowITZX}(select 1 from rec_node itn where itn.flowlsh=f.flowlsh and itn.nodecode='8704d4d70a11226800834bbe3cb68d92')--是否流经IT中心管控]
+      	#[and i.replytime>=${startDate}]
+	  	#[and i.replytime<${endDate}]
+	) t
+		]]></ksql>
+</kreport>
