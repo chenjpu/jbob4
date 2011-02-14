@@ -80,5 +80,10 @@
                 <comment>执行标准</comment>
             </column>
         </property>
+        <property name="specs" type="java.lang.String">
+            <column name="specs" length="32">
+                <comment>规格</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>
