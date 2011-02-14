@@ -45,5 +45,10 @@
                 <comment>经销商ID</comment>
             </column>
         </property>
+        <property name="customer" type="java.lang.String">
+            <column name="customer" length="45">
+                <comment>经销商名称</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>
