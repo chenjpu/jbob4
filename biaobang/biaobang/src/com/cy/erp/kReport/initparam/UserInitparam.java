@@ -42,8 +42,8 @@ public class UserInitparam implements Initparam {
 		}*/
 		userParam.put("s@user_id", loginData.getLoginId());
 		userParam.put("s@user_name", loginData.getLoginId());
-		userParam.put("s@user_orgid", loginData.getOrganizationScope());
-		userParam.put("s@user_orgname", loginData.getOrganizationScope());
+		//userParam.put("s@user_orgid", loginData.getOrganizationScope());
+		//userParam.put("s@user_orgname", loginData.getOrganizationScope());
 		return userParam;
 	}
 

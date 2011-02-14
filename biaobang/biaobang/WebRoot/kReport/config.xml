@@ -19,6 +19,7 @@
 		<htmlwidget name="rselect">cn.blsoft.krport.htmlwidget.RSelectHtmlWidget</htmlwidget>
 		<htmlwidget name="refresh">cn.blsoft.krport.htmlwidget.RefreshHtmlWidget</htmlwidget>
 		<htmlwidget name="blank">cn.blsoft.krport.htmlwidget.BlankHtmlWidget</htmlwidget>
+		<htmlwidget name="initaction">cn.blsoft.krport.htmlwidget.InitActionHtmlWidget</htmlwidget>
 		<!-- 扩展 -->
 		<htmlwidget name="treeSelect">com.cy.erp.kReport.htmlwidget.TreeSelectHtmlWidget</htmlwidget>
 	</htmlwidgets>	
