@@ -2,7 +2,7 @@
 	<data-sources>
 		<data-source name="default">
 			<driver>com.mysql.jdbc.Driver</driver>
-			<url>jdbc:mysql://127.0.0.1:3306/biaobang</url>
+			<url>jdbc:mysql://127.0.0.1:3306/biaobang?useUnicode=true&amp;characterEncoding=UTF-8</url>
 			<username>root</username>
 			<password>1</password>
 		</data-source>

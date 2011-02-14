@@ -69,23 +69,38 @@
 		</tbody>
 	</data>
 	<ksql><![CDATA[
-	  --综合查询
-		select * from (
-		select distinct f.serialno 工单编号,
-           f.title 年度计划名称,
-           rend(e.schemeproperty) 计划属性,
-           u.user_name 提交人,getdepnamepath(uo.org_id) 提交单位,
-           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 提交时间,
-           to_char(e.auditingtime,'yyyy-mm-dd hh24:mi') 计划提交综合会审时间,
-           e.principal 制度责任人,f.flowlsh,f.gendate
-		from rec_flow f,sec_user u,sec_r_user_org uo,flw_flow fw
-		,ins_frm_itscheme e
-		where f.flowlsh=e.flowlsh
-		and u.id=f.startercode and u.id=uo.user_id
-		and f.status!='XJ' and fw.flowcode=f.flowcode
-		  
+	  select 
+		DAYOFMONTH(bl.tTime) 月份,
+		bl.`level` 等级,
+		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
 		
-		) yb
-		order by yb.gendate desc
+		
+		where bl.id = bp.ladingId
+		group by DAYOFMONTH(bl.tTime),bl.`level`
+		
+		UNION
+		
+		select 
+		
+		'合计' 月份,
+		
+		bl.`level` 等级,
+		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		
+		where bl.id = bp.ladingId
+		group by bl.`level`
+		
+		UNION
+		
+		select 
+		
+		'合计'  月均,
+		
+		bl.`level` 等级,
+		avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		
+		where bl.id = bp.ladingId
+		group by bl.`level`
+
 		]]></ksql>
 </kreport>
