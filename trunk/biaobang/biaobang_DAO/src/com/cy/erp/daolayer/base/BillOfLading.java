@@ -1,8 +1,6 @@
 package com.cy.erp.daolayer.base;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * BillOfLading entity.
@@ -35,7 +33,10 @@ public class BillOfLading implements java.io.Serializable {
 	private String cuser;
 	private String remark4;
 	private String remark5;
-	private Set billOfParticularses = new HashSet(0);
+	private String customer2;
+	private String number;
+	private String level;
+	private String area;
 
 	// Constructors
 
@@ -59,7 +60,7 @@ public class BillOfLading implements java.io.Serializable {
 			String remark3, String sheetName, String auditor, String sender,
 			String client, Double otherFee, String busiKey, Date ttime,
 			Date ctime, String cuser, String remark4, String remark5,
-			Set billOfParticularses) {
+			String customer2, String number, String level, String area) {
 		this.id = id;
 		this.customer = customer;
 		this.contactInformation = contactInformation;
@@ -81,7 +82,10 @@ public class BillOfLading implements java.io.Serializable {
 		this.cuser = cuser;
 		this.remark4 = remark4;
 		this.remark5 = remark5;
-		this.billOfParticularses = billOfParticularses;
+		this.customer2 = customer2;
+		this.number = number;
+		this.level = level;
+		this.area = area;
 	}
 
 	// Property accessors
@@ -254,12 +258,36 @@ public class BillOfLading implements java.io.Serializable {
 		this.remark5 = remark5;
 	}
 
-	public Set getBillOfParticularses() {
-		return this.billOfParticularses;
+	public String getCustomer2() {
+		return this.customer2;
 	}
 
-	public void setBillOfParticularses(Set billOfParticularses) {
-		this.billOfParticularses = billOfParticularses;
+	public void setCustomer2(String customer2) {
+		this.customer2 = customer2;
+	}
+
+	public String getNumber() {
+		return this.number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getLevel() {
+		return this.level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getArea() {
+		return this.area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
 	}
 
 }
