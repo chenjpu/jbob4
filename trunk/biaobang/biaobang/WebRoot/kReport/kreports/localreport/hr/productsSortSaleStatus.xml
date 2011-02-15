@@ -81,7 +81,7 @@
 		
 		select 
 		14  序号,
-		CONCAT('月均')  月均,
+		CONCAT('月均')  月份,
 		
 		bp.sort 分类,
 		round(avg(bp.sum), 2 ) 销售金额 from bill_of_lading bl,bill_of_particulars bp		
