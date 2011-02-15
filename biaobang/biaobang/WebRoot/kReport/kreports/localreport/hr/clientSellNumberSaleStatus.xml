@@ -42,7 +42,7 @@
 			<required>true</required>
 		</condition>
 		
-		<condition name="orgCode">
+		<condition name="month">
 			<index>30</index>
 			<display-name>月份</display-name>
 			<type>select</type>
@@ -78,12 +78,23 @@
 		select 
 		bl.customer2  经销商,
 		sum(bp.amount) 销售量,
-    	0  销售量百分比,
+    	sum(bp.amount) * 100/(select sum(bp.amount) from 
+			bill_of_lading bl,bill_of_particulars bp
+			where bl.id = bp.ladingId
+			#[and year(bl.tTime)=${date}]
+			#[and month(bl.tTime)=${month}]
+		)   销售量百分比,
 		round(sum(bp.sum),2) 销售额,
-		0  销售额百分比
+		round(sum(bp.sum) * 100/(select sum(bp.sum) from 
+			bill_of_lading bl,bill_of_particulars bp
+			where bl.id = bp.ladingId
+			#[and year(bl.tTime)=${date}]
+			#[and month(bl.tTime)=${month}]
+		),4)   销售额百分比
 	  from bill_of_lading bl,bill_of_particulars bp
 		where bl.id = bp.ladingId
 		#[and year(bl.tTime)=${date}]
+		#[and month(bl.tTime)=${month}]
 		group by bl.customer2
 		]]></ksql>
 </kreport>
