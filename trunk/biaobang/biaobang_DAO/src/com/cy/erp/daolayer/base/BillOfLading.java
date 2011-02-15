@@ -1,6 +1,8 @@
 package com.cy.erp.daolayer.base;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * BillOfLading entity.
@@ -37,6 +39,13 @@ public class BillOfLading implements java.io.Serializable {
 	private String number;
 	private String level;
 	private String area;
+	private String otherFeeRemark;
+	private String sum;
+	private Integer totalSl;
+	private Double totalZl;
+	private Double totalTj;
+	private Double totalJe;
+	private Set billOfParticularses = new HashSet(0);
 
 	// Constructors
 
@@ -45,12 +54,10 @@ public class BillOfLading implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public BillOfLading(Long id, String customer, String contactInformation,
-			String freightName) {
+	public BillOfLading(Long id, String customer, String contactInformation) {
 		this.id = id;
 		this.customer = customer;
 		this.contactInformation = contactInformation;
-		this.freightName = freightName;
 	}
 
 	/** full constructor */
@@ -60,7 +67,9 @@ public class BillOfLading implements java.io.Serializable {
 			String remark3, String sheetName, String auditor, String sender,
 			String client, Double otherFee, String busiKey, Date ttime,
 			Date ctime, String cuser, String remark4, String remark5,
-			String customer2, String number, String level, String area) {
+			String customer2, String number, String level, String area,
+			String otherFeeRemark, String sum, Integer totalSl, Double totalZl,
+			Double totalTj, Double totalJe, Set billOfParticularses) {
 		this.id = id;
 		this.customer = customer;
 		this.contactInformation = contactInformation;
@@ -86,6 +95,13 @@ public class BillOfLading implements java.io.Serializable {
 		this.number = number;
 		this.level = level;
 		this.area = area;
+		this.otherFeeRemark = otherFeeRemark;
+		this.sum = sum;
+		this.totalSl = totalSl;
+		this.totalZl = totalZl;
+		this.totalTj = totalTj;
+		this.totalJe = totalJe;
+		this.billOfParticularses = billOfParticularses;
 	}
 
 	// Property accessors
@@ -288,6 +304,62 @@ public class BillOfLading implements java.io.Serializable {
 
 	public void setArea(String area) {
 		this.area = area;
+	}
+
+	public String getOtherFeeRemark() {
+		return this.otherFeeRemark;
+	}
+
+	public void setOtherFeeRemark(String otherFeeRemark) {
+		this.otherFeeRemark = otherFeeRemark;
+	}
+
+	public String getSum() {
+		return this.sum;
+	}
+
+	public void setSum(String sum) {
+		this.sum = sum;
+	}
+
+	public Integer getTotalSl() {
+		return this.totalSl;
+	}
+
+	public void setTotalSl(Integer totalSl) {
+		this.totalSl = totalSl;
+	}
+
+	public Double getTotalZl() {
+		return this.totalZl;
+	}
+
+	public void setTotalZl(Double totalZl) {
+		this.totalZl = totalZl;
+	}
+
+	public Double getTotalTj() {
+		return this.totalTj;
+	}
+
+	public void setTotalTj(Double totalTj) {
+		this.totalTj = totalTj;
+	}
+
+	public Double getTotalJe() {
+		return this.totalJe;
+	}
+
+	public void setTotalJe(Double totalJe) {
+		this.totalJe = totalJe;
+	}
+
+	public Set getBillOfParticularses() {
+		return this.billOfParticularses;
+	}
+
+	public void setBillOfParticularses(Set billOfParticularses) {
+		this.billOfParticularses = billOfParticularses;
 	}
 
 }

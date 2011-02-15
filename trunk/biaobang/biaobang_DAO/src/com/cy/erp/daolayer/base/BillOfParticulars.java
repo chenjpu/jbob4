@@ -22,6 +22,7 @@ public class BillOfParticulars implements java.io.Serializable {
 	private Double weight;
 	private Double volume;
 	private Double sum;
+	private String attribute;
 
 	// Constructors
 
@@ -40,7 +41,7 @@ public class BillOfParticulars implements java.io.Serializable {
 	public BillOfParticulars(Long id, BillOfLading billOfLading, String code,
 			String specificationModel, String sort, String spec,
 			Double unitPrice, Integer amount, String units, Double weight,
-			Double volume, Double sum) {
+			Double volume, Double sum, String attribute) {
 		this.id = id;
 		this.billOfLading = billOfLading;
 		this.code = code;
@@ -53,6 +54,7 @@ public class BillOfParticulars implements java.io.Serializable {
 		this.weight = weight;
 		this.volume = volume;
 		this.sum = sum;
+		this.attribute = attribute;
 	}
 
 	// Property accessors
@@ -151,6 +153,14 @@ public class BillOfParticulars implements java.io.Serializable {
 
 	public void setSum(Double sum) {
 		this.sum = sum;
+	}
+
+	public String getAttribute() {
+		return this.attribute;
+	}
+
+	public void setAttribute(String attribute) {
+		this.attribute = attribute;
 	}
 
 }
