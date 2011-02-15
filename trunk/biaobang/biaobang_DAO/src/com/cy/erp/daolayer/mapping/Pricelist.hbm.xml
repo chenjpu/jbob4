@@ -25,5 +25,10 @@
                 <comment>价格(元)</comment>
             </column>
         </property>
+        <property name="name" type="java.lang.String">
+            <column name="name" length="45">
+                <comment>货名规格</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>
