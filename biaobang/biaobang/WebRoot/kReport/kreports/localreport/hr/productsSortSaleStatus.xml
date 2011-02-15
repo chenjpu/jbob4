@@ -2,10 +2,17 @@
 <kreport>
 	<name>itschemeQueryStat</name>
 	<display-name>产品分类销售状况 </display-name>
-	<pageable>true</pageable>
-	<condition-size>3</condition-size>
+	<comment><![CDATA[]]></comment>
+	<page-size></page-size>
+	<pageable></pageable>
+	<condition-size>4</condition-size>
 	<skin></skin>	
 	<actions>
+		<action name="crossQuery">
+			<index>5</index>
+			<display-name>交叉报表</display-name>
+			<do>doCrossQuery()</do>
+		</action>
 		<action name="query">
 			<index>10</index>
 			<display-name>查询</display-name>
@@ -14,10 +21,10 @@
 		<action name="export">
 			<index>20</index>
 			<display-name>导出</display-name>
-			<do>doExport()</do>
+			<do>doExportCrossTable()</do>
 		</action>
 		<action name="reset">
-			<index>30</index>
+			<index>100</index>
 			<display-name>重置</display-name>
 			<do>doReset()</do>
 		</action>
@@ -39,49 +46,31 @@
 			<defaut-value>.0H.0m.0s</defaut-value>
 			<extend>yyyy</extend>
 		</condition>
-	</conditions>	
-	<data>
-		<thead><![CDATA[
-			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
-				<td nowrap>序号</td>
-				<td>工单编号</td>
-				<td>年度计划名称</td>
-				<td>计划属性</td>
-				<td>提交人</td>
-				<td>提交单位</td>
-				<td>提交时间</td>
-				<td>计划提交综合会审时间</td>
-				<td>制度责任人</td>
-			</tr>]]>
-		</thead>
-		<tbody><![CDATA[
-			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>		
-				<td align="center">${0}</td>
-				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${工单编号}</a></td>
-				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${年度计划名称}</a></td>
-				<td nowrap align="center">${计划属性}</td>
-				<td nowrap align="center">${提交人}</td>
-				<td nowrap align="center">${提交单位}</td>
-				<td nowrap align="center">${提交时间}</td>
-				<td nowrap align="center">${计划提交综合会审时间}</td>
-				<td nowrap align="center">${制度责任人}</td>
-			</tr>]]>
-		</tbody>
-	</data>
+	</conditions>
+	<cross>
+		<cross-text></cross-text>
+		<row-field>序号:月份</row-field>
+		<col-field>分类</col-field>
+		<value-field>销售金额</value-field>
+		<row-count>false</row-count>
+		<col-count>false</col-count>
+	</cross>
 	<ksql><![CDATA[
 	  select 
-		DAYOFMONTH(bl.tTime) 月份,
+	    MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
 		bp.sort 分类,
 		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
 		where bl.id = bp.ladingId
 
-		group by DAYOFMONTH(bl.tTime),bp.sort
+		group by MONTH(bl.tTime),bp.sort
+		
 		
 		UNION
 		
 		select 
-		
-		'合计' 月份,
+		13  序号,
+		CONCAT('合计') 月份,
 		
 		bp.sort 分类,
 		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
@@ -92,8 +81,8 @@
 		UNION
 		
 		select 
-		
-		'合计'  月均,
+		14  序号,
+		CONCAT('月均')  月均,
 		
 		bp.sort 分类,
 		avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp		
