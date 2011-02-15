@@ -2,14 +2,16 @@
 <kreport>
 	<name>itschemeQueryStat</name>
 	<display-name>销售动态</display-name>
-	<pageable>true</pageable>
-	<condition-size>3</condition-size>
+	<comment><![CDATA[]]></comment>
+	<page-size></page-size>
+	<pageable></pageable>
+	<condition-size>4</condition-size>
 	<skin></skin>	
 	<actions>
-		<action name="query">
-			<index>10</index>
-			<display-name>查询</display-name>
-			<do>doQuery()</do>
+		<action name="crossQuery">
+			<index>5</index>
+			<display-name>交叉报表</display-name>
+			<do>doCrossQuery()</do>
 		</action>
 		<action name="export">
 			<index>20</index>
@@ -35,56 +37,146 @@
 			<index>50</index>
 			<display-name>统计年份</display-name>
 			<type>date</type>
-			<return-type>date</return-type>
+			<return-type>string</return-type>
 			<defaut-value>.0H.0m.0s</defaut-value>
 			<extend>yyyy</extend>
+			<required>true</required>
 		</condition>
 	</conditions>	
-	<data>
-		<thead><![CDATA[
-			<tr style='color:#ffffff;font-size:9pt;font-family:宋体;line-height:14pt;text-align:center;background-color:#A5C7EF;'>
-				<td nowrap>序号</td>
-				<td>工单编号</td>
-				<td>年度计划名称</td>
-				<td>计划属性</td>
-				<td>提交人</td>
-				<td>提交单位</td>
-				<td>提交时间</td>
-				<td>计划提交综合会审时间</td>
-				<td>制度责任人</td>
-			</tr>]]>
-		</thead>
-		<tbody><![CDATA[
-			<tr style='font-size:9pt;font-family:宋体;line-height:14pt;	background-color:white;'>		
-				<td align="center">${0}</td>
-				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${工单编号}</a></td>
-				<td nowrap><a href="javascript:openWindow('/common/commonWorkOrder!viewFlow.do?flowLsh=${FLOWLSH}')">${年度计划名称}</a></td>
-				<td nowrap align="center">${计划属性}</td>
-				<td nowrap align="center">${提交人}</td>
-				<td nowrap align="center">${提交单位}</td>
-				<td nowrap align="center">${提交时间}</td>
-				<td nowrap align="center">${计划提交综合会审时间}</td>
-				<td nowrap align="center">${制度责任人}</td>
-			</tr>]]>
-		</tbody>
-	</data>
+	<cross>
+		<cross-text></cross-text>
+		<row-field>序号:月份</row-field>
+		<col-field>销售序号:销售,单位</col-field>
+		<value-field>销售金额</value-field>
+		<row-count>false</row-count>
+		<col-count>false</col-count>
+	</cross>
 	<ksql><![CDATA[
-		select * from (
-		select distinct f.serialno 工单编号,
-           f.title 年度计划名称,
-           rend(e.schemeproperty) 计划属性,
-           u.user_name 提交人,getdepnamepath(uo.org_id) 提交单位,
-           to_char(f.gendate,'yyyy-mm-dd hh24:mi') 提交时间,
-           to_char(e.auditingtime,'yyyy-mm-dd hh24:mi') 计划提交综合会审时间,
-           e.principal 制度责任人,f.flowlsh,f.gendate
-		from rec_flow f,sec_user u,sec_r_user_org uo,flw_flow fw
-		,ins_frm_itscheme e
-		where f.flowlsh=e.flowlsh
-		and u.id=f.startercode and u.id=uo.user_id
-		and f.status!='XJ' and fw.flowcode=f.flowcode
-		  
+select 		
+		MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		1  销售序号,
+		CONCAT('销售量') 销售,
+		CONCAT('箱') 单位,
+		sum(bp.amount) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
+union
+
+select 		
+		13 序号,
+		CONCAT('合计') 月份,
+		1  销售序号,
+		CONCAT('销售量') 销售,
+		CONCAT('箱') 单位,
+		sum(bp.amount) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+
+union
+
+select 		
+		14 序号,
+		CONCAT('月均') 月份,
+		1  销售序号,
+		CONCAT('销售量') 销售,
+		CONCAT('箱') 单位,
+		round(avg(bp.amount)) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+union
+select 
+	  MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		3  销售序号,
+		CONCAT('销售额') 销售,
+		CONCAT('元') 单位,
+		round(sum(bp.sum),2) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
 		
-		) yb
-		order by yb.gendate desc
+		UNION
+		
+		select 
+		13  序号,
+		CONCAT('合计') 月份,
+		3  销售序号,
+		CONCAT('销售额') 销售,
+		CONCAT('元') 单位,
+		round(sum(bp.sum),2) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		
+		UNION
+		
+		select 
+		14  序号,
+		CONCAT('月均')  月份,
+		3  销售序号,
+		CONCAT('销售额') 销售,
+		CONCAT('元') 单位,
+		round(avg(bp.sum),2) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		
+
+		
+
+		
+
+UNION
+
+select 
+    MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		2  销售序号,
+		CONCAT('销售量增长率%') 销售,
+		CONCAT('环比') 单位,
+		0  销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
+
+UNION
+
+select 
+    MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		2  销售序号,
+		CONCAT('销售量增长率%') 销售,
+		CONCAT('同比') 单位,
+		0  销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
+		
+
+UNION
+
+select 
+    MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		4  销售序号,
+		CONCAT('销售额增长率%') 销售,
+		CONCAT('环比') 单位,
+		0  销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
+
+UNION
+
+select 
+    MONTH(bl.tTime) 序号,
+		CAST(MONTH(bl.tTime) as char(2)) 月份,
+		4  销售序号,
+		CONCAT('销售额增长率%') 销售,
+		CONCAT('同比') 单位,
+		0  销售金额 from bill_of_lading bl,bill_of_particulars bp
+		where bl.id = bp.ladingId
+		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime)
 		]]></ksql>
 </kreport>
