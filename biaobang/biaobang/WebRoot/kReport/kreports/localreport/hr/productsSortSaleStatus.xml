@@ -61,7 +61,7 @@
 	    MONTH(bl.tTime) 序号,
 		CAST(MONTH(bl.tTime) as char(2)) 月份,
 		bp.sort 分类,
-		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
+		round(sum(bp.sum), 2 ) 销售金额 from bill_of_lading bl,bill_of_particulars bp
 		where bl.id = bp.ladingId
 		#[and year(bl.tTime)=${date}]
 		group by MONTH(bl.tTime),bp.sort
@@ -72,7 +72,7 @@
 		CONCAT('合计') 月份,
 		
 		bp.sort 分类,
-		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
+		round(sum(bp.sum), 2 ) 销售金额 from bill_of_lading bl,bill_of_particulars bp	
 		where bl.id = bp.ladingId
 		#[and year(bl.tTime)=${date}]
 		group by bp.sort
@@ -84,7 +84,7 @@
 		CONCAT('月均')  月均,
 		
 		bp.sort 分类,
-		avg(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp		
+		round(avg(bp.sum), 2 ) 销售金额 from bill_of_lading bl,bill_of_particulars bp		
 		where bl.id = bp.ladingId
 		#[and year(bl.tTime)=${date}]
 		group by bp.sort
