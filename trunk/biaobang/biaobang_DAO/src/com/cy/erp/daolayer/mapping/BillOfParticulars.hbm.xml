@@ -65,5 +65,10 @@
                 <comment>金额</comment>
             </column>
         </property>
+        <property name="attribute" type="java.lang.String">
+            <column name="attribute" length="10">
+                <comment>货单属性</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>
