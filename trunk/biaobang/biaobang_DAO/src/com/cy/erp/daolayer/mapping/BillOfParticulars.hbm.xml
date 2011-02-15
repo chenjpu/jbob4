@@ -20,8 +20,8 @@
                 <comment>编码</comment>
             </column>
         </property>
-        <property name="specificationModel" type="java.lang.String">
-            <column name="specificationModel" length="32">
+        <property name="specificationModel" type="java.lang.Integer">
+            <column name="specificationModel">
                 <comment>货名规格</comment>
             </column>
         </property>
