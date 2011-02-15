@@ -14,6 +14,7 @@ public class Pricelist implements java.io.Serializable {
 	private Long franchiserId;
 	private Long goodsId;
 	private Double price;
+	private String name;
 
 	// Constructors
 
@@ -27,11 +28,13 @@ public class Pricelist implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Pricelist(Long id, Long franchiserId, Long goodsId, Double price) {
+	public Pricelist(Long id, Long franchiserId, Long goodsId, Double price,
+			String name) {
 		this.id = id;
 		this.franchiserId = franchiserId;
 		this.goodsId = goodsId;
 		this.price = price;
+		this.name = name;
 	}
 
 	// Property accessors
@@ -66,6 +69,14 @@ public class Pricelist implements java.io.Serializable {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
