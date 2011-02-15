@@ -15,7 +15,7 @@ public class BillOfParticulars implements java.io.Serializable {
 	private String code;
 	private String specificationModel;
 	private String sort;
-	private String spec;
+	private Integer spec;
 	private Double unitPrice;
 	private Integer amount;
 	private String units;
@@ -39,7 +39,7 @@ public class BillOfParticulars implements java.io.Serializable {
 
 	/** full constructor */
 	public BillOfParticulars(Long id, BillOfLading billOfLading, String code,
-			String specificationModel, String sort, String spec,
+			String specificationModel, String sort, Integer spec,
 			Double unitPrice, Integer amount, String units, Double weight,
 			Double volume, Double sum, String attribute) {
 		this.id = id;
@@ -99,11 +99,11 @@ public class BillOfParticulars implements java.io.Serializable {
 		this.sort = sort;
 	}
 
-	public String getSpec() {
-		return this.spec;
+	public Integer getSpec() {
+		return spec;
 	}
 
-	public void setSpec(String spec) {
+	public void setSpec(Integer spec) {
 		this.spec = spec;
 	}
 
