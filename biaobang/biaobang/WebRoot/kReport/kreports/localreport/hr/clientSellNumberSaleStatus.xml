@@ -32,13 +32,24 @@
 		</condition>
 		-->
 		<condition name="date">
-			<index>50</index>
+			<index>20</index>
 			<display-name>统计年份</display-name>
 			<type>date</type>
-			<return-type>date</return-type>
+			<return-type>string</return-type>
 			<defaut-value>.0H.0m.0s</defaut-value>
 			<extend>yyyy</extend>
+			<required>true</required>
 		</condition>
+		
+		<condition name="orgCode">
+			<index>30</index>
+			<display-name>月份</display-name>
+			<type>select</type>
+			<required>true</required>
+			<return-type>string</return-type>
+			<extend>{1:1月,2:2月,3:3月,4:4月,5:5月,6:6月,7:7月,8:8月,9:9月,10:10月,11:11月,12:12月}</extend>
+		</condition>
+		
 	</conditions>	
 	<data>
 		<thead><![CDATA[
