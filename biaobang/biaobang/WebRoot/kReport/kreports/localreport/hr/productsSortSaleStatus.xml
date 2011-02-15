@@ -38,7 +38,7 @@
 			<extend>doQuery()</extend>
 		</condition>
 		-->
-		<condition name="year">
+		<condition name="date">
 			<index>50</index>
 			<display-name>统计年份</display-name>
 			<type>date</type>
@@ -63,10 +63,8 @@
 		bp.sort 分类,
 		sum(bp.sum) 销售金额 from bill_of_lading bl,bill_of_particulars bp
 		where bl.id = bp.ladingId
-
-		group by MONTH(bl.tTime),bp.sort
-		
 		#[and year(bl.tTime)=${date}]
+		group by MONTH(bl.tTime),bp.sort
 		UNION
 		
 		select 
