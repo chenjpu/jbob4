@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT configuration (properties?, settings?, typeAliases?,databaseIdProvider?, mappers?)>
+
+<!ELEMENT databaseIdProvider (property*)>
+<!ATTLIST databaseIdProvider
+type CDATA #REQUIRED
+>
+
+<!ELEMENT properties (property*)>
+<!ATTLIST properties
+resource CDATA #IMPLIED
+url CDATA #IMPLIED
+>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+name CDATA #REQUIRED
+value CDATA #REQUIRED
+>
+
+<!ELEMENT typeAliases (typeAlias*,package*)>
+
+<!ELEMENT typeAlias EMPTY>
+<!ATTLIST typeAlias
+type CDATA #REQUIRED
+alias CDATA #IMPLIED
+>
+
+
+<!ELEMENT objectFactory (property*)>
+<!ATTLIST objectFactory
+type CDATA #REQUIRED
+>
+
+
+<!ELEMENT mappers (mapper*,package*)>
+
+<!ELEMENT mapper EMPTY>
+<!ATTLIST mapper
+resource CDATA #IMPLIED
+url CDATA #IMPLIED
+class CDATA #IMPLIED
+>
+
+<!ELEMENT package EMPTY>
+<!ATTLIST package
+name CDATA #REQUIRED
+>
