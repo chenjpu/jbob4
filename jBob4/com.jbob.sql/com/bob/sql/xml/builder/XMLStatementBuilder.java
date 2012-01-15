@@ -48,6 +48,7 @@ public class XMLStatementBuilder extends BaseBuilder {
 		String parameterType = context.getStringAttribute("parameterType");
 		Class<?> parameterTypeClass = resolveClass(parameterType);
 		String resultType = context.getStringAttribute("resultType");
+		boolean natived = context.getBooleanAttribute("natived", true);
 
 		Class<?> resultTypeClass = resolveClass(resultType);
 		StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
@@ -58,7 +59,7 @@ public class XMLStatementBuilder extends BaseBuilder {
 		String nodeName = context.getNode().getNodeName();
 		SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
 
-		builderAssistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap,
+		builderAssistant.addMappedStatement(id, natived,sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap,
 				parameterTypeClass, resultTypeClass,databaseId);
 	}
 
