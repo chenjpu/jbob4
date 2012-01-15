@@ -21,6 +21,7 @@ public class MappedStatement {
 	private ParameterMap parameterMap;
 	private SqlCommandType sqlCommandType;
 	private String databaseId;
+	private boolean natived;
 
 	private MappedStatement() {
 	}
@@ -76,6 +77,10 @@ public class MappedStatement {
 			mappedStatement.cache = cache;
 			return this;
 		}
+		public Builder natived(boolean natived) {
+			mappedStatement.natived = natived;
+			return this;
+		}
 
 		public MappedStatement build() {
 			assert mappedStatement.configuration != null;
@@ -128,6 +133,10 @@ public class MappedStatement {
 
 	public String getDatabaseId() {
 		return databaseId;
+	}
+
+	public boolean isNatived() {
+		return natived;
 	}
 
 	public BoundSql getBoundSql(Object parameterObject) {

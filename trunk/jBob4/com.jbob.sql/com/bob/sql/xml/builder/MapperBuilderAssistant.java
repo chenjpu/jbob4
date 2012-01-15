@@ -81,11 +81,12 @@ public class MapperBuilderAssistant extends BaseBuilder {
 		return builder.build();
 	}
 
-	public MappedStatement addMappedStatement(String id, SqlSource sqlSource, StatementType statementType, SqlCommandType sqlCommandType,
+	public MappedStatement addMappedStatement(String id,boolean natived, SqlSource sqlSource, StatementType statementType, SqlCommandType sqlCommandType,
 			Integer fetchSize, Integer timeout, String parameterMap, Class<?> parameterType, Class<?> resultType,String databaseId) {
 		id = applyCurrentNamespace(id, false);
 
 		MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType, databaseId);
+		statementBuilder.natived(natived);
 		statementBuilder.resource(resource);
 		statementBuilder.fetchSize(fetchSize);
 		statementBuilder.statementType(statementType);

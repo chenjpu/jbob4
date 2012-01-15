@@ -102,6 +102,10 @@ public class Configuration {
 		this.defaultStatementTimeout = defaultStatementTimeout;
 	}
 
+	public MappedStatement getMappedStatement(String id) {
+		return mappedStatements.get(id);
+	}
+
 	protected static class StrictMap<V> extends HashMap<String, V> {
 
 		private static final long serialVersionUID = -4950446264854982944L;

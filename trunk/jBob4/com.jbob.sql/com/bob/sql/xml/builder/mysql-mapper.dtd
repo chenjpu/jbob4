@@ -51,6 +51,7 @@ fetchSize CDATA #IMPLIED
 timeout CDATA #IMPLIED
 flushCache (true|false) #IMPLIED
 useCache (true|false) #IMPLIED
+natived (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 >
 
@@ -67,6 +68,7 @@ fetchSize CDATA #IMPLIED
 timeout CDATA #IMPLIED
 flushCache (true|false) #IMPLIED
 useCache (true|false) #IMPLIED
+natived (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 >
 
@@ -81,6 +83,7 @@ statementType (STATEMENT|PREPARED|CALLABLE) #IMPLIED
 keyProperty CDATA #IMPLIED
 useGeneratedKeys (true|false) #IMPLIED
 keyColumn CDATA #IMPLIED
+natived (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 >
 
@@ -92,6 +95,7 @@ parameterType CDATA #IMPLIED
 timeout CDATA #IMPLIED
 flushCache (true|false) #IMPLIED
 statementType (STATEMENT|PREPARED|CALLABLE) #IMPLIED
+natived (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 >
 
@@ -103,6 +107,7 @@ parameterType CDATA #IMPLIED
 timeout CDATA #IMPLIED
 flushCache (true|false) #IMPLIED
 statementType (STATEMENT|PREPARED|CALLABLE) #IMPLIED
+natived (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 >
 
