@@ -17,19 +17,19 @@
     <!-- =========================================================== -->
     <Set name="ThreadPool">
       <!-- Default queued blocking threadpool 
-      -->
+      
       <New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
         <Set name="minThreads">10</Set>
         <Set name="maxThreads">200</Set>
-      </New>
+      </New>-->
 
-      <!-- Optional Java 5 bounded threadpool with job queue 
+      <!-- Optional Java 5 bounded threadpool with job queue -->
       <New class="org.eclipse.jetty.util.thread.ExecutorThreadPool">     
         <Arg name="coreSize" type="int">25</Arg>
         <Arg name="maxSize" type="int">50</Arg>
         <Arg name="maxIdleMs" type="long">30000</Arg>
       </New>
-      -->
+      
     </Set>
 
 
@@ -113,7 +113,7 @@
                 <Set name="defaultsDescriptor"><Property name="jetty.home" default="."/>/etc/webdefault.xml</Set>
               -->
                 <Set name="scanInterval">5</Set>
-                <Set name="contextXmlDir"><Property name="jetty.home" default="." />/contexts</Set>
+                <Set name="contextXmlDir"><Property name="jetty.home" default="." />/bundle</Set>
                 <!-- comma separated list of bundle symbolic names that
                     contain custom tag libraries (*.tld files)
                     if those bundles don't exist or can't be loaded no errors or warning will be issued!
@@ -123,6 +123,28 @@
               </New>
             </Arg>
           </Call>
+
+		   <Call name="addAppProvider">
+            <Arg>
+              <New class="org.eclipse.jetty.deploy.providers.ContextProvider">
+                <Set name="monitoredDirName"><Property name="jetty.home" default="." />/contexts</Set>
+                <Set name="scanInterval">1</Set>
+              </New>
+            </Arg>
+          </Call>
+		 <!--
+		  <Call id="webappprovider" name="addAppProvider">
+            <Arg>
+              <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
+                <Set name="monitoredDirName"><Property name="jetty.home" default="." />/webapps</Set>
+                <Set name="defaultsDescriptor"><Property name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+                <Set name="scanInterval">1</Set>
+                <Set name="contextXmlDir"><Property name="jetty.home" default="." />/contexts</Set>
+				<Set name="extractWars">true</Set>
+              </New>
+            </Arg>
+          </Call>
+		  -->
         </New>
       </Arg>
     </Call>
@@ -163,4 +185,15 @@
       <Arg><Property name="java.naming.factory.url.pkgs" default="org.eclipse.jetty.jndi"/></Arg>
     </Call>
 
+	<!-- cluster mongodb -->
+	 <Set name="sessionIdManager">
+		 <New id="mongoIdMgr" class="org.eclipse.jetty.nosql.mongodb.MongoSessionIdManager">
+			 <Arg><Ref id="Server"/></Arg>
+			 <Set name="workerName">fred</Set>
+		 </New>
+	 </Set>
+	 <Call name="setAttribute">
+		   <Arg>mongoIdMgr</Arg>
+		   <Arg><Ref id="mongoIdMgr"/></Arg>
+	 </Call>
 </Configure>
