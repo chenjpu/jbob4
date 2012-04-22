@@ -1,1 +1,0 @@
-org.eclipse.jetty.osgi.boot_8.1.0.v20120127.jar		修改过MANIFEST.MF和源码的
