@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Menus>
+	<Items id="MyDesktop" text="我的桌面" iconCls="menu-desktop" isPublic="true">
+		
+	</Items>
+	 
+	<Items id="SystemSetting" text="系统设置" iconCls="menu-system" isPublic="false">
+		<Item id="AppRoleView" iconCls="menu-role" text="角色设置">
+			<Function id="_AppRoleList" text="查看角色" iconCls="menu-list">
+				<url>/Role/List.do</url>
+			</Function>
+			<Function id="_AppRoleAdd" text="添加角色" iconCls="menu-add">
+				<url>/Role/List.do</url>
+				<url>/Role/Save.do</url>
+			</Function>
+			<Function id="_AppRoleEdit" text="编辑角色" iconCls="btn-edit">
+				<url>/Role/List.do</url>
+				<url>/Role/Save.do</url>
+				<url>/Role/Get.do</url>
+			</Function>
+			<Function id="_AppRoleDel" text="删除角色" iconCls="menu-del">
+				<url>/Role/List.do</url>
+				<url>/Role/Del.do</url>
+			</Function>
+			<Function id="_AppRoleGrant" text="授权角色" iconCls="btn-grant">
+				<url>/Role/List.do</url>
+				<url>/Role/GrantXml.do</url>
+				<url>/Role/Get.do</url>
+				<url>/Role/Grant.do</url>
+			</Function>
+		</Item>
+	</Items>
+</Menus>
