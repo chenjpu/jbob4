@@ -1,0 +1,100 @@
+/*-------扩展的icon样式------------ */
+
+.icon-navigation{
+	background:url('icons/navigation.png') no-repeat;
+}
+
+/*-------扩展的icon样式------------ */
+
+#header-left {
+	width:230px;
+	float:left;
+}
+#header-info{
+	padding-top:6px;
+	height:22px;
+}
+
+#header-nav{
+}
+
+#header-main {
+	width:520px;
+	float:left;
+	margin-top:4px;
+	margin-left:6px;
+}
+#header-right {
+	width:300px;
+	float:right;
+}
+
+#setting {
+	float: right;
+	width: 132px;
+	padding-top: 6px;
+	padding-right: 6px
+}
+.menu-desktop {
+	background-image: url('icons/monitor/monitor.png') !important;
+	background-repeat: no-repeat;
+	background-position: 10% 0%;
+}
+.menu-company {
+	background-image: url('icons/house_link.png') !important;
+	height:36px;
+	background-repeat: no-repeat;
+	background-position: 10% 0%;
+}
+
+.menu-mail_box {
+	background-image: url('icons/email/email_go.png') !important;
+	background-repeat: no-repeat;
+	background-position: 10% 50%;
+}
+
+.icon-nav-setting{
+	background:url('icons/cog/cog.png') no-repeat;
+}
+
+.icon-nav-oa{
+	background:url('icons/home.gif') no-repeat;
+}
+.icon-nav-flow{
+	background:url('icons/brick/bricks.png') no-repeat;
+}
+.tableForm {
+	border-collapse: collapse;
+}
+
+.tableForm th {
+	text-align: right;
+	border-bottom: 1px dotted #ccc;
+	padding: 5px;
+}
+
+.tableForm td {
+	text-align: left;
+	border-bottom: 1px dotted #ccc;
+	padding: 5px;
+}
+
+.logo {
+	background: url('images/jbob_logo.jpg') no-repeat;
+}
+
+.info {
+	background: #FFFEE6;
+	color: #8F5700;
+	padding: 12px;
+}
+
+.tip {
+	width: 24px;
+	height: 16px;
+	float: left;
+}
+
+img {
+	cursor: pointer;
+}
